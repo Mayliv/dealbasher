@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
+import { Search, Hammer } from "lucide-react";
 import { Link, useNavigate } from 'react-router-dom';
 
 const Header: React.FC = () => {
@@ -22,7 +22,9 @@ const Header: React.FC = () => {
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
-              <span className="text-2xl font-bold text-deal-red">DealSeeker</span>
+              <span className="text-2xl font-bold text-deal-red">Deal</span>
+              <Hammer className="h-6 w-6 mx-1 text-deal-red" />
+              <span className="text-2xl font-bold text-deal-red">Basher</span>
             </Link>
           </div>
           
