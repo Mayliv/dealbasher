@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
   return (
@@ -9,33 +10,33 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">DealSeeker</h3>
             <p className="text-sm text-muted-foreground">
-              Find the best deals, discounts, and promotions from around the web, shared by our community of deal hunters.
+              Найдите лучшие скидки, акции и промокоды от интернет-магазинов, которыми делятся наши пользователи.
             </p>
           </div>
           
           <div>
-            <h3 className="text-lg font-semibold mb-4">Categories</h3>
+            <h3 className="text-lg font-semibold mb-4">Категории</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-deal-red">Electronics</a></li>
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-deal-red">Fashion</a></li>
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-deal-red">Home & Garden</a></li>
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-deal-red">Gaming</a></li>
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-deal-red">Beauty</a></li>
+              <li><Link to="/category/electronics" className="text-sm text-muted-foreground hover:text-deal-red">Электроника</Link></li>
+              <li><Link to="/category/fashion" className="text-sm text-muted-foreground hover:text-deal-red">Мода</Link></li>
+              <li><Link to="/category/home" className="text-sm text-muted-foreground hover:text-deal-red">Дом и сад</Link></li>
+              <li><Link to="/category/gaming" className="text-sm text-muted-foreground hover:text-deal-red">Игры</Link></li>
+              <li><Link to="/category/beauty" className="text-sm text-muted-foreground hover:text-deal-red">Красота</Link></li>
             </ul>
           </div>
           
           <div>
-            <h3 className="text-lg font-semibold mb-4">Help & Support</h3>
+            <h3 className="text-lg font-semibold mb-4">Помощь</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-deal-red">How It Works</a></li>
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-deal-red">Posting Guidelines</a></li>
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-deal-red">Contact Us</a></li>
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-deal-red">FAQ</a></li>
+              <li><Link to="/how-it-works" className="text-sm text-muted-foreground hover:text-deal-red">Как это работает</Link></li>
+              <li><Link to="/guidelines" className="text-sm text-muted-foreground hover:text-deal-red">Правила публикации</Link></li>
+              <li><Link to="/contact" className="text-sm text-muted-foreground hover:text-deal-red">Связаться с нами</Link></li>
+              <li><Link to="/faq" className="text-sm text-muted-foreground hover:text-deal-red">Вопросы и ответы</Link></li>
             </ul>
           </div>
           
           <div>
-            <h3 className="text-lg font-semibold mb-4">Connect</h3>
+            <h3 className="text-lg font-semibold mb-4">Присоединяйтесь</h3>
             <ul className="space-y-2">
               <li><a href="#" className="text-sm text-muted-foreground hover:text-deal-red">Facebook</a></li>
               <li><a href="#" className="text-sm text-muted-foreground hover:text-deal-red">Twitter</a></li>
@@ -47,13 +48,13 @@ const Footer: React.FC = () => {
         
         <div className="border-t border-gray-200 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} DealSeeker. All rights reserved.
+            © {new Date().getFullYear()} DealSeeker. Все права защищены.
           </p>
           
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <a href="#" className="text-sm text-muted-foreground hover:text-deal-red">Privacy Policy</a>
-            <a href="#" className="text-sm text-muted-foreground hover:text-deal-red">Terms of Service</a>
-            <a href="#" className="text-sm text-muted-foreground hover:text-deal-red">Cookie Policy</a>
+            <Link to="/privacy" className="text-sm text-muted-foreground hover:text-deal-red">Политика конфиденциальности</Link>
+            <Link to="/terms" className="text-sm text-muted-foreground hover:text-deal-red">Условия использования</Link>
+            <Link to="/cookies" className="text-sm text-muted-foreground hover:text-deal-red">Политика в отношении файлов cookie</Link>
           </div>
         </div>
       </div>
