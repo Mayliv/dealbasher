@@ -36,10 +36,10 @@ const FeaturedDeals: React.FC<FeaturedDealsProps> = ({ deals }) => {
               
               <div className="flex items-center justify-between mt-2">
                 <div className="flex items-center">
-                  <span className="text-sm font-medium text-deal-red">${deal.dealPrice.toFixed(2)}</span>
+                  <span className="text-sm font-medium text-deal-red">{deal.dealPrice.toFixed(2)} ₽</span>
                   {deal.originalPrice && (
                     <span className="text-xs text-muted-foreground line-through ml-2">
-                      ${deal.originalPrice.toFixed(2)}
+                      {deal.originalPrice.toFixed(2)} ₽
                     </span>
                   )}
                 </div>

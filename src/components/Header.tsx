@@ -31,7 +31,7 @@ const Header: React.FC = () => {
               <input
                 type="text"
                 name="search"
-                placeholder="Поиск сделок..."
+                placeholder="Поиск предложений..."
                 className="w-full py-2 px-4 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-deal-red focus:border-transparent"
               />
               <Button type="submit" size="icon" className="absolute right-1 top-1 rounded-full bg-deal-red hover:bg-deal-red/90">
@@ -48,7 +48,7 @@ const Header: React.FC = () => {
             </Link>
             <Link to="/submit-deal">
               <Button className="bg-deal-red hover:bg-deal-red/90">
-                Добавить сделку
+                Добавить предложение
               </Button>
             </Link>
           </div>
@@ -59,7 +59,7 @@ const Header: React.FC = () => {
             <input
               type="text"
               name="search"
-              placeholder="Поиск сделок..."
+              placeholder="Поиск предложений..."
               className="w-full py-2 px-4 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-deal-red focus:border-transparent"
             />
             <Button type="submit" size="icon" className="absolute right-1 top-1 rounded-full bg-deal-red hover:bg-deal-red/90">
