@@ -7,7 +7,7 @@ import FeaturedDeals from '@/components/FeaturedDeals';
 import Footer from '@/components/Footer';
 import { deals } from '@/utils/data';
 import { Button } from '@/components/ui/button';
-import { Fire, TrendingUp } from 'lucide-react';
+import { Flame, TrendingUp } from 'lucide-react';
 
 const Index = () => {
   return (
@@ -20,7 +20,7 @@ const Index = () => {
         
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
-            <Fire className="text-deal-red mr-2" />
+            <Flame className="text-deal-red mr-2" />
             <h2 className="text-xl font-bold">Hot Deals</h2>
           </div>
           
@@ -30,7 +30,7 @@ const Index = () => {
               Newest
             </Button>
             <Button variant="outline" size="sm" className="flex items-center">
-              <Fire className="mr-1 h-4 w-4" />
+              <Flame className="mr-1 h-4 w-4" />
               Hottest
             </Button>
           </div>

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Deal } from '@/utils/data';
-import { Fire } from 'lucide-react';
+import { Flame } from 'lucide-react';
 
 interface FeaturedDealsProps {
   deals: Deal[];
@@ -13,7 +13,7 @@ const FeaturedDeals: React.FC<FeaturedDealsProps> = ({ deals }) => {
   return (
     <div className="bg-white shadow-sm rounded-lg overflow-hidden mb-6">
       <div className="bg-deal-red text-white px-4 py-2 flex items-center">
-        <Fire className="mr-2 h-5 w-5" />
+        <Flame className="mr-2 h-5 w-5" />
         <h2 className="text-lg font-semibold">Featured Hot Deals</h2>
       </div>
       
@@ -43,7 +43,7 @@ const FeaturedDeals: React.FC<FeaturedDealsProps> = ({ deals }) => {
               </div>
               
               <div className="flex items-center text-xs bg-deal-red text-white px-1.5 py-0.5 rounded-full">
-                <Fire className="mr-1 h-3 w-3" />
+                <Flame className="mr-1 h-3 w-3" />
                 <span>{deal.temperature}</span>
               </div>
             </div>
