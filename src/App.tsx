@@ -14,6 +14,7 @@ import Login from "./pages/Login";
 import StaticPage from "./pages/StaticPage";
 import NotFound from "./pages/NotFound";
 import Discussions from "./pages/Discussions";
+import AdminPanel from "./pages/AdminPanel";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ const App = () => (
             <Route path="/deals" element={<Index />} />
             <Route path="/freebies" element={<StaticPage />} />
             <Route path="/discussions" element={<Discussions />} />
+            <Route path="/owner" element={<AdminPanel />} />
             <Route path="/:pageId" element={<StaticPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
