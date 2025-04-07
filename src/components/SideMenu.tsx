@@ -60,7 +60,10 @@ const SideMenu: React.FC<SideMenuProps> = ({ open, onOpenChange }) => {
             <span>Предложения</span>
           </button>
           
-          <div className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md dark:hover:bg-gray-800">
+          <button 
+            onClick={() => handleNavigation('/promocodes')}
+            className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md dark:hover:bg-gray-800"
+          >
             <Ticket className="h-5 w-5 text-deal-red" />
             <span>Промокоды</span>
             <span className="ml-auto">
@@ -68,9 +71,12 @@ const SideMenu: React.FC<SideMenuProps> = ({ open, onOpenChange }) => {
                 <path d="M1 9L5 5L1 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </span>
-          </div>
+          </button>
           
-          <div className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md dark:hover:bg-gray-800">
+          <button 
+            onClick={() => handleNavigation('/categories')}
+            className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md dark:hover:bg-gray-800"
+          >
             <LayoutGrid className="h-5 w-5 text-deal-red" />
             <span>Категории</span>
             <span className="ml-auto">
@@ -78,7 +84,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ open, onOpenChange }) => {
                 <path d="M1 9L5 5L1 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </span>
-          </div>
+          </button>
           
           <button 
             onClick={() => handleNavigation('/freebies')}

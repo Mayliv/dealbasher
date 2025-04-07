@@ -15,6 +15,8 @@ import StaticPage from "./pages/StaticPage";
 import NotFound from "./pages/NotFound";
 import Discussions from "./pages/Discussions";
 import AdminPanel from "./pages/AdminPanel";
+import CategoriesPage from "./pages/CategoriesPage";
+import PromocodesPage from "./pages/PromocodesPage";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +35,8 @@ const App = () => (
             <Route path="/submit-deal" element={<SubmitDeal />} />
             <Route path="/login" element={<Login />} />
             <Route path="/deals" element={<Index />} />
+            <Route path="/categories" element={<CategoriesPage />} />
+            <Route path="/promocodes" element={<PromocodesPage />} />
             <Route path="/freebies" element={<StaticPage />} />
             <Route path="/discussions" element={<Discussions />} />
             <Route path="/owner" element={<AdminPanel />} />
