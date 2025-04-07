@@ -1,20 +1,22 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { 
   Home, 
   Tag, 
   Ticket, 
   LayoutGrid, 
   Gift, 
-  MessageSquare, 
-  BookOpen,
+  MessageSquare,
   LogIn,
   Palette,
-  Egg
+  SunMedium,
+  Moon,
+  MonitorSmartphone
 } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '@/providers/ThemeProvider';
 
 interface SideMenuProps {
   open: boolean;
@@ -23,10 +25,15 @@ interface SideMenuProps {
 
 const SideMenu: React.FC<SideMenuProps> = ({ open, onOpenChange }) => {
   const navigate = useNavigate();
+  const { theme, setTheme } = useTheme();
 
   const handleNavigation = (path: string) => {
     navigate(path);
     onOpenChange(false);
+  };
+
+  const handleThemeChange = (newTheme: 'light' | 'dark' | 'system') => {
+    setTheme(newTheme);
   };
 
   return (
@@ -39,7 +46,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ open, onOpenChange }) => {
         <div className="flex flex-col space-y-3 mt-6">
           <button 
             onClick={() => handleNavigation('/')}
-            className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md"
+            className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md dark:hover:bg-gray-800"
           >
             <Home className="h-5 w-5 text-deal-red" />
             <span>Главная</span>
@@ -47,13 +54,13 @@ const SideMenu: React.FC<SideMenuProps> = ({ open, onOpenChange }) => {
           
           <button 
             onClick={() => handleNavigation('/deals')}
-            className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md"
+            className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md dark:hover:bg-gray-800"
           >
             <Tag className="h-5 w-5 text-deal-red" />
             <span>Предложения</span>
           </button>
           
-          <div className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md">
+          <div className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md dark:hover:bg-gray-800">
             <Ticket className="h-5 w-5 text-deal-red" />
             <span>Промокоды</span>
             <span className="ml-auto">
@@ -63,7 +70,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ open, onOpenChange }) => {
             </span>
           </div>
           
-          <div className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md">
+          <div className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md dark:hover:bg-gray-800">
             <LayoutGrid className="h-5 w-5 text-deal-red" />
             <span>Категории</span>
             <span className="ml-auto">
@@ -75,7 +82,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ open, onOpenChange }) => {
           
           <button 
             onClick={() => handleNavigation('/freebies')}
-            className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md"
+            className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md dark:hover:bg-gray-800"
           >
             <Gift className="h-5 w-5 text-deal-red" />
             <span>Бесплатное</span>
@@ -83,37 +90,18 @@ const SideMenu: React.FC<SideMenuProps> = ({ open, onOpenChange }) => {
           
           <button 
             onClick={() => handleNavigation('/discussions')}
-            className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md"
+            className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md dark:hover:bg-gray-800"
           >
             <MessageSquare className="h-5 w-5 text-deal-red" />
             <span>Обсуждения</span>
           </button>
-          
-          <button 
-            onClick={() => handleNavigation('/magazine')}
-            className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md"
-          >
-            <BookOpen className="h-5 w-5 text-deal-red" />
-            <span>Журнал</span>
-          </button>
         </div>
         
         <div className="mt-10">
-          <h3 className="text-sm font-semibold text-gray-500 mb-3">Интересное</h3>
-          <button 
-            onClick={() => handleNavigation('/easter-deals')}
-            className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md w-full"
-          >
-            <Egg className="h-5 w-5 text-deal-red" />
-            <span>Пасхальные акции 2025</span>
-          </button>
-        </div>
-        
-        <div className="mt-10">
-          <h3 className="text-sm font-semibold text-gray-500 mb-3">Аккаунт</h3>
+          <h3 className="text-sm font-semibold text-gray-500 mb-3 dark:text-gray-400">Аккаунт</h3>
           <button 
             onClick={() => handleNavigation('/login')}
-            className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md w-full"
+            className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md w-full dark:hover:bg-gray-800"
           >
             <LogIn className="h-5 w-5 text-deal-red" />
             <span>Войти</span>
@@ -124,18 +112,30 @@ const SideMenu: React.FC<SideMenuProps> = ({ open, onOpenChange }) => {
             </span>
           </button>
           
-          <div className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md mt-2">
+          <div className="flex items-center space-x-3 text-left hover:bg-gray-100 py-2 px-3 rounded-md mt-2 dark:hover:bg-gray-800">
             <Palette className="h-5 w-5 text-deal-red" />
             <span>Оформление</span>
             <div className="ml-auto flex space-x-2">
-              <button className="w-6 h-6 rounded-full bg-white border border-gray-300 flex items-center justify-center">
-                <span className="text-xs">С</span>
+              <button 
+                onClick={() => handleThemeChange('light')} 
+                className={`w-6 h-6 rounded-full ${theme === 'light' ? 'bg-deal-red text-white' : 'bg-white border border-gray-300 dark:bg-gray-700 dark:border-gray-600'} flex items-center justify-center`}
+                aria-label="Светлая тема"
+              >
+                <SunMedium className="h-3.5 w-3.5" />
               </button>
-              <button className="w-6 h-6 rounded-full bg-gray-900 border border-gray-300 flex items-center justify-center">
-                <span className="text-xs text-white">Т</span>
+              <button 
+                onClick={() => handleThemeChange('dark')} 
+                className={`w-6 h-6 rounded-full ${theme === 'dark' ? 'bg-deal-red text-white' : 'bg-gray-900 border border-gray-300 text-white dark:border-gray-600'} flex items-center justify-center`}
+                aria-label="Темная тема"
+              >
+                <Moon className="h-3.5 w-3.5" />
               </button>
-              <button className="w-6 h-6 rounded-full bg-orange-100 border border-gray-300 flex items-center justify-center">
-                <span className="text-xs">А</span>
+              <button 
+                onClick={() => handleThemeChange('system')} 
+                className={`w-6 h-6 rounded-full ${theme === 'system' ? 'bg-deal-red text-white' : 'bg-orange-100 border border-gray-300 dark:bg-gray-600 dark:border-gray-500'} flex items-center justify-center`}
+                aria-label="Системная тема"
+              >
+                <MonitorSmartphone className="h-3.5 w-3.5" />
               </button>
             </div>
           </div>

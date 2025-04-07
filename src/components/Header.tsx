@@ -22,14 +22,14 @@ const Header: React.FC = () => {
     <>
       <SideMenu open={sideMenuOpen} onOpenChange={setSideMenuOpen} />
       
-      <header className="bg-white shadow-sm sticky top-0 z-50">
+      <header className="bg-white shadow-sm sticky top-0 z-50 dark:bg-gray-900 dark:border-b dark:border-gray-800">
         <div className="container mx-auto px-4 py-3">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="mr-2 md:mr-4"
+                className="mr-2 md:mr-4 dark:text-gray-300 dark:hover:bg-gray-800"
                 onClick={() => setSideMenuOpen(true)}
               >
                 <Menu className="h-5 w-5" />
@@ -49,7 +49,7 @@ const Header: React.FC = () => {
                   type="text"
                   name="search"
                   placeholder="Поиск предложений..."
-                  className="w-full py-2 px-4 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-deal-red focus:border-transparent"
+                  className="w-full py-2 px-4 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-deal-red focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:placeholder-gray-400"
                 />
                 <Button type="submit" size="icon" className="absolute right-1 top-1 rounded-full bg-deal-red hover:bg-deal-red/90">
                   <Search className="h-4 w-4" />
@@ -59,7 +59,7 @@ const Header: React.FC = () => {
             
             <div className="flex items-center space-x-4">
               <Link to="/login">
-                <Button variant="outline" className="hidden sm:inline-flex">
+                <Button variant="outline" className="hidden sm:inline-flex dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800">
                   Войти
                 </Button>
               </Link>
@@ -77,7 +77,7 @@ const Header: React.FC = () => {
                 type="text"
                 name="search"
                 placeholder="Поиск предложений..."
-                className="w-full py-2 px-4 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-deal-red focus:border-transparent"
+                className="w-full py-2 px-4 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-deal-red focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:placeholder-gray-400"
               />
               <Button type="submit" size="icon" className="absolute right-1 top-1 rounded-full bg-deal-red hover:bg-deal-red/90">
                 <Search className="h-4 w-4" />
