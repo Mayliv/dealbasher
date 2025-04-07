@@ -28,6 +28,11 @@ const App = () => (
           <Route path="/search" element={<SearchResults />} />
           <Route path="/submit-deal" element={<SubmitDeal />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/deals" element={<Index />} />
+          <Route path="/freebies" element={<StaticPage />} />
+          <Route path="/discussions" element={<StaticPage />} />
+          <Route path="/magazine" element={<StaticPage />} />
+          <Route path="/easter-deals" element={<StaticPage />} />
           <Route path="/:pageId" element={<StaticPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
