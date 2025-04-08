@@ -17,20 +17,23 @@ const Index = () => {
   const [sortTab, setSortTab] = useState('hot');
   const [timePeriod, setTimePeriod] = useState('week');
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
-  const { t } = useLocalization();
+  const { t, region } = useLocalization();
 
-  // Get selected city from localStorage
+  // Get selected city from localStorage based on current region
   useEffect(() => {
-    const savedCity = localStorage.getItem('dealbasher_city');
+    const savedCity = localStorage.getItem(`dealbasher_city_${region}`);
     if (savedCity) {
       setSelectedCity(savedCity);
     }
-  }, []);
+  }, [region]);
 
-  // Filter deals by location if a city is selected
+  // Filter deals by region first
+  const regionDeals = deals.filter(deal => !deal.region || deal.region === region);
+  
+  // Then filter by location if a city is selected
   const filteredDeals = selectedCity 
-    ? deals.filter(deal => !deal.location || deal.location === selectedCity)
-    : deals;
+    ? regionDeals.filter(deal => !deal.location || deal.location === selectedCity)
+    : regionDeals;
 
   // Sort deals based on selected tab
   const sortedDeals = [...filteredDeals].sort((a, b) => {
@@ -51,7 +54,7 @@ const Index = () => {
       <MarketplaceBar />
       
       <main className="flex-1 container mx-auto px-4">
-        <FeaturedDeals deals={deals} />
+        <FeaturedDeals deals={regionDeals.filter(deal => deal.isFeatured)} />
         
         {selectedCity && (
           <div className="mb-6 flex items-center">

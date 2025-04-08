@@ -8,13 +8,18 @@ import Footer from '@/components/Footer';
 import { deals } from '@/utils/data';
 import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
+import { useLocalization } from '@/contexts/LocalizationContext';
 
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q') || '';
+  const { region } = useLocalization();
   
-  // Фильтрация сделок по поисковому запросу
-  const filteredDeals = deals.filter(deal => 
+  // Filter deals by region first
+  const regionDeals = deals.filter(deal => !deal.region || deal.region === region);
+  
+  // Then filter by search query
+  const filteredDeals = regionDeals.filter(deal => 
     deal.title.toLowerCase().includes(query.toLowerCase()) || 
     deal.description.toLowerCase().includes(query.toLowerCase()) ||
     deal.store.toLowerCase().includes(query.toLowerCase())

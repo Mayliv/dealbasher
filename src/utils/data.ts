@@ -16,6 +16,7 @@ export interface Deal {
   isFeatured?: boolean;
   location?: string;
   marketplace?: string;
+  region?: 'kz' | 'ru';
 }
 
 export const categories = [
@@ -30,6 +31,7 @@ export const categories = [
   { id: 'local', name: 'Локальные скидки' },
 ];
 
+// Kazakhstan marketplaces
 export const kazMarketplaces = [
   { id: 'kaspi', name: 'Kaspi.kz', icon: 'https://placehold.co/40x40/e9e9e9/999?text=Kaspi' },
   { id: 'wildberries', name: 'Wildberries.kz', icon: 'https://placehold.co/40x40/e9e9e9/999?text=WB' },
@@ -39,6 +41,18 @@ export const kazMarketplaces = [
   { id: 'technodom', name: 'Technodom.kz', icon: 'https://placehold.co/40x40/e9e9e9/999?text=TD' },
 ];
 
+// Russian marketplaces
+export const ruMarketplaces = [
+  { id: 'wildberries', name: 'Wildberries.ru', icon: 'https://placehold.co/40x40/e9e9e9/999?text=WB' },
+  { id: 'ozon', name: 'Ozon.ru', icon: 'https://placehold.co/40x40/e9e9e9/999?text=Ozon' },
+  { id: 'yandex', name: 'Яндекс Маркет', icon: 'https://placehold.co/40x40/e9e9e9/999?text=ЯМ' },
+  { id: 'aliexpress', name: 'AliExpress Россия', icon: 'https://placehold.co/40x40/e9e9e9/999?text=Ali' },
+  { id: 'dns', name: 'DNS-Shop.ru', icon: 'https://placehold.co/40x40/e9e9e9/999?text=DNS' },
+  { id: 'mvideo', name: 'М.Видео', icon: 'https://placehold.co/40x40/e9e9e9/999?text=МВ' },
+  { id: 'citilink', name: 'Ситилинк', icon: 'https://placehold.co/40x40/e9e9e9/999?text=СЛ' },
+];
+
+// Kazakhstan cities
 export const kazCities = [
   { id: 'almaty', name: 'Алматы' },
   { id: 'nursultan', name: 'Нур-Султан' },
@@ -52,6 +66,26 @@ export const kazCities = [
   { id: 'kostanay', name: 'Костанай' },
 ];
 
+// Russian cities (population over 500k)
+export const ruCities = [
+  { id: 'moscow', name: 'Москва' },
+  { id: 'spb', name: 'Санкт-Петербург' },
+  { id: 'novosibirsk', name: 'Новосибирск' },
+  { id: 'ekaterinburg', name: 'Екатеринбург' },
+  { id: 'kazan', name: 'Казань' },
+  { id: 'nizhny', name: 'Нижний Новгород' },
+  { id: 'chelyabinsk', name: 'Челябинск' },
+  { id: 'samara', name: 'Самара' },
+  { id: 'omsk', name: 'Омск' },
+  { id: 'rostov', name: 'Ростов-на-Дону' },
+  { id: 'ufa', name: 'Уфа' },
+  { id: 'krasnoyarsk', name: 'Красноярск' },
+  { id: 'voronezh', name: 'Воронеж' },
+  { id: 'perm', name: 'Пермь' },
+  { id: 'volgograd', name: 'Волгоград' },
+];
+
+// Kazakhstan deals
 const kazDeals: Deal[] = [
   {
     id: 101,
@@ -70,7 +104,8 @@ const kazDeals: Deal[] = [
     url: "https://example.com",
     isFeatured: true,
     location: "almaty",
-    marketplace: "kaspi"
+    marketplace: "kaspi",
+    region: "kz"
   },
   {
     id: 102,
@@ -87,7 +122,8 @@ const kazDeals: Deal[] = [
     temperature: 189,
     comments: 15,
     url: "https://example.com",
-    marketplace: "wildberries"
+    marketplace: "wildberries",
+    region: "kz"
   },
   {
     id: 103,
@@ -104,7 +140,8 @@ const kazDeals: Deal[] = [
     temperature: 278,
     comments: 22,
     url: "https://example.com",
-    marketplace: "lamoda"
+    marketplace: "lamoda",
+    region: "kz"
   },
   {
     id: 104,
@@ -122,11 +159,92 @@ const kazDeals: Deal[] = [
     comments: 12,
     url: "https://example.com",
     location: "nursultan",
-    marketplace: "mechta"
+    marketplace: "mechta",
+    region: "kz"
   },
 ];
 
-export const deals: Deal[] = [
+// Russian deals
+const ruDeals: Deal[] = [
+  {
+    id: 201,
+    title: "Смартфон Xiaomi Redmi Note 12",
+    description: "Скидка на Xiaomi Redmi Note 12 в честь открытия нового магазина DNS",
+    originalPrice: 22990,
+    dealPrice: 16990,
+    discount: 26,
+    store: "DNS",
+    category: "electronics",
+    imageUrl: "https://placehold.co/400x300/e9e9e9/999?text=Xiaomi+Redmi",
+    postedBy: "dns_lover",
+    postedAt: "3 часа назад",
+    temperature: 276,
+    comments: 18,
+    url: "https://example.com",
+    isFeatured: true,
+    location: "moscow",
+    marketplace: "dns",
+    region: "ru"
+  },
+  {
+    id: 202,
+    title: "PlayStation 5 Slim + God of War Ragnarök",
+    description: "Успей купить PlayStation 5 Slim с игрой по специальной цене",
+    originalPrice: 49999,
+    dealPrice: 44999,
+    discount: 10,
+    store: "М.Видео",
+    category: "gaming",
+    imageUrl: "https://placehold.co/400x300/e9e9e9/999?text=PS5+Slim",
+    postedBy: "console_master",
+    postedAt: "1 день назад",
+    temperature: 412,
+    comments: 32,
+    url: "https://example.com",
+    marketplace: "mvideo",
+    region: "ru"
+  },
+  {
+    id: 203,
+    title: "Яндекс Станция Мини 2",
+    description: "Умная колонка по супер цене + 3 месяца подписки Яндекс Плюс в подарок",
+    originalPrice: 7990,
+    dealPrice: 4990,
+    discount: 38,
+    store: "Яндекс Маркет",
+    category: "electronics",
+    imageUrl: "https://placehold.co/400x300/e9e9e9/999?text=Яндекс+Станция",
+    postedBy: "yandex_fan",
+    postedAt: "6 часов назад",
+    temperature: 198,
+    comments: 14,
+    url: "https://example.com",
+    location: "spb",
+    marketplace: "yandex",
+    region: "ru"
+  },
+  {
+    id: 204,
+    title: "Кроссовки Nike Air Force 1",
+    description: "Скидка на культовые кроссовки Nike в Wildberries",
+    originalPrice: 12990,
+    dealPrice: 7990,
+    discount: 38,
+    store: "Wildberries",
+    category: "fashion",
+    imageUrl: "https://placehold.co/400x300/e9e9e9/999?text=Nike+AF1",
+    postedBy: "sneaker_hunter",
+    postedAt: "2 дня назад",
+    temperature: 245,
+    comments: 21,
+    url: "https://example.com",
+    marketplace: "wildberries",
+    region: "ru"
+  },
+];
+
+// Global deals (available in both regions)
+const globalDeals: Deal[] = [
   {
     id: 1,
     title: "Samsung 75\" 4K Smart TV",
@@ -257,6 +375,12 @@ export const deals: Deal[] = [
     temperature: 402,
     comments: 35,
     url: "https://example.com"
-  },
-  ...kazDeals
+  }
+];
+
+// Combine all deals, but tag them with their regions
+export const deals: Deal[] = [
+  ...globalDeals,
+  ...kazDeals,
+  ...ruDeals
 ];

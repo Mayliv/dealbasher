@@ -8,7 +8,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { useLocalization } from '@/contexts/LocalizationContext';
 import LanguageSwitcher from './LanguageSwitcher';
-import CurrencySwitcher from './CurrencySwitcher';
+import RegionSwitcher from './RegionSwitcher';
 import LocationSelector from './LocationSelector';
 
 const Header = () => {
@@ -16,7 +16,7 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { t } = useLocalization();
+  const { t, region } = useLocalization();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,11 +35,16 @@ const Header = () => {
     <header className="bg-white dark:bg-gray-800 shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center">
-            <span className="text-xl font-bold text-deal-red">DealBasher</span>
-            <span className="text-xs ml-1 bg-gray-200 dark:bg-gray-700 px-1 rounded">KZ</span>
-          </Link>
+          {/* Logo and Region Switcher */}
+          <div className="flex items-center space-x-2">
+            <Link to="/" className="flex items-center">
+              <span className="text-xl font-bold text-deal-red">DealBasher</span>
+              <span className="text-xs ml-1 bg-gray-200 dark:bg-gray-700 px-1 rounded">
+                {region.toUpperCase()}
+              </span>
+            </Link>
+            <RegionSwitcher />
+          </div>
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex md:items-center md:space-x-4">
@@ -81,7 +86,6 @@ const Header = () => {
             <div className="flex items-center space-x-2">
               <LocationSelector />
               <LanguageSwitcher />
-              <CurrencySwitcher />
               
               <Link to="/login">
                 <Button variant="outline" size="sm" className="h-8">
