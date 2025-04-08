@@ -1,4 +1,3 @@
-
 export interface Deal {
   id: number;
   title: string;
@@ -15,6 +14,8 @@ export interface Deal {
   comments: number;
   url: string;
   isFeatured?: boolean;
+  location?: string;
+  marketplace?: string;
 }
 
 export const categories = [
@@ -26,6 +27,103 @@ export const categories = [
   { id: 'beauty', name: 'Красота' },
   { id: 'food', name: 'Еда и напитки' },
   { id: 'travel', name: 'Путешествия' },
+  { id: 'local', name: 'Локальные скидки' },
+];
+
+export const kazMarketplaces = [
+  { id: 'kaspi', name: 'Kaspi.kz', icon: 'https://placehold.co/40x40/e9e9e9/999?text=Kaspi' },
+  { id: 'wildberries', name: 'Wildberries.kz', icon: 'https://placehold.co/40x40/e9e9e9/999?text=WB' },
+  { id: 'lamoda', name: 'Lamoda.kz', icon: 'https://placehold.co/40x40/e9e9e9/999?text=Lamoda' },
+  { id: 'mechta', name: 'Mechta.kz', icon: 'https://placehold.co/40x40/e9e9e9/999?text=Mechta' },
+  { id: 'sulpak', name: 'Sulpak.kz', icon: 'https://placehold.co/40x40/e9e9e9/999?text=Sulpak' },
+  { id: 'technodom', name: 'Technodom.kz', icon: 'https://placehold.co/40x40/e9e9e9/999?text=TD' },
+];
+
+export const kazCities = [
+  { id: 'almaty', name: 'Алматы' },
+  { id: 'nursultan', name: 'Нур-Султан' },
+  { id: 'shymkent', name: 'Шымкент' },
+  { id: 'karaganda', name: 'Караганда' },
+  { id: 'aktau', name: 'Актау' },
+  { id: 'aktobe', name: 'Актобе' },
+  { id: 'atyrau', name: 'Атырау' },
+  { id: 'oskemen', name: 'Усть-Каменогорск' },
+  { id: 'pavlodar', name: 'Павлодар' },
+  { id: 'kostanay', name: 'Костанай' },
+];
+
+const kazDeals: Deal[] = [
+  {
+    id: 101,
+    title: "iPhone 13 128GB",
+    description: "Скидка на iPhone 13 в честь открытия нового магазина Kaspi",
+    originalPrice: 450000,
+    dealPrice: 399000,
+    discount: 11,
+    store: "Kaspi Shop",
+    category: "electronics",
+    imageUrl: "https://placehold.co/400x300/e9e9e9/999?text=iPhone+13",
+    postedBy: "kaspi_hunter",
+    postedAt: "5 часов назад",
+    temperature: 342,
+    comments: 28,
+    url: "https://example.com",
+    isFeatured: true,
+    location: "almaty",
+    marketplace: "kaspi"
+  },
+  {
+    id: 102,
+    title: "Беспроводные наушники Samsung Galaxy Buds2 Pro",
+    description: "Выгодная цена на Samsung Galaxy Buds2 Pro на Wildberries",
+    originalPrice: 79990,
+    dealPrice: 58990,
+    discount: 26,
+    store: "Wildberries",
+    category: "electronics",
+    imageUrl: "https://placehold.co/400x300/e9e9e9/999?text=Galaxy+Buds",
+    postedBy: "techexpert",
+    postedAt: "2 дня назад",
+    temperature: 189,
+    comments: 15,
+    url: "https://example.com",
+    marketplace: "wildberries"
+  },
+  {
+    id: 103,
+    title: "Кроссовки Adidas Ultraboost",
+    description: "Распродажа кроссовок Adidas на Lamoda. Скидки до 50%",
+    originalPrice: 65000,
+    dealPrice: 32500,
+    discount: 50,
+    store: "Lamoda",
+    category: "fashion",
+    imageUrl: "https://placehold.co/400x300/e9e9e9/999?text=Adidas",
+    postedBy: "fashionista",
+    postedAt: "1 день назад",
+    temperature: 278,
+    comments: 22,
+    url: "https://example.com",
+    marketplace: "lamoda"
+  },
+  {
+    id: 104,
+    title: "Xiaomi Robot Vacuum S10+",
+    description: "Робот-пылесос Xiaomi со скидкой и бесплатной доставкой",
+    originalPrice: 185000,
+    dealPrice: 149900,
+    discount: 19,
+    store: "Mechta",
+    category: "home",
+    imageUrl: "https://placehold.co/400x300/e9e9e9/999?text=Xiaomi+Vacuum",
+    postedBy: "smart_home",
+    postedAt: "7 часов назад",
+    temperature: 156,
+    comments: 12,
+    url: "https://example.com",
+    location: "nursultan",
+    marketplace: "mechta"
+  },
 ];
 
 export const deals: Deal[] = [
@@ -159,5 +257,6 @@ export const deals: Deal[] = [
     temperature: 402,
     comments: 35,
     url: "https://example.com"
-  }
+  },
+  ...kazDeals
 ];
