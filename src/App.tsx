@@ -18,6 +18,7 @@ import Discussions from "./pages/Discussions";
 import AdminPanel from "./pages/AdminPanel";
 import CategoriesPage from "./pages/CategoriesPage";
 import PromocodesPage from "./pages/PromocodesPage";
+import PriceBugsPage from "./pages/PriceBugsPage";
 
 const queryClient = new QueryClient();
 
