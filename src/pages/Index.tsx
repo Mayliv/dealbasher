@@ -527,7 +527,6 @@ const Index = () => {
       </main>
 
       <Footer />
-      <LiveActivityFeed />
     </div>
   );
 };
