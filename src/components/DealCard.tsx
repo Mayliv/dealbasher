@@ -257,10 +257,10 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
             className={cn(
               'w-8 h-8 rounded-full flex items-center justify-center transition-all',
               userVote === 'hot'
-                ? 'bg-orange-500 text-white shadow-md'
+                ? 'bg-deal-hot text-white shadow-md'
                 : userVote
                   ? 'text-muted-foreground/30'
-                  : 'text-muted-foreground hover:bg-orange-500/10 hover:text-orange-500'
+                  : 'text-muted-foreground hover:bg-deal-hot/10 hover:text-deal-hot'
             )}
           >
             <ChevronUp className="w-5 h-5" strokeWidth={2.5} />
