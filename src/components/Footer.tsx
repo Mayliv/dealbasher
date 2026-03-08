@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <Link to="/">
-              <img src={dealbasherLogo} alt="DealBasher" className="h-8 w-auto mb-3" />
+              <img src={dealbasherLogo} alt="DealBasher" className="h-7 w-auto max-w-[160px] object-contain mb-3" />
             </Link>
             <p className="text-sm text-muted-foreground">
               Найдите лучшие скидки, акции и промокоды от интернет-магазинов, которыми делятся наши пользователи.

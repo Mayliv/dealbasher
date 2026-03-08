@@ -55,6 +55,7 @@ const App = () => (
                   <Route path="/user/:username" element={<UserProfile />} />
                   <Route path="/settings/notifications" element={<NotificationSettings />} />
                   <Route path="/tracking" element={<TrackingPage />} />
+                  <Route path="/digest" element={<DigestPage />} />
                   <Route path="/:pageId" element={<StaticPage />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
