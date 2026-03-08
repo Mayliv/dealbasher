@@ -18,7 +18,7 @@ const FeaturedDeals: React.FC<FeaturedDealsProps> = ({ deals }) => {
         <h2 className="text-lg font-semibold text-foreground">Горячие предложения</h2>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="space-y-0 rounded-xl border overflow-hidden">
         {featuredDeals.map((deal) => (
           <DealCard key={deal.id} deal={deal} />
         ))}

@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MessageSquare, Clock, Share2, Flag, TimerOff } from 'lucide-react';
+import { MessageSquare, Clock, Share2, Flag, TimerOff, ChevronUp, ChevronDown, Bookmark, MapPin } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Deal, deals } from '@/utils/data';
 import { useLocalization } from '@/contexts/LocalizationContext';
@@ -12,9 +12,11 @@ import { isDealOfTheDay } from '@/components/DealOfTheDay';
 import ShareModal from '@/components/ShareModal';
 import ReportDealModal, { getReportCount, reportExpired } from '@/components/ReportDealModal';
 import { useToast } from '@/components/ui/use-toast';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 interface DealCardProps {
   deal: Deal;
+  variant?: 'default' | 'compact';
 }
 
 const getTemperatureColor = (temp: number) => {
@@ -77,23 +79,7 @@ const FloatingDelta = ({ delta }: { delta: number | null }) => {
   );
 };
 
-// ─── Swipe overlay feedback ────────────────────────────────
-const SwipeOverlay = ({ direction, opacity }: { direction: 'hot' | 'cold' | null; opacity: number }) => {
-  if (!direction || opacity <= 0) return null;
-  return (
-    <div
-      className={cn(
-        'absolute inset-0 z-30 rounded-xl flex items-center justify-center pointer-events-none transition-opacity',
-        direction === 'hot' ? 'bg-orange-500/20' : 'bg-blue-500/20'
-      )}
-      style={{ opacity: Math.min(opacity, 1) }}
-    >
-      <span className="text-5xl">{direction === 'hot' ? '🔥' : '❄️'}</span>
-    </div>
-  );
-};
-
-const DealCard = ({ deal }: DealCardProps) => {
+const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
   const { formatPrice, region } = useLocalization();
   const { temperature, userVote, lastDelta, vote } = useTemperatureVote(deal.id, deal.temperature);
   const isMobile = useIsMobile();
@@ -103,6 +89,8 @@ const DealCard = ({ deal }: DealCardProps) => {
   const [shareOpen, setShareOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
   const [reportCount, setReportCount] = useState(() => getReportCount(deal.id));
+  const [saved, setSaved] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const [shareCount, setShareCount] = useState(() => {
     const stored = localStorage.getItem(`share_count_${deal.id}`);
     return stored ? parseInt(stored, 10) : Math.floor(Math.random() * 120);
@@ -121,313 +109,392 @@ const DealCard = ({ deal }: DealCardProps) => {
     toast({ title: '🕐 Отмечено как истёкшее', description: 'Спасибо за обратную связь!' });
   };
 
-  // Check if deal is older than 7 days
-  const isAged = (() => {
-    try {
-      const posted = new Date(deal.postedAt);
-      if (isNaN(posted.getTime())) {
-        // Try parsing relative time like "2ч назад"
-        return false;
-      }
-      return (Date.now() - posted.getTime()) > 7 * 24 * 60 * 60 * 1000;
-    } catch { return false; }
-  })();
-
   const isUnderReview = reportCount >= 3;
-
   const isExpired = temperature < -10;
-  const isOnFire = temperature > 300;
-  const isViral = shareCount > 100;
   const currency = region === 'kz' ? 'KZT' : region === 'ru' ? 'RUB' : 'USD';
 
   const regionDeals = deals.filter(d => !d.region || d.region === region);
   const isDOTD = isDealOfTheDay(deal.id, regionDeals);
 
-  // ─── Swipe gesture state ─────────────────────────────────
-  const touchStartX = useRef<number | null>(null);
-  const touchStartY = useRef<number | null>(null);
-  const [swipeOffset, setSwipeOffset] = useState(0);
-  const [swipeDirection, setSwipeDirection] = useState<'hot' | 'cold' | null>(null);
-  const SWIPE_THRESHOLD = 80;
-
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    if (!isMobile || userVote) return;
-    touchStartX.current = e.touches[0].clientX;
-    touchStartY.current = e.touches[0].clientY;
-  }, [isMobile, userVote]);
-
-  const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    if (!isMobile || userVote || touchStartX.current === null || touchStartY.current === null) return;
-    const dx = e.touches[0].clientX - touchStartX.current;
-    const dy = e.touches[0].clientY - touchStartY.current;
-    if (Math.abs(dy) > Math.abs(dx)) return;
-    setSwipeOffset(dx);
-    setSwipeDirection(dx > 30 ? 'hot' : dx < -30 ? 'cold' : null);
-  }, [isMobile, userVote]);
-
-  const handleTouchEnd = useCallback(() => {
-    if (!isMobile || userVote) return;
-    if (swipeOffset > SWIPE_THRESHOLD) vote('hot');
-    else if (swipeOffset < -SWIPE_THRESHOLD) vote('cold');
-    setSwipeOffset(0);
-    setSwipeDirection(null);
-    touchStartX.current = null;
-    touchStartY.current = null;
-  }, [isMobile, userVote, swipeOffset, vote]);
-
-  const swipeOpacity = Math.abs(swipeOffset) / SWIPE_THRESHOLD;
-
   const handleCardClick = (e: React.MouseEvent) => {
-    // Don't navigate if clicking interactive elements
     const target = e.target as HTMLElement;
     if (target.closest('[data-no-navigate]')) return;
     navigate(`/deal/${deal.id}`);
   };
 
-  return (
-    <div
-      className={cn(
-        'group bg-card text-card-foreground rounded-xl border overflow-hidden hover:shadow-lg transition-all duration-200 relative cursor-pointer',
-        !isMobile && 'hover:-translate-y-0.5',
-        isOnFire && 'hot-deal-glow',
-        isDOTD && 'border-yellow-400/60 dark:border-yellow-500/40'
-      )}
-      onClick={handleCardClick}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      style={isMobile && swipeOffset ? { transform: `translateX(${swipeOffset * 0.3}px)`, transition: swipeOffset === 0 ? 'transform 0.3s' : 'none' } : undefined}
-    >
-      {/* Deal of the Day crown */}
-      {isDOTD && (
-        <div className="dotd-crown-badge">
-          <span className="text-2xl" title="Сделка дня">👑</span>
+  // ─── COMPACT variant (for horizontal scroll "Самое горячее") ───
+  if (variant === 'compact') {
+    return (
+      <div
+        className="w-[220px] shrink-0 bg-card border rounded-xl overflow-hidden cursor-pointer hover:shadow-md transition-all group"
+        onClick={handleCardClick}
+      >
+        {/* Image */}
+        <div className="relative h-[140px] overflow-hidden bg-muted">
+          <img src={deal.imageUrl} alt={deal.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+          <Badge variant="secondary" className="absolute top-2 right-2 text-[10px] px-1.5 py-0 h-5 bg-background/80 backdrop-blur-sm">
+            {deal.store}
+          </Badge>
+          {deal.isPriceBug && (
+            <Badge className="absolute top-2 left-2 bg-destructive text-destructive-foreground text-[10px] px-1.5 py-0 h-5 border-0">
+              🐛 Баг
+            </Badge>
+          )}
+          {isDOTD && (
+            <Badge className="absolute bottom-2 left-2 bg-yellow-500 text-white text-[10px] px-1.5 py-0 h-5 border-0">
+              👑 Сделка дня
+            </Badge>
+          )}
         </div>
-      )}
 
-      {/* Swipe overlay */}
-      <SwipeOverlay direction={swipeDirection} opacity={swipeOpacity} />
-
-      {/* Expired overlay */}
-      {isExpired && (
-        <div className="absolute inset-0 z-20 bg-background/70 backdrop-blur-[2px] flex items-center justify-center rounded-xl">
-          <div className="text-center">
-            <span className="text-4xl">❄️</span>
-            <p className="text-sm font-semibold text-muted-foreground mt-1">Истёкшая сделка?</p>
-          </div>
-        </div>
-      )}
-
-      {/* Community review overlay (3+ reports) */}
-      {isUnderReview && !isExpired && (
-        <div className="absolute inset-0 z-20 bg-amber-500/10 backdrop-blur-[1px] flex items-center justify-center rounded-xl border-2 border-amber-500/50">
-          <div className="text-center bg-background/90 rounded-lg px-4 py-2">
-            <span className="text-2xl">⚠️</span>
-            <p className="text-sm font-semibold text-amber-600 dark:text-amber-400 mt-1">Проверяется сообществом</p>
-            <p className="text-[10px] text-muted-foreground">{reportCount} жалоб</p>
-          </div>
-        </div>
-      )}
-
-      {/* 3-column layout */}
-      <div className="flex items-stretch">
-        {/* LEFT: Voting widget (20%) */}
-        <div className="w-[20%] shrink-0 flex flex-col items-center justify-center gap-1.5 py-3 px-1 border-r border-border" data-no-navigate>
+        {/* Vote row (horizontal) */}
+        <div className="flex items-center justify-center gap-2 py-2 border-b border-border" data-no-navigate>
           <button
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); vote('hot'); }}
+            onClick={(e) => { e.stopPropagation(); vote('hot'); }}
             disabled={!!userVote}
             data-no-navigate
             className={cn(
-              'w-9 h-9 rounded-full flex items-center justify-center text-base transition-all duration-200',
-              userVote === 'hot'
-                ? 'bg-orange-500 scale-110 shadow-md'
-                : userVote
-                  ? 'bg-muted opacity-50 cursor-not-allowed'
-                  : 'bg-orange-500/10 hover:bg-orange-500/20 hover:scale-110 cursor-pointer',
-              'active:scale-125 active:rotate-12 active:transition-transform active:duration-75'
+              'w-7 h-7 rounded-full flex items-center justify-center transition-all',
+              userVote === 'hot' ? 'bg-orange-500 text-white' : userVote ? 'bg-muted opacity-50' : 'hover:bg-orange-500/20 text-muted-foreground hover:text-orange-500'
             )}
-            title="Hot!"
           >
-            🔥
+            <ChevronUp className="w-4 h-4" />
           </button>
-
-          {/* Temperature */}
           <div className="relative">
             <FloatingDelta delta={lastDelta} />
-            <span className={cn('text-lg font-extrabold', getTemperatureColor(temperature))}>
+            <span className={cn('text-sm font-extrabold', getTemperatureColor(temperature))}>
+              <AnimatedTemp value={temperature} />
+            </span>
+          </div>
+          <button
+            onClick={(e) => { e.stopPropagation(); vote('cold'); }}
+            disabled={!!userVote}
+            data-no-navigate
+            className={cn(
+              'w-7 h-7 rounded-full flex items-center justify-center transition-all',
+              userVote === 'cold' ? 'bg-blue-500 text-white' : userVote ? 'bg-muted opacity-50' : 'hover:bg-blue-500/20 text-muted-foreground hover:text-blue-500'
+            )}
+          >
+            <ChevronDown className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="p-3 space-y-2">
+          <h3 className="text-[13px] font-bold leading-tight line-clamp-2 text-foreground group-hover:text-primary transition-colors">
+            {deal.title}
+          </h3>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-base font-extrabold text-destructive">
+              {formatPrice(deal.dealPrice, currency)}
+            </span>
+            {deal.originalPrice && (
+              <span className="text-xs text-muted-foreground line-through">
+                {formatPrice(deal.originalPrice, currency)}
+              </span>
+            )}
+            {deal.discount && (
+              <Badge className="bg-[hsl(var(--deal-success))] text-primary-foreground border-0 text-[10px] font-bold px-1.5 py-0 h-4">
+                -{deal.discount}%
+              </Badge>
+            )}
+          </div>
+
+          {/* CTA */}
+          <a
+            href={deal.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-no-navigate
+            onClick={(e) => e.stopPropagation()}
+            className="block w-full text-center gradient-primary text-primary-foreground text-xs font-bold py-2 rounded-lg hover:scale-[1.03] transition-transform"
+          >
+            Забрать скидку →
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  // ─── DEFAULT variant: Full-width horizontal Pepper-style ───
+  return (
+    <div
+      className={cn(
+        'group bg-card text-card-foreground border-b border-border hover:bg-muted/30 hover:shadow-sm transition-all duration-200 relative cursor-pointer',
+        isExpired && 'opacity-60',
+        deal.isPriceBug && 'ring-2 ring-destructive/40 animate-bug-pulse rounded-xl',
+        !deal.isPriceBug && 'rounded-none first:rounded-t-xl last:rounded-b-xl'
+      )}
+      onClick={handleCardClick}
+    >
+      {/* Expired overlay */}
+      {isExpired && (
+        <div className="absolute inset-0 z-20 bg-background/60 backdrop-blur-[1px] flex items-center justify-center">
+          <div className="text-center">
+            <span className="text-3xl">❄️</span>
+            <p className="text-xs font-semibold text-muted-foreground mt-1">Истёкшая сделка</p>
+          </div>
+        </div>
+      )}
+
+      {/* Community review overlay */}
+      {isUnderReview && !isExpired && (
+        <div className="absolute inset-0 z-20 bg-amber-500/10 backdrop-blur-[1px] flex items-center justify-center">
+          <div className="text-center bg-background/90 rounded-lg px-3 py-2">
+            <span className="text-xl">⚠️</span>
+            <p className="text-xs font-semibold text-amber-600 dark:text-amber-400 mt-1">Проверяется</p>
+          </div>
+        </div>
+      )}
+
+      <div className={cn('flex items-center', isMobile ? 'px-3 py-3 gap-3' : 'px-4 py-3 gap-4')}>
+        {/* LEFT: Vote widget */}
+        <div className="w-[52px] shrink-0 flex flex-col items-center gap-0.5" data-no-navigate>
+          <button
+            onClick={(e) => { e.stopPropagation(); vote('hot'); }}
+            disabled={!!userVote}
+            data-no-navigate
+            className={cn(
+              'w-8 h-8 rounded-full flex items-center justify-center transition-all',
+              userVote === 'hot'
+                ? 'bg-orange-500 text-white shadow-md'
+                : userVote
+                  ? 'text-muted-foreground/30'
+                  : 'text-muted-foreground hover:bg-orange-500/10 hover:text-orange-500'
+            )}
+          >
+            <ChevronUp className="w-5 h-5" strokeWidth={2.5} />
+          </button>
+
+          <div className="relative py-0.5">
+            <FloatingDelta delta={lastDelta} />
+            <span className={cn('text-base font-extrabold leading-none', getTemperatureColor(temperature))}>
               <AnimatedTemp value={temperature} />
             </span>
           </div>
 
           <button
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); vote('cold'); }}
+            onClick={(e) => { e.stopPropagation(); vote('cold'); }}
             disabled={!!userVote}
             data-no-navigate
             className={cn(
-              'w-9 h-9 rounded-full flex items-center justify-center text-base transition-all duration-200',
+              'w-8 h-8 rounded-full flex items-center justify-center transition-all',
               userVote === 'cold'
-                ? 'bg-blue-500 scale-110 shadow-md'
+                ? 'bg-blue-500 text-white shadow-md'
                 : userVote
-                  ? 'bg-muted opacity-50 cursor-not-allowed'
-                  : 'bg-blue-500/10 hover:bg-blue-500/20 hover:scale-110 cursor-pointer',
-              'active:scale-125 active:-rotate-12 active:transition-transform active:duration-75'
+                  ? 'text-muted-foreground/30'
+                  : 'text-muted-foreground hover:bg-blue-500/10 hover:text-blue-500'
             )}
-            title="Cold"
           >
-            ❄️
+            <ChevronDown className="w-5 h-5" strokeWidth={2.5} />
           </button>
         </div>
 
-        {/* CENTER: Product image (45%) */}
-        <div className="w-[45%] shrink-0 relative">
-          <div className="aspect-square w-full overflow-hidden bg-muted">
-            <img
-              src={deal.imageUrl}
-              alt={deal.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            />
-          </div>
-
-          {/* Price Bug badge */}
+        {/* CENTER-LEFT: Image */}
+        <div className={cn(
+          'shrink-0 relative rounded-lg overflow-hidden bg-muted',
+          isMobile ? 'w-[100px] h-[80px]' : 'w-[160px] h-[120px]',
+          deal.isPriceBug && 'ring-2 ring-destructive ring-offset-1 ring-offset-background'
+        )}>
+          <img
+            src={deal.imageUrl}
+            alt={deal.title}
+            className="w-full h-full object-cover"
+          />
+          {/* Store badge on image */}
+          <Badge variant="secondary" className="absolute top-1.5 right-1.5 text-[9px] px-1 py-0 h-4 bg-background/80 backdrop-blur-sm">
+            {deal.store}
+          </Badge>
+          {/* Special badges on image */}
           {deal.isPriceBug && (
-            <div className="absolute top-2 left-2">
-              <Badge variant="outline" className="bg-background/90 border-destructive text-destructive backdrop-blur-sm text-[10px] font-bold">
-                🐛 Bug
-              </Badge>
-            </div>
+            <Badge className="absolute bottom-1.5 left-1.5 bg-destructive text-destructive-foreground text-[9px] px-1 py-0 h-4 border-0">
+              🐛 Баг цены
+            </Badge>
           )}
-
-          {/* Mobile: swipe hint */}
-          {isMobile && !userVote && (
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
-              <span className="text-[10px] text-white/80 bg-black/50 backdrop-blur-sm rounded-full px-2 py-0.5">
-                ← ❄️ свайп 🔥 →
-              </span>
-            </div>
+          {deal.dealPrice === 0 && (
+            <Badge className="absolute bottom-1.5 left-1.5 bg-[hsl(var(--deal-success))] text-primary-foreground text-[9px] px-1 py-0 h-4 border-0">
+              🆓 Бесплатно
+            </Badge>
+          )}
+          {deal.isOffline && (
+            <Badge className="absolute bottom-1.5 left-1.5 bg-blue-500 text-white text-[9px] px-1 py-0 h-4 border-0">
+              📍 {deal.city ? deal.city : 'Офлайн'}
+            </Badge>
+          )}
+          {isDOTD && (
+            <Badge className="absolute top-1.5 left-1.5 bg-yellow-500 text-white text-[9px] px-1 py-0 h-4 border-0">
+              👑
+            </Badge>
           )}
         </div>
 
-        {/* RIGHT: Content (35%) */}
-        <div className="w-[35%] flex flex-col justify-between p-3 min-w-0">
-          {/* Store badge */}
-          <div className="flex items-center gap-1 mb-1.5">
-            <Badge variant="secondary" className="self-start text-[10px] px-1.5 py-0 h-5 shrink-0">
-              {deal.store}
-            </Badge>
-            {deal.isKaspiRed && region === 'kz' && (
-              <Badge className="bg-[hsl(var(--kaspi-red))] text-white border-0 text-[9px] px-1.5 py-0 h-4 shrink-0">
-                🔴 RED
-              </Badge>
-            )}
-          </div>
-
-          {/* Kaspi rating */}
-          {deal.kaspiScore && region === 'kz' && (
-            <div className="flex items-center gap-1 mb-1">
-              <span className="text-[10px] text-amber-500">{'★'.repeat(Math.round(deal.kaspiScore))}</span>
-              <span className="text-[10px] text-muted-foreground">{deal.kaspiScore}</span>
-            </div>
-          )}
-
-          {/* Title */}
-          <h3 className="text-sm font-bold leading-tight line-clamp-2 text-foreground group-hover:text-primary transition-colors mb-auto">
+        {/* CENTER: Content block */}
+        <div className="flex-1 min-w-0 flex flex-col justify-between self-stretch py-0.5">
+          {/* Row 1: Title */}
+          <h3 className="text-[15px] font-bold leading-tight line-clamp-2 text-foreground group-hover:text-primary transition-colors">
             {deal.title}
           </h3>
 
-          {/* Badges row */}
-          <div className="flex items-center gap-1 flex-wrap mt-1">
-            {isViral && (
-              <Badge variant="outline" className="text-[9px] px-1 py-0 h-4 border-destructive text-destructive">
-                🦠 Вирусная
-              </Badge>
-            )}
-            {isAged && !isExpired && (
-              <Badge variant="outline" className="text-[9px] px-1 py-0 h-4 border-amber-500 text-amber-600 dark:text-amber-400">
-                🕐 Возможно устарело
-              </Badge>
-            )}
-          </div>
-
-          {/* Price block */}
-          <div className="mt-2 space-y-0.5">
-            <span className="text-lg font-extrabold text-[hsl(var(--deal-success))] block leading-tight">
+          {/* Row 2: Price row */}
+          <div className="flex items-center gap-2 flex-wrap mt-1">
+            <span className="text-lg font-extrabold text-destructive leading-none">
               {formatPrice(deal.dealPrice, currency)}
             </span>
-            <div className="flex items-center gap-1.5 flex-wrap">
-              {deal.originalPrice && (
-                <span className="text-xs text-muted-foreground line-through">
-                  {formatPrice(deal.originalPrice, currency)}
-                </span>
-              )}
-              {deal.discount && (
-                <Badge className="bg-[hsl(var(--deal-success))] text-primary-foreground border-0 text-[10px] font-bold px-1.5 py-0 h-4">
-                  -{deal.discount}%
-                </Badge>
-              )}
-            </div>
-            {/* Kaspi installment info */}
-            {deal.kaspiInstallment && region === 'kz' && (
-              <div className="mt-1 px-1.5 py-0.5 rounded bg-[hsl(var(--kaspi-red)/0.1)] border border-[hsl(var(--kaspi-red)/0.2)]">
-                <span className="text-[10px] font-bold text-[hsl(var(--kaspi-red))]">
-                  0-0-{deal.kaspiInstallment.months}: {formatPrice(deal.kaspiInstallment.monthlyPayment, 'KZT')}/мес
-                </span>
-              </div>
+            {deal.originalPrice && (
+              <span className="text-sm text-muted-foreground line-through">
+                {formatPrice(deal.originalPrice, currency)}
+              </span>
+            )}
+            {deal.discount && (
+              <Badge className="bg-[hsl(var(--deal-success))] text-primary-foreground border-0 text-[10px] font-bold px-1.5 py-0 h-4">
+                -{deal.discount}%
+              </Badge>
             )}
           </div>
 
-          {/* Bottom row: user, time, comments, share */}
-          <div className="flex items-center gap-1.5 mt-2 text-[10px] text-muted-foreground">
-            <span className="truncate max-w-[60px]">{deal.postedBy}</span>
-            <span>·</span>
-            <Clock className="w-2.5 h-2.5 shrink-0" />
+          {/* Row 3: Description */}
+          {deal.description && (
+            <div className="mt-1">
+              <p className={cn('text-[13px] text-muted-foreground', expanded ? '' : 'line-clamp-1')}>
+                {deal.description}
+              </p>
+              {!expanded && deal.description.length > 60 && (
+                <button
+                  data-no-navigate
+                  onClick={(e) => { e.stopPropagation(); setExpanded(true); }}
+                  className="text-[12px] text-primary hover:underline"
+                >
+                  Показать ещё
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* Row 4: Meta row */}
+          <div className="flex items-center gap-1.5 mt-1.5 text-[11px] text-muted-foreground flex-wrap">
+            <Avatar className="h-4 w-4">
+              <AvatarFallback className="text-[8px] bg-primary/10 text-primary">
+                {deal.postedBy.slice(0, 2).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <span className="truncate max-w-[70px]">{deal.postedBy}</span>
+            <span className="text-border">·</span>
+            <Clock className="w-3 h-3 shrink-0" />
             <span className="truncate">{deal.postedAt}</span>
-            <span>·</span>
-            <MessageSquare className="w-2.5 h-2.5 shrink-0" />
-            <span>{deal.comments}</span>
-            <span>·</span>
-            <button
+            <span className="text-border">·</span>
+            <Link
+              to={`/category/${deal.category}`}
               data-no-navigate
-              onClick={(e) => { e.stopPropagation(); setShareOpen(true); }}
+              onClick={(e) => e.stopPropagation()}
+              className="hover:text-primary transition-colors"
+            >
+              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 cursor-pointer hover:bg-primary/10">
+                {deal.category}
+              </Badge>
+            </Link>
+            <span className="text-border">·</span>
+            <Link
+              to={`/deal/${deal.id}#comments`}
+              data-no-navigate
+              onClick={(e) => e.stopPropagation()}
               className="inline-flex items-center gap-0.5 hover:text-primary transition-colors"
             >
-              <Share2 className="w-2.5 h-2.5" />
-              <span>{shareCount}</span>
+              <MessageSquare className="w-3 h-3" />
+              <span>{deal.comments}</span>
+            </Link>
+
+            {/* Bookmark - right aligned */}
+            <button
+              data-no-navigate
+              onClick={(e) => { e.stopPropagation(); setSaved(!saved); }}
+              className={cn('ml-auto hover:text-primary transition-colors', saved && 'text-primary')}
+            >
+              <Bookmark className={cn('w-3.5 h-3.5', saved && 'fill-current')} />
             </button>
           </div>
         </div>
+
+        {/* RIGHT: CTA button (hidden on mobile, shown on desktop) */}
+        {!isMobile && (
+          <div className="w-[120px] shrink-0 flex flex-col items-center justify-center gap-2" data-no-navigate>
+            <a
+              href={deal.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-no-navigate
+              onClick={(e) => e.stopPropagation()}
+              className="w-full text-center gradient-primary text-primary-foreground text-sm font-bold py-2.5 px-3 rounded-lg hover:scale-[1.03] transition-transform leading-tight"
+            >
+              Забрать скидку →
+            </a>
+            <div className="flex items-center gap-2">
+              <button
+                data-no-navigate
+                onClick={(e) => { e.stopPropagation(); setShareOpen(true); }}
+                className="text-muted-foreground hover:text-primary transition-colors"
+                title="Поделиться"
+              >
+                <Share2 className="w-3.5 h-3.5" />
+              </button>
+              <button
+                data-no-navigate
+                onClick={(e) => { e.stopPropagation(); handleExpiredReport(e); }}
+                className="text-muted-foreground hover:text-amber-500 transition-colors"
+                title="Истекла"
+              >
+                <TimerOff className="w-3.5 h-3.5" />
+              </button>
+              <button
+                data-no-navigate
+                onClick={(e) => { e.stopPropagation(); setReportOpen(true); }}
+                className="text-muted-foreground hover:text-destructive transition-colors"
+                title="Пожаловаться"
+              >
+                <Flag className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Report & Expired buttons bar */}
-      <div className="flex items-center border-t border-border" data-no-navigate>
-        <a
-          href={deal.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          data-no-navigate
-          onClick={(e) => e.stopPropagation()}
-          className="flex-1 gradient-primary text-primary-foreground text-center py-2.5 text-sm font-bold hover:opacity-90 transition-opacity"
-        >
-          🛒 Перейти к скидке
-        </a>
-        <button
-          data-no-navigate
-          onClick={(e) => { e.stopPropagation(); handleExpiredReport(e); }}
-          className="px-3 py-2.5 text-muted-foreground hover:text-amber-500 transition-colors border-l border-border"
-          title="Сделка истекла"
-        >
-          <TimerOff className="w-4 h-4" />
-        </button>
-        <button
-          data-no-navigate
-          onClick={(e) => { e.stopPropagation(); setReportOpen(true); }}
-          className="px-3 py-2.5 text-muted-foreground hover:text-destructive transition-colors border-l border-border"
-          title="Пожаловаться"
-        >
-          <Flag className="w-4 h-4" />
-        </button>
-      </div>
+      {/* Mobile: bottom action bar */}
+      {isMobile && (
+        <div className="flex items-center border-t border-border" data-no-navigate>
+          <a
+            href={deal.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-no-navigate
+            onClick={(e) => e.stopPropagation()}
+            className="flex-1 gradient-primary text-primary-foreground text-center py-2 text-sm font-bold hover:opacity-90 transition-opacity"
+          >
+            Забрать скидку →
+          </a>
+          <button
+            data-no-navigate
+            onClick={(e) => { e.stopPropagation(); setShareOpen(true); }}
+            className="px-3 py-2 text-muted-foreground hover:text-primary transition-colors border-l border-border"
+          >
+            <Share2 className="w-4 h-4" />
+          </button>
+          <button
+            data-no-navigate
+            onClick={(e) => { e.stopPropagation(); handleExpiredReport(e); }}
+            className="px-3 py-2 text-muted-foreground hover:text-amber-500 transition-colors border-l border-border"
+          >
+            <TimerOff className="w-4 h-4" />
+          </button>
+          <button
+            data-no-navigate
+            onClick={(e) => { e.stopPropagation(); setReportOpen(true); }}
+            className="px-3 py-2 text-muted-foreground hover:text-destructive transition-colors border-l border-border"
+          >
+            <Flag className="w-4 h-4" />
+          </button>
+        </div>
+      )}
 
-      {/* Share modal */}
+      {/* Modals */}
       <ShareModal
         deal={deal}
         open={shareOpen}
@@ -435,8 +502,6 @@ const DealCard = ({ deal }: DealCardProps) => {
         shareCount={shareCount}
         onShare={handleShare}
       />
-
-      {/* Report modal */}
       <ReportDealModal
         dealId={deal.id}
         dealTitle={deal.title}
