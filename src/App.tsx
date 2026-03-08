@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./providers/ThemeProvider";
 import { LocalizationProvider } from "./contexts/LocalizationContext";
+import { AuthProvider } from "./contexts/AuthContext";
 import Index from "./pages/Index";
 import CategoryPage from "./pages/CategoryPage";
 import DealDetail from "./pages/DealDetail";
@@ -25,28 +25,30 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
       <LocalizationProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/category/:categoryId" element={<CategoryPage />} />
-              <Route path="/deal/:dealId" element={<DealDetail />} />
-              <Route path="/search" element={<SearchResults />} />
-              <Route path="/submit-deal" element={<SubmitDeal />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/deals" element={<Index />} />
-              <Route path="/categories" element={<CategoriesPage />} />
-              <Route path="/promocodes" element={<PromocodesPage />} />
-              <Route path="/freebies" element={<StaticPage />} />
-              <Route path="/discussions" element={<Discussions />} />
-              <Route path="/owner" element={<AdminPanel />} />
-              <Route path="/:pageId" element={<StaticPage />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
+        <AuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/category/:categoryId" element={<CategoryPage />} />
+                <Route path="/deal/:dealId" element={<DealDetail />} />
+                <Route path="/search" element={<SearchResults />} />
+                <Route path="/submit-deal" element={<SubmitDeal />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/deals" element={<Index />} />
+                <Route path="/categories" element={<CategoriesPage />} />
+                <Route path="/promocodes" element={<PromocodesPage />} />
+                <Route path="/freebies" element={<StaticPage />} />
+                <Route path="/discussions" element={<Discussions />} />
+                <Route path="/owner" element={<AdminPanel />} />
+                <Route path="/:pageId" element={<StaticPage />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </TooltipProvider>
+        </AuthProvider>
       </LocalizationProvider>
     </ThemeProvider>
   </QueryClientProvider>
