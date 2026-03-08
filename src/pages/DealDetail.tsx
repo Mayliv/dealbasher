@@ -61,20 +61,24 @@ const getTemperatureStyle = (temp: number) => {
   return { gradient: 'from-red-700 to-red-500', text: 'text-destructive' };
 };
 
-// ─── Mock price history ────────────────────────────────────────
+// ─── Mock 30-day price history with sale annotations ───────────
 const generatePriceHistory = (deal: Deal) => {
-  const points = 12;
   const data = [];
   const basePrice = deal.originalPrice || deal.dealPrice * 1.3;
-  for (let i = 0; i < points; i++) {
-    const daysAgo = points - 1 - i;
+  const saledays = new Set([5, 12, 20, 28]); // days with sales
+  for (let i = 0; i < 30; i++) {
+    const daysAgo = 29 - i;
     const label = daysAgo === 0 ? 'Сегодня' : `${daysAgo}д`;
-    const variance = Math.random() * 0.15;
-    const price =
-      i === points - 1
-        ? deal.dealPrice
-        : basePrice * (1 - variance * (i / points));
-    data.push({ date: label, price: Math.round(price * 100) / 100 });
+    const isSale = saledays.has(i);
+    const variance = Math.random() * 0.12;
+    let price = basePrice * (1 - variance * (i / 30));
+    if (isSale) price = price * 0.82;
+    if (i === 29) price = deal.dealPrice;
+    data.push({
+      date: label,
+      price: Math.round(price),
+      sale: isSale ? 'Распродажа' : undefined,
+    });
   }
   return data;
 };
