@@ -733,8 +733,8 @@ const SubmitDeal = () => {
               </div>
             </div>
 
-            {/* ─── Live Preview Panel ─────────── */}
-            <div className="lg:w-80 shrink-0">
+            {/* ─── Live Preview Panel (desktop only) ─────────── */}
+            <div className="lg:w-80 shrink-0 hidden lg:block">
               <div className="sticky top-20 space-y-3">
                 <LivePreview form={form} />
 
