@@ -18,6 +18,7 @@ const Header = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { t, region } = useLocalization();
+  const { user, signOut } = useAuth();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
