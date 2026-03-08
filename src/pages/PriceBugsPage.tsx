@@ -11,6 +11,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { ExternalLink, Upload, Clock, Trophy, AlertTriangle, Send } from 'lucide-react';
 import { deals } from '@/utils/data';
 import { useLocalization } from '@/contexts/LocalizationContext';
+import { cn } from '@/lib/utils';
 
 // ─── Countdown timer ───────────────────────────────────────
 const CountdownTimer = ({ hoursLeft }: { hoursLeft: number }) => {

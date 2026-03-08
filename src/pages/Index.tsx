@@ -313,6 +313,14 @@ const Index = () => {
     .sort((a, b) => (b.discount || 0) - (a.discount || 0))
     .slice(0, 3);
 
+  // Kaspi deals for KZ
+  const allKaspiDeals = regionDeals.filter(d => d.marketplace === 'kaspi' || d.store?.toLowerCase().includes('kaspi'));
+  const kaspiDeals = kaspiFilter === 'red'
+    ? allKaspiDeals.filter(d => d.isKaspiRed)
+    : kaspiFilter === 'installment'
+      ? allKaspiDeals.filter(d => !!d.kaspiInstallment)
+      : allKaspiDeals;
+
   // Nearby offline deals
   const nearbyDeals = userCity
     ? regionDeals.filter(deal => deal.isOffline && deal.city === userCity).slice(0, 4)
