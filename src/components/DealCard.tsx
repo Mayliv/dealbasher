@@ -280,6 +280,15 @@ const DealCard = ({ deal }: DealCardProps) => {
             {deal.title}
           </h3>
 
+          {/* Badges row */}
+          <div className="flex items-center gap-1 flex-wrap mt-1">
+            {isViral && (
+              <Badge variant="outline" className="text-[9px] px-1 py-0 h-4 border-destructive text-destructive">
+                🦠 Вирусная
+              </Badge>
+            )}
+          </div>
+
           {/* Price block */}
           <div className="mt-2 space-y-0.5">
             <span className="text-lg font-extrabold text-[hsl(var(--deal-success))] block leading-tight">
@@ -299,7 +308,7 @@ const DealCard = ({ deal }: DealCardProps) => {
             </div>
           </div>
 
-          {/* Bottom row: user, time, comments */}
+          {/* Bottom row: user, time, comments, share */}
           <div className="flex items-center gap-1.5 mt-2 text-[10px] text-muted-foreground">
             <span className="truncate max-w-[60px]">{deal.postedBy}</span>
             <span>·</span>
@@ -308,6 +317,15 @@ const DealCard = ({ deal }: DealCardProps) => {
             <span>·</span>
             <MessageSquare className="w-2.5 h-2.5 shrink-0" />
             <span>{deal.comments}</span>
+            <span>·</span>
+            <button
+              data-no-navigate
+              onClick={(e) => { e.stopPropagation(); setShareOpen(true); }}
+              className="inline-flex items-center gap-0.5 hover:text-primary transition-colors"
+            >
+              <Share2 className="w-2.5 h-2.5" />
+              <span>{shareCount}</span>
+            </button>
           </div>
         </div>
       </div>
@@ -323,6 +341,15 @@ const DealCard = ({ deal }: DealCardProps) => {
       >
         🛒 Перейти к скидке
       </a>
+
+      {/* Share modal */}
+      <ShareModal
+        deal={deal}
+        open={shareOpen}
+        onOpenChange={setShareOpen}
+        shareCount={shareCount}
+        onShare={handleShare}
+      />
     </div>
   );
 };
