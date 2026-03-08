@@ -21,6 +21,7 @@ import PromocodesPage from "./pages/PromocodesPage";
 import PriceBugsPage from "./pages/PriceBugsPage";
 import UserProfile from "./pages/UserProfile";
 import NotificationSettings from "./pages/NotificationSettings";
+import MobileBottomNav from "./components/MobileBottomNav";
 
 const queryClient = new QueryClient();
 
