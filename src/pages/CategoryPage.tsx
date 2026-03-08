@@ -8,6 +8,7 @@ import TimePeriodSelector from '@/components/TimePeriodSelector';
 import { deals, categories } from '@/utils/data';
 import { Button } from '@/components/ui/button';
 import { Flame, LayoutGrid, ChevronRight, Thermometer } from 'lucide-react';
+import SubscribeButton from '@/components/SubscribeButton';
 import { useParams, Link } from 'react-router-dom';
 import { Separator } from '@/components/ui/separator';
 import { Slider } from '@/components/ui/slider';
