@@ -174,4 +174,8 @@
   .animate-vote-float {
     animation: vote-float 0.9s ease-out forwards;
   }
+
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
 }
