@@ -302,7 +302,7 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
             className="w-full h-full object-cover"
           />
           {/* Store badge on image */}
-          <Badge variant="secondary" className="absolute top-1.5 right-1.5 text-[9px] px-1 py-0 h-4 bg-background/80 backdrop-blur-sm">
+          <Badge className="absolute top-1.5 right-1.5 text-[9px] px-1 py-0 h-4 bg-[hsl(var(--deal-success))] text-primary-foreground border-0 backdrop-blur-sm">
             {deal.store}
           </Badge>
           {/* Special badges on image */}
