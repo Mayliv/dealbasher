@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import dealbasherLogo from '@/assets/dealbasher-logo.png';
-import { Search, Menu, X, LogOut, Moon, Sun, Clock, TrendingUp } from 'lucide-react';
+import { Search, Menu, X, LogOut, Moon, Sun, Clock, TrendingUp, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
