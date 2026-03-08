@@ -342,7 +342,8 @@ const Index = () => {
     ? regionDeals.filter(deal => deal.isOffline && deal.city === userCity).slice(0, 4)
     : regionDeals.filter(deal => deal.isOffline).slice(0, 4);
 
-  // Main feed
+  // Main feed — apply onboarding category preferences
+  const prefCats = onboardingPrefs?.categories;
   const filteredDeals = (selectedCity
     ? regionDeals.filter(deal => !deal.location || deal.location === selectedCity)
     : regionDeals
@@ -351,6 +352,10 @@ const Index = () => {
     .filter(deal => {
       if (dealTypeFilter === 'online') return !deal.isOffline;
       if (dealTypeFilter === 'offline') return !!deal.isOffline;
+      return true;
+    })
+    .filter(deal => {
+      if (prefCats && prefCats.length > 0) return prefCats.includes(deal.category);
       return true;
     });
 
