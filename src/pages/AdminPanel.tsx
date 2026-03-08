@@ -105,8 +105,12 @@ const AdminPanel: React.FC = () => {
           </AlertDescription>
         </Alert>
         
-        <Tabs defaultValue="activity" className="space-y-4">
-          <TabsList className="grid grid-cols-6 gap-2">
+        <Tabs defaultValue="analytics" className="space-y-4">
+          <TabsList className="grid grid-cols-7 gap-2">
+            <TabsTrigger value="analytics" className="flex gap-2 items-center">
+              <PieChart className="h-4 w-4" />
+              <span className="hidden sm:inline">Аналитика</span>
+            </TabsTrigger>
             <TabsTrigger value="activity" className="flex gap-2 items-center">
               <Activity className="h-4 w-4" />
               <span className="hidden sm:inline">Активность</span>
@@ -132,6 +136,10 @@ const AdminPanel: React.FC = () => {
               <span className="hidden sm:inline">Настройки</span>
             </TabsTrigger>
           </TabsList>
+          
+          <TabsContent value="analytics" className="space-y-4">
+            <AnalyticsDashboard />
+          </TabsContent>
           
           <TabsContent value="activity" className="space-y-4">
             <UserActivity />
