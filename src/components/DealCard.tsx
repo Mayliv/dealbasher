@@ -280,10 +280,10 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
             className={cn(
               'w-8 h-8 rounded-full flex items-center justify-center transition-all',
               userVote === 'cold'
-                ? 'bg-blue-500 text-white shadow-md'
+                ? 'bg-deal-cold text-white shadow-md'
                 : userVote
                   ? 'text-muted-foreground/30'
-                  : 'text-muted-foreground hover:bg-blue-500/10 hover:text-blue-500'
+                  : 'text-muted-foreground hover:bg-deal-cold/10 hover:text-deal-cold'
             )}
           >
             <ChevronDown className="w-5 h-5" strokeWidth={2.5} />
