@@ -251,7 +251,7 @@ const CommentItem = ({
                 onClick={() => handleReaction(type)}
                 title={label}
                 className={cn(
-                  'inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs transition-all',
+                  'inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-sm transition-all',
                   isActive
                     ? activeClass
                     : 'text-muted-foreground hover:bg-muted hover:text-foreground'
