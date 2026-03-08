@@ -284,7 +284,7 @@ const SearchResults = () => {
             )}
 
             {filteredDeals.length > 0 ? (
-              <div className="space-y-4">
+              <div className="space-y-0 rounded-xl border overflow-hidden">
                 {filteredDeals.map(deal => (
                   <DealCard key={deal.id} deal={deal} />
                 ))}
