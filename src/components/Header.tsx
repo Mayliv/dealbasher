@@ -16,6 +16,7 @@ import LanguageSwitcher from './LanguageSwitcher';
 import RegionSwitcher from './RegionSwitcher';
 import LocationSelector from './LocationSelector';
 import NotificationBell from './NotificationBell';
+import { usePulseSubmit } from './HintsSystem';
 
 const RECENT_SEARCHES_KEY = 'dealbasher_recent_searches';
 const MAX_RECENT = 6;
