@@ -122,6 +122,15 @@ const DealCard = ({ deal }: DealCardProps) => {
               </Badge>
             </div>
           )}
+
+          {/* Offline badge */}
+          {deal.isOffline && (
+            <div className={`absolute ${deal.isPriceBug ? 'top-9' : 'top-2'} left-2`}>
+              <Badge className="bg-deal-success text-primary-foreground border-0 backdrop-blur-sm text-xs font-bold shadow-sm">
+                <Store className="w-3 h-3 mr-1" /> Офлайн
+              </Badge>
+            </div>
+          )}
         </div>
 
         {/* Content Section */}
