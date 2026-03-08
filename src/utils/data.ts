@@ -22,6 +22,11 @@ export interface Deal {
   isOffline?: boolean;
   storeAddress?: string;
   city?: string;
+  // Kaspi-specific fields
+  isKaspiRed?: boolean;
+  kaspiInstallment?: { months: number; monthlyPayment: number };
+  kaspiScore?: number; // 1-5 rating
+  isKaspiBug?: boolean;
 }
 
 export const categories = [
