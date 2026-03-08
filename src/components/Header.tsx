@@ -53,6 +53,7 @@ const Header = () => {
   const { user, signOut } = useAuth();
   const { theme, setTheme } = useTheme();
   const isMobile = useIsMobile();
+  const shouldPulse = usePulseSubmit();
 
   // Close dropdown on outside click
   useEffect(() => {
