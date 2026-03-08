@@ -154,6 +154,56 @@ const PriceBugsPage = () => {
           </div>
         </div>
 
+        {/* Kaspi Bugs — KZ only */}
+        {region === 'kz' && (
+          <div>
+            <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+              🔴 Kaspi баги <Badge className="bg-[hsl(var(--kaspi-red))] text-white border-0 text-xs">{kaspiBugs.length} live</Badge>
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {kaspiBugs.map(bug => (
+                <div key={bug.id} className="bg-card rounded-xl border-2 border-[hsl(var(--kaspi-red)/0.5)] overflow-hidden relative animate-bug-pulse">
+                  <div className="absolute top-3 left-3 z-10">
+                    <Badge className="bg-[hsl(var(--kaspi-red))] text-white border-0 text-xs font-bold shadow-lg">
+                      🔴 Kaspi Баг
+                    </Badge>
+                  </div>
+                  <div className="absolute top-3 right-3 z-10 flex items-center gap-1 bg-background/90 backdrop-blur-sm rounded-full px-2 py-1">
+                    <Clock className="w-3 h-3 text-[hsl(var(--kaspi-red))]" />
+                    <CountdownTimer hoursLeft={bug.hoursLeft} />
+                  </div>
+                  <div className="aspect-[16/9] bg-muted">
+                    <img src={bug.imageUrl} alt={bug.title} className="w-full h-full object-cover" />
+                  </div>
+                  <div className="p-4 space-y-3">
+                    <h3 className="font-bold text-foreground leading-tight">{bug.title}</h3>
+                    <div className="flex items-baseline gap-3">
+                      <span className="text-2xl font-extrabold text-[hsl(var(--kaspi-red))]">
+                        {bug.bugPrice.toLocaleString()}₸
+                      </span>
+                      <span className="text-sm text-muted-foreground line-through">
+                        {bug.originalPrice.toLocaleString()}₸
+                      </span>
+                      <Badge className="bg-[hsl(var(--kaspi-red))] text-white border-0 text-xs font-bold">
+                        -{bug.discount}%
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <Badge variant="outline" className="text-[10px] border-[hsl(var(--kaspi-red)/0.3)] text-[hsl(var(--kaspi-red))]">{bug.store}</Badge>
+                        <span>{bug.postedAt}</span>
+                      </div>
+                      <Button size="sm" className="bg-[hsl(var(--kaspi-red))] hover:bg-[hsl(var(--kaspi-red)/0.9)] text-white font-bold text-xs">
+                        <ExternalLink className="w-3 h-3 mr-1" /> Купить
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Hall of Fame */}
         <div>
           <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
