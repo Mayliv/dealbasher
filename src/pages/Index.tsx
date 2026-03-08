@@ -373,6 +373,8 @@ const Index = () => {
   }, []);
 
   return (
+    <>
+    {showOnboarding && <OnboardingModal onComplete={handleOnboardingComplete} />}
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
       <CategoryBar />
