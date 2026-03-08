@@ -329,13 +329,13 @@ const DealDetail = () => {
 
       <main className="flex-1 container mx-auto px-4 py-6">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-1 text-sm text-muted-foreground mb-4">
+        <nav aria-label="Breadcrumb" className="flex items-center gap-1 text-sm text-muted-foreground mb-4">
           <Link to="/" className="hover:text-foreground transition-colors">Главная</Link>
           <ChevronRight className="w-3 h-3" />
-          <Link to={`/category/${deal.category}`} className="hover:text-foreground transition-colors capitalize">{deal.category}</Link>
+          <Link to={`/category/${deal.category}`} className="hover:text-foreground transition-colors">{categoryName}</Link>
           <ChevronRight className="w-3 h-3" />
           <span className="text-foreground truncate max-w-[200px]">{deal.title}</span>
-        </div>
+        </nav>
 
         <div className="flex flex-col lg:flex-row gap-6">
           {/* ─── Main Content ─────────────────── */}
