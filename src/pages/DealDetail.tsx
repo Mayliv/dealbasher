@@ -37,6 +37,7 @@ import {
 } from 'recharts';
 import DealCard from '@/components/DealCard';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { isDealOfTheDay, wasDealOfTheDay } from '@/components/DealOfTheDay';
 
 // ─── Temperature color helper ──────────────────────────────────
 const getTemperatureStyle = (temp: number) => {

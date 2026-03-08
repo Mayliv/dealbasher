@@ -149,7 +149,8 @@ const DealCard = ({ deal }: DealCardProps) => {
       className={cn(
         'group bg-card text-card-foreground rounded-xl border overflow-hidden hover:shadow-lg transition-all duration-200 relative cursor-pointer',
         !isMobile && 'hover:-translate-y-0.5',
-        isOnFire && 'hot-deal-glow'
+        isOnFire && 'hot-deal-glow',
+        isDOTD && 'border-yellow-400/60 dark:border-yellow-500/40'
       )}
       onClick={handleCardClick}
       onTouchStart={handleTouchStart}
@@ -157,6 +158,13 @@ const DealCard = ({ deal }: DealCardProps) => {
       onTouchEnd={handleTouchEnd}
       style={isMobile && swipeOffset ? { transform: `translateX(${swipeOffset * 0.3}px)`, transition: swipeOffset === 0 ? 'transform 0.3s' : 'none' } : undefined}
     >
+      {/* Deal of the Day crown */}
+      {isDOTD && (
+        <div className="dotd-crown-badge">
+          <span className="text-2xl" title="Сделка дня">👑</span>
+        </div>
+      )}
+
       {/* Swipe overlay */}
       <SwipeOverlay direction={swipeDirection} opacity={swipeOpacity} />
 

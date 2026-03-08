@@ -346,6 +346,9 @@ const Index = () => {
         {/* Hero Banner */}
         <HeroBanner deals={heroDeals} />
 
+        {/* 🏆 Deal of the Day */}
+        <DealOfTheDay regionDeals={regionDeals} />
+
         {/* 🔴 Kaspi RED section — KZ only */}
         {region === 'kz' && (
           <section className="mb-8">
