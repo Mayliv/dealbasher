@@ -11,6 +11,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { ExternalLink, Upload, Clock, Trophy, AlertTriangle, Send } from 'lucide-react';
 import { deals } from '@/utils/data';
 import { useLocalization } from '@/contexts/LocalizationContext';
+import { cn } from '@/lib/utils';
 
 // ─── Countdown timer ───────────────────────────────────────
 const CountdownTimer = ({ hoursLeft }: { hoursLeft: number }) => {
@@ -48,9 +49,14 @@ const hallOfFame = [
   { title: 'Samsung S24 Ultra за 2 990₽', store: 'DNS', discount: 97.5, date: '02.05.2024' },
 ];
 
+const kaspiBugs = [
+  { id: 'kb1', store: 'Kaspi Shop', title: 'MacBook Air M2 за 49 990₸ вместо 649 990₸', originalPrice: 649990, bugPrice: 49990, discount: 92, imageUrl: 'https://placehold.co/400x300/cc0000/fff?text=MacBook+Kaspi', postedBy: 'kaspi_bug_hunter', postedAt: '20 мин назад', hoursLeft: 3, isActive: true },
+  { id: 'kb2', store: 'Kaspi Shop', title: 'AirPods Pro 2 за 4 990₸ — ошибка Kaspi!', originalPrice: 119990, bugPrice: 4990, discount: 96, imageUrl: 'https://placehold.co/400x300/cc0000/fff?text=AirPods+Kaspi', postedBy: 'almaty_sniper', postedAt: '40 мин назад', hoursLeft: 1.5, isActive: true },
+];
+
 const PriceBugsPage = () => {
   const { toast } = useToast();
-  const { formatPrice } = useLocalization();
+  const { formatPrice, region } = useLocalization();
 
   const [formData, setFormData] = useState({
     storeUrl: '',
@@ -147,6 +153,56 @@ const PriceBugsPage = () => {
             ))}
           </div>
         </div>
+
+        {/* Kaspi Bugs — KZ only */}
+        {region === 'kz' && (
+          <div>
+            <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+              🔴 Kaspi баги <Badge className="bg-[hsl(var(--kaspi-red))] text-white border-0 text-xs">{kaspiBugs.length} live</Badge>
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {kaspiBugs.map(bug => (
+                <div key={bug.id} className="bg-card rounded-xl border-2 border-[hsl(var(--kaspi-red)/0.5)] overflow-hidden relative animate-bug-pulse">
+                  <div className="absolute top-3 left-3 z-10">
+                    <Badge className="bg-[hsl(var(--kaspi-red))] text-white border-0 text-xs font-bold shadow-lg">
+                      🔴 Kaspi Баг
+                    </Badge>
+                  </div>
+                  <div className="absolute top-3 right-3 z-10 flex items-center gap-1 bg-background/90 backdrop-blur-sm rounded-full px-2 py-1">
+                    <Clock className="w-3 h-3 text-[hsl(var(--kaspi-red))]" />
+                    <CountdownTimer hoursLeft={bug.hoursLeft} />
+                  </div>
+                  <div className="aspect-[16/9] bg-muted">
+                    <img src={bug.imageUrl} alt={bug.title} className="w-full h-full object-cover" />
+                  </div>
+                  <div className="p-4 space-y-3">
+                    <h3 className="font-bold text-foreground leading-tight">{bug.title}</h3>
+                    <div className="flex items-baseline gap-3">
+                      <span className="text-2xl font-extrabold text-[hsl(var(--kaspi-red))]">
+                        {bug.bugPrice.toLocaleString()}₸
+                      </span>
+                      <span className="text-sm text-muted-foreground line-through">
+                        {bug.originalPrice.toLocaleString()}₸
+                      </span>
+                      <Badge className="bg-[hsl(var(--kaspi-red))] text-white border-0 text-xs font-bold">
+                        -{bug.discount}%
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <Badge variant="outline" className="text-[10px] border-[hsl(var(--kaspi-red)/0.3)] text-[hsl(var(--kaspi-red))]">{bug.store}</Badge>
+                        <span>{bug.postedAt}</span>
+                      </div>
+                      <Button size="sm" className="bg-[hsl(var(--kaspi-red))] hover:bg-[hsl(var(--kaspi-red)/0.9)] text-white font-bold text-xs">
+                        <ExternalLink className="w-3 h-3 mr-1" /> Купить
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Hall of Fame */}
         <div>

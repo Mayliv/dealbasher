@@ -271,9 +271,24 @@ const DealCard = ({ deal }: DealCardProps) => {
         {/* RIGHT: Content (35%) */}
         <div className="w-[35%] flex flex-col justify-between p-3 min-w-0">
           {/* Store badge */}
-          <Badge variant="secondary" className="self-start text-[10px] px-1.5 py-0 h-5 mb-1.5 shrink-0">
-            {deal.store}
-          </Badge>
+          <div className="flex items-center gap-1 mb-1.5">
+            <Badge variant="secondary" className="self-start text-[10px] px-1.5 py-0 h-5 shrink-0">
+              {deal.store}
+            </Badge>
+            {deal.isKaspiRed && region === 'kz' && (
+              <Badge className="bg-[hsl(var(--kaspi-red))] text-white border-0 text-[9px] px-1.5 py-0 h-4 shrink-0">
+                🔴 RED
+              </Badge>
+            )}
+          </div>
+
+          {/* Kaspi rating */}
+          {deal.kaspiScore && region === 'kz' && (
+            <div className="flex items-center gap-1 mb-1">
+              <span className="text-[10px] text-amber-500">{'★'.repeat(Math.round(deal.kaspiScore))}</span>
+              <span className="text-[10px] text-muted-foreground">{deal.kaspiScore}</span>
+            </div>
+          )}
 
           {/* Title */}
           <h3 className="text-sm font-bold leading-tight line-clamp-2 text-foreground group-hover:text-primary transition-colors mb-auto">
@@ -306,6 +321,14 @@ const DealCard = ({ deal }: DealCardProps) => {
                 </Badge>
               )}
             </div>
+            {/* Kaspi installment info */}
+            {deal.kaspiInstallment && region === 'kz' && (
+              <div className="mt-1 px-1.5 py-0.5 rounded bg-[hsl(var(--kaspi-red)/0.1)] border border-[hsl(var(--kaspi-red)/0.2)]">
+                <span className="text-[10px] font-bold text-[hsl(var(--kaspi-red))]">
+                  0-0-{deal.kaspiInstallment.months}: {formatPrice(deal.kaspiInstallment.monthlyPayment, 'KZT')}/мес
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Bottom row: user, time, comments, share */}
