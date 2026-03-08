@@ -127,10 +127,10 @@ const ONBOARDING_STEPS = [
   },
   {
     target: '[data-onboarding="region"]',
-    text: '🌍 Выбери свой регион чтобы видеть релевантные сделки',
     position: 'bottom' as const,
+    text: '🌍 Выбери свой регион чтобы видеть релевантные сделки',
   },
-];
+] as const;
 
 export const OnboardingTooltips = () => {
   const [step, setStep] = useState(0);
