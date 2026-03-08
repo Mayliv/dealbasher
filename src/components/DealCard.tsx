@@ -218,6 +218,17 @@ const DealCard = ({ deal }: DealCardProps) => {
         </div>
       )}
 
+      {/* Community review overlay (3+ reports) */}
+      {isUnderReview && !isExpired && (
+        <div className="absolute inset-0 z-20 bg-amber-500/10 backdrop-blur-[1px] flex items-center justify-center rounded-xl border-2 border-amber-500/50">
+          <div className="text-center bg-background/90 rounded-lg px-4 py-2">
+            <span className="text-2xl">⚠️</span>
+            <p className="text-sm font-semibold text-amber-600 dark:text-amber-400 mt-1">Проверяется сообществом</p>
+            <p className="text-[10px] text-muted-foreground">{reportCount} жалоб</p>
+          </div>
+        </div>
+      )}
+
       {/* 3-column layout */}
       <div className="flex items-stretch">
         {/* LEFT: Voting widget (20%) */}
