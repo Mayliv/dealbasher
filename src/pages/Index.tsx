@@ -25,6 +25,7 @@ import MobileSidebarDrawer from '@/components/MobileSidebarDrawer';
 import DealOfTheDay from '@/components/DealOfTheDay';
 import PullToRefresh from '@/components/PullToRefresh';
 import PWAInstallBanner from '@/components/PWAInstallBanner';
+import OnboardingModal, { isOnboardingDone, getOnboardingPrefs, OnboardingPrefs } from '@/components/OnboardingModal';
 
 type DealTypeFilter = 'all' | 'online' | 'offline';
 
