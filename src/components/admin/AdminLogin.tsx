@@ -5,26 +5,46 @@ import { Hammer, Lock } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { supabase } from "@/integrations/supabase/client";
 
 interface AdminLoginProps {
   onLogin: (success: boolean) => void;
 }
 
 const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    
-    // Простая проверка для демонстрации - в реальном приложении использовать безопасную аутентификацию
-    if (username === 'admin' && password === 'admin123') {
-      onLogin(true);
-    } else {
-      setError('Неверные учетные данные');
+    setLoading(true);
+
+    try {
+      const { data, error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (authError) {
+        setError('Неверные учетные данные');
+        onLogin(false);
+        return;
+      }
+
+      if (data.session) {
+        onLogin(true);
+      } else {
+        setError('Не удалось войти');
+        onLogin(false);
+      }
+    } catch {
+      setError('Ошибка при входе');
       onLogin(false);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -47,12 +67,13 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username">Имя пользователя</Label>
+              <Label htmlFor="email">Email</Label>
               <Input
-                id="username"
-                placeholder="admin"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                id="email"
+                type="email"
+                placeholder="admin@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
@@ -72,8 +93,8 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
             )}
           </CardContent>
           <CardFooter>
-            <Button type="submit" className="w-full">
-              <Lock className="mr-2 h-4 w-4" /> Войти
+            <Button type="submit" className="w-full" disabled={loading}>
+              <Lock className="mr-2 h-4 w-4" /> {loading ? 'Вход...' : 'Войти'}
             </Button>
           </CardFooter>
         </form>

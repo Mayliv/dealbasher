@@ -1,21 +1,16 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Users,
   MessageSquare,
   FileCode,
   Activity,
-  AlertTriangle,
   Settings,
-  Eye,
-  EyeOff,
-  BarChart3,
   AlertCircle,
   Bell,
 } from "lucide-react";
@@ -26,10 +21,23 @@ import UserActivity from "@/components/admin/UserActivity";
 import SiteSettings from "@/components/admin/SiteSettings";
 import CodeEditor from "@/components/admin/CodeEditor";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const AdminPanel: React.FC = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session);
+    });
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsAuthenticated(!!session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
   
   const handleLogin = (success: boolean) => {
     if (success) {
@@ -46,6 +54,19 @@ const AdminPanel: React.FC = () => {
       });
     }
   };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setIsAuthenticated(false);
+  };
+
+  if (isAuthenticated === null) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-muted/40">
+        <p className="text-muted-foreground">Загрузка...</p>
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
     return <AdminLogin onLogin={handleLogin} />;
@@ -66,7 +87,7 @@ const AdminPanel: React.FC = () => {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
               </span>
             </Button>
-            <Button variant="outline" size="sm" onClick={() => setIsAuthenticated(false)}>
+            <Button variant="outline" size="sm" onClick={handleLogout}>
               Выйти
             </Button>
           </div>
