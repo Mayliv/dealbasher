@@ -280,6 +280,7 @@ const Index = () => {
   const [minTemp, setMinTemp] = useState(0);
   const [dealTypeFilter, setDealTypeFilter] = useState<DealTypeFilter>('all');
   const [userCity, setUserCity] = useState<string | null>(getSelectedCity());
+  const [kaspiFilter, setKaspiFilter] = useState<'all' | 'red' | 'installment'>('all');
   const { t, region, formatPrice } = useLocalization();
 
   useEffect(() => {
