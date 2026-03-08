@@ -20,10 +20,10 @@ interface DealCardProps {
 }
 
 const getTemperatureColor = (temp: number) => {
-  if (temp < 0) return 'text-blue-500';
-  if (temp <= 50) return 'text-muted-foreground';
-  if (temp <= 200) return 'text-orange-500';
-  return 'text-red-600';
+  if (temp < 0) return 'text-deal-cold';
+  if (temp <= 50) return 'text-meta';
+  if (temp <= 200) return 'text-primary';
+  return 'text-deal-hot';
 };
 
 // ─── Animated counter ──────────────────────────────────────
@@ -71,7 +71,7 @@ const FloatingDelta = ({ delta }: { delta: number | null }) => {
     <span
       className={cn(
         'absolute -top-5 left-1/2 -translate-x-1/2 text-sm font-bold pointer-events-none animate-vote-float',
-        isPositive ? 'text-orange-500' : 'text-blue-500'
+        isPositive ? 'text-deal-hot' : 'text-deal-cold'
       )}
     >
       {isPositive ? '+' : ''}{currentDelta}
@@ -141,7 +141,7 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
             </Badge>
           )}
           {isDOTD && (
-            <Badge className="absolute bottom-2 left-2 bg-yellow-500 text-white text-[10px] px-1.5 py-0 h-5 border-0">
+            <Badge className="absolute bottom-2 left-2 bg-amber-500 text-white text-[10px] px-1.5 py-0 h-5 border-0">
               👑 Сделка дня
             </Badge>
           )}
@@ -155,7 +155,7 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
             data-no-navigate
             className={cn(
               'w-7 h-7 rounded-full flex items-center justify-center transition-all',
-              userVote === 'hot' ? 'bg-orange-500 text-white' : userVote ? 'bg-muted opacity-50' : 'hover:bg-orange-500/20 text-muted-foreground hover:text-orange-500'
+              userVote === 'hot' ? 'bg-deal-hot text-white' : userVote ? 'bg-muted opacity-50' : 'hover:bg-deal-hot/20 text-muted-foreground hover:text-deal-hot'
             )}
           >
             <ChevronUp className="w-4 h-4" />
@@ -172,7 +172,7 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
             data-no-navigate
             className={cn(
               'w-7 h-7 rounded-full flex items-center justify-center transition-all',
-              userVote === 'cold' ? 'bg-blue-500 text-white' : userVote ? 'bg-muted opacity-50' : 'hover:bg-blue-500/20 text-muted-foreground hover:text-blue-500'
+              userVote === 'cold' ? 'bg-deal-cold text-white' : userVote ? 'bg-muted opacity-50' : 'hover:bg-deal-cold/20 text-muted-foreground hover:text-deal-cold'
             )}
           >
             <ChevronDown className="w-4 h-4" />
@@ -257,10 +257,10 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
             className={cn(
               'w-8 h-8 rounded-full flex items-center justify-center transition-all',
               userVote === 'hot'
-                ? 'bg-orange-500 text-white shadow-md'
+                ? 'bg-deal-hot text-white shadow-md'
                 : userVote
                   ? 'text-muted-foreground/30'
-                  : 'text-muted-foreground hover:bg-orange-500/10 hover:text-orange-500'
+                  : 'text-muted-foreground hover:bg-deal-hot/10 hover:text-deal-hot'
             )}
           >
             <ChevronUp className="w-5 h-5" strokeWidth={2.5} />
@@ -280,10 +280,10 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
             className={cn(
               'w-8 h-8 rounded-full flex items-center justify-center transition-all',
               userVote === 'cold'
-                ? 'bg-blue-500 text-white shadow-md'
+                ? 'bg-deal-cold text-white shadow-md'
                 : userVote
                   ? 'text-muted-foreground/30'
-                  : 'text-muted-foreground hover:bg-blue-500/10 hover:text-blue-500'
+                  : 'text-muted-foreground hover:bg-deal-cold/10 hover:text-deal-cold'
             )}
           >
             <ChevronDown className="w-5 h-5" strokeWidth={2.5} />
@@ -317,7 +317,7 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
             </Badge>
           )}
           {deal.isOffline && (
-            <Badge className="absolute bottom-1.5 left-1.5 bg-blue-500 text-white text-[9px] px-1 py-0 h-4 border-0">
+            <Badge className="absolute bottom-1.5 left-1.5 bg-deal-cold text-white text-[9px] px-1 py-0 h-4 border-0">
               📍 {deal.city ? deal.city : 'Офлайн'}
             </Badge>
           )}

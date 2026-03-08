@@ -19,8 +19,19 @@ export default {
 			}
 		},
 		extend: {
+			fontSize: {
+				'heading-1': ['24px', { lineHeight: '1.3', fontWeight: '700' }],
+				'heading-2': ['20px', { lineHeight: '1.3', fontWeight: '700' }],
+				'heading-3': ['18px', { lineHeight: '1.3', fontWeight: '700' }],
+				'body': ['15px', { lineHeight: '1.5', fontWeight: '400' }],
+				'meta': ['13px', { lineHeight: '1.5', fontWeight: '400' }],
+				'tiny': ['11px', { lineHeight: '1.4', fontWeight: '400' }],
+			},
 			colors: {
 				'deal-success': 'hsl(var(--deal-success))',
+				'deal-hot': 'hsl(var(--deal-hot))',
+				'deal-cold': 'hsl(var(--deal-cold))',
+				'meta': 'hsl(var(--meta))',
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
@@ -55,8 +66,8 @@ export default {
 					foreground: 'hsl(var(--card-foreground))'
 				},
 				deal: {
-					red: '#FF5252',
-					green: '#4CAF50',
+					red: 'hsl(var(--deal-hot))',
+					green: 'hsl(var(--deal-success))',
 					gray: '#F5F5F5',
 					dark: '#333333',
 					discount: '#FF9800',
@@ -80,32 +91,23 @@ export default {
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
 			},
+			spacing: {
+				'card': '16px',
+				'section': '32px',
+				'element': '8px',
+			},
 			keyframes: {
 				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
+					from: { height: '0' },
+					to: { height: 'var(--radix-accordion-content-height)' }
 				},
 				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
-					},
-					to: {
-						height: '0'
-					}
+					from: { height: 'var(--radix-accordion-content-height)' },
+					to: { height: '0' }
 				},
 				'pulse-hot': {
-					'0%, 100%': { 
-						transform: 'scale(1)',
-						opacity: '1'
-					},
-					'50%': { 
-						transform: 'scale(1.05)',
-						opacity: '0.9'
-					}
+					'0%, 100%': { transform: 'scale(1)', opacity: '1' },
+					'50%': { transform: 'scale(1.05)', opacity: '0.9' }
 				},
 				'fade-in': {
 					'0%': { opacity: '0', transform: 'translateY(4px)' },
