@@ -20,10 +20,10 @@ interface DealCardProps {
 }
 
 const getTemperatureColor = (temp: number) => {
-  if (temp < 0) return 'text-blue-500';
-  if (temp <= 50) return 'text-muted-foreground';
-  if (temp <= 200) return 'text-orange-500';
-  return 'text-red-600';
+  if (temp < 0) return 'text-deal-cold';
+  if (temp <= 50) return 'text-meta';
+  if (temp <= 200) return 'text-primary';
+  return 'text-deal-hot';
 };
 
 // ─── Animated counter ──────────────────────────────────────
