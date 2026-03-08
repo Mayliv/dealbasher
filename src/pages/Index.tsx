@@ -25,6 +25,7 @@ import MobileSidebarDrawer from '@/components/MobileSidebarDrawer';
 import DealOfTheDay from '@/components/DealOfTheDay';
 import PullToRefresh from '@/components/PullToRefresh';
 import PWAInstallBanner from '@/components/PWAInstallBanner';
+import OnboardingModal, { isOnboardingDone, getOnboardingPrefs, OnboardingPrefs } from '@/components/OnboardingModal';
 
 type DealTypeFilter = 'all' | 'online' | 'offline';
 
@@ -283,7 +284,20 @@ const Index = () => {
   const [dealTypeFilter, setDealTypeFilter] = useState<DealTypeFilter>('all');
   const [userCity, setUserCity] = useState<string | null>(getSelectedCity());
   const [kaspiFilter, setKaspiFilter] = useState<'all' | 'red' | 'installment'>('all');
-  const { t, region, formatPrice } = useLocalization();
+  const [showOnboarding, setShowOnboarding] = useState(!isOnboardingDone());
+  const [onboardingPrefs, setOnboardingPrefs] = useState<OnboardingPrefs | null>(getOnboardingPrefs());
+  const { t, region, setRegion, formatPrice } = useLocalization();
+
+  const handleOnboardingComplete = (prefs: OnboardingPrefs) => {
+    setOnboardingPrefs(prefs);
+    setRegion(prefs.region);
+    if (prefs.city) {
+      localStorage.setItem(`dealbasher_city_${prefs.region}`, prefs.city);
+      setSelectedCity(prefs.city);
+      setUserCity(prefs.city);
+    }
+    setShowOnboarding(false);
+  };
 
   useEffect(() => {
     const savedCity = localStorage.getItem(`dealbasher_city_${region}`);
@@ -328,7 +342,8 @@ const Index = () => {
     ? regionDeals.filter(deal => deal.isOffline && deal.city === userCity).slice(0, 4)
     : regionDeals.filter(deal => deal.isOffline).slice(0, 4);
 
-  // Main feed
+  // Main feed — apply onboarding category preferences
+  const prefCats = onboardingPrefs?.categories;
   const filteredDeals = (selectedCity
     ? regionDeals.filter(deal => !deal.location || deal.location === selectedCity)
     : regionDeals
@@ -337,6 +352,10 @@ const Index = () => {
     .filter(deal => {
       if (dealTypeFilter === 'online') return !deal.isOffline;
       if (dealTypeFilter === 'offline') return !!deal.isOffline;
+      return true;
+    })
+    .filter(deal => {
+      if (prefCats && prefCats.length > 0) return prefCats.includes(deal.category);
       return true;
     });
 
@@ -354,6 +373,8 @@ const Index = () => {
   }, []);
 
   return (
+    <>
+    {showOnboarding && <OnboardingModal onComplete={handleOnboardingComplete} />}
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
       <CategoryBar />
@@ -570,6 +591,7 @@ const Index = () => {
       <PWAInstallBanner />
       <Footer />
     </div>
+    </>
   );
 };
 
