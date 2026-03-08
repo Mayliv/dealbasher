@@ -317,7 +317,7 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
             </Badge>
           )}
           {deal.isOffline && (
-            <Badge className="absolute bottom-1.5 left-1.5 bg-blue-500 text-white text-[9px] px-1 py-0 h-4 border-0">
+            <Badge className="absolute bottom-1.5 left-1.5 bg-deal-cold text-white text-[9px] px-1 py-0 h-4 border-0">
               📍 {deal.city ? deal.city : 'Офлайн'}
             </Badge>
           )}
