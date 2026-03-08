@@ -243,7 +243,8 @@ const DealCard = ({ deal }: DealCardProps) => {
                 ? 'bg-orange-500 scale-110 shadow-md'
                 : userVote
                   ? 'bg-muted opacity-50 cursor-not-allowed'
-                  : 'bg-orange-500/10 hover:bg-orange-500/20 hover:scale-110 cursor-pointer'
+                  : 'bg-orange-500/10 hover:bg-orange-500/20 hover:scale-110 cursor-pointer',
+              'active:scale-125 active:rotate-12 active:transition-transform active:duration-75'
             )}
             title="Hot!"
           >
