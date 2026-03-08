@@ -591,6 +591,7 @@ const Index = () => {
       <PWAInstallBanner />
       <Footer />
     </div>
+    </>
   );
 };
 
