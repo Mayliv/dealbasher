@@ -202,10 +202,11 @@ const DealDetail = () => {
   const { dealId } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { formatPrice } = useLocalization();
+  const { formatPrice, region } = useLocalization();
   const { user } = useAuth();
 
   const deal = deals.find((d) => d.id === parseInt(dealId || '0'));
+  const currency = region === 'kz' ? 'KZT' : region === 'ru' ? 'RUB' : 'USD';
 
   const priceHistory = useMemo(() => (deal ? generatePriceHistory(deal) : []), [deal]);
 
@@ -214,6 +215,48 @@ const DealDetail = () => {
   const [trackModalOpen, setTrackModalOpen] = useState(false);
   const [targetPrice, setTargetPrice] = useState('');
   const [dealTracked, setDealTracked] = useState(() => deal ? isTracked(deal.id) : false);
+
+  // SEO meta tags
+  const categoryName = categories.find(c => c.id === deal?.category)?.name || deal?.category || '';
+  const seoTitle = deal
+    ? `${deal.title} за ${formatPrice(deal.dealPrice, currency)}${deal.discount ? ` (-${deal.discount}%)` : ''} | DealBasher`
+    : 'Сделка не найдена | DealBasher';
+  const seoDescription = deal
+    ? `${deal.title} в ${deal.store}. ${deal.description?.slice(0, 120) || ''} Цена: ${formatPrice(deal.dealPrice, currency)}`
+    : 'Сделка не найдена';
+  const canonicalUrl = deal ? `${window.location.origin}/deal/${deal.id}` : undefined;
+
+  const jsonLd = deal ? {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: deal.title,
+    image: deal.imageUrl,
+    description: deal.description,
+    offers: {
+      '@type': 'Offer',
+      price: deal.dealPrice,
+      priceCurrency: currency,
+      availability: 'https://schema.org/InStock',
+      url: deal.url,
+      seller: { '@type': 'Organization', name: deal.store },
+    },
+    ...(deal.originalPrice ? {
+      priceSpecification: {
+        '@type': 'PriceSpecification',
+        price: deal.originalPrice,
+        priceCurrency: currency,
+      },
+    } : {}),
+  } : undefined;
+
+  usePageSEO({
+    title: seoTitle,
+    description: seoDescription,
+    ogImage: deal?.imageUrl,
+    ogType: 'product',
+    canonical: canonicalUrl,
+    jsonLd,
+  });
 
   const similarDeals = useMemo(
     () =>
