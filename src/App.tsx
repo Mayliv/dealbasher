@@ -66,7 +66,7 @@ const App = () => (
                   <Route path="/challenges" element={<ChallengesPage />} />
                   <Route path="/sitemap" element={<SitemapPage />} />
                   <Route path="/how-it-works" element={<HowItWorksPage />} />
-                  <Route path="/faq" element={<HowItWorksPage />} />
+                  <Route path="/faq" element={<FaqPage />} />
                   <Route path="/guidelines" element={<GuidelinesPage />} />
                   <Route path="/:pageId" element={<StaticPage />} />
                   <Route path="*" element={<NotFound />} />
