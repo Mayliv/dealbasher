@@ -155,7 +155,7 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <Link to="/" className="flex items-center">
-              <img src={dealbasherLogo} alt="DealBasher" className="h-7 md:h-8 w-auto max-w-[160px] md:max-w-[180px] object-contain" />
+              <img src={dealbasherLogo} alt="DealBasher" className="h-8 md:h-10 w-auto max-w-[192px] md:max-w-[216px] object-contain" />
               {!isMobile && (
                 <span className="text-[10px] ml-1.5 bg-white/20 rounded px-1.5 py-0.5 text-primary-foreground font-medium uppercase">
                   {region}
