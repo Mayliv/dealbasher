@@ -353,39 +353,61 @@ const Index = () => {
         {/* 🔴 Kaspi RED section — KZ only */}
         {region === 'kz' && (
           <section className="mb-8">
+            {/* Kaspi community banner */}
+            <div className="mb-4 rounded-xl bg-[hsl(var(--kaspi-red)/0.08)] border-2 border-[hsl(var(--kaspi-red)/0.3)] p-4 flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-bold text-foreground">🔍 Нашёл дешевле на Kaspi? Делись с сообществом!</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Помоги другим найти лучшие цены на Kaspi.kz</p>
+              </div>
+              <Link to="/submit">
+                <Button size="sm" className="bg-[hsl(var(--kaspi-red))] hover:bg-[hsl(var(--kaspi-red)/0.9)] text-white text-xs font-bold shrink-0">
+                  Добавить сделку
+                </Button>
+              </Link>
+            </div>
+
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                {t('section.kaspi_red')}
+                🔴 Kaspi RED — Рассрочка 0%
               </h2>
-              <Badge className="bg-secondary text-secondary-foreground text-xs font-bold">Kaspi</Badge>
+              <Badge className="bg-[hsl(var(--kaspi-red))] text-white text-xs font-bold border-0">Kaspi</Badge>
             </div>
+
+            {/* Kaspi filters */}
+            <div className="flex items-center gap-2 mb-4">
+              <Button
+                variant={kaspiFilter === 'all' ? 'default' : 'outline'}
+                size="sm"
+                className={cn('h-7 text-xs', kaspiFilter === 'all' && 'bg-[hsl(var(--kaspi-red))] hover:bg-[hsl(var(--kaspi-red)/0.9)] text-white border-0')}
+                onClick={() => setKaspiFilter('all')}
+              >
+                Все Kaspi
+              </Button>
+              <Button
+                variant={kaspiFilter === 'red' ? 'default' : 'outline'}
+                size="sm"
+                className={cn('h-7 text-xs', kaspiFilter === 'red' && 'bg-[hsl(var(--kaspi-red))] hover:bg-[hsl(var(--kaspi-red)/0.9)] text-white border-0')}
+                onClick={() => setKaspiFilter('red')}
+              >
+                🔴 Только Kaspi RED
+              </Button>
+              <Button
+                variant={kaspiFilter === 'installment' ? 'default' : 'outline'}
+                size="sm"
+                className={cn('h-7 text-xs', kaspiFilter === 'installment' && 'bg-[hsl(var(--kaspi-red))] hover:bg-[hsl(var(--kaspi-red)/0.9)] text-white border-0')}
+                onClick={() => setKaspiFilter('installment')}
+              >
+                💳 Рассрочка доступна
+              </Button>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[
-                { id: 901, title: 'iPhone 15 Pro — Kaspi RED 12 мес', description: 'Рассрочка 0% на 12 месяцев через Kaspi RED. Без переплаты!', originalPrice: 599990, dealPrice: 599990, store: 'Kaspi Shop', category: 'electronics', imageUrl: 'https://placehold.co/400x300/00A651/fff?text=iPhone+15+RED', postedBy: 'kaspi_deals', postedAt: '1 час назад', temperature: 389, comments: 24, url: '#', region: 'kz' as const, discount: 0 },
-                { id: 902, title: 'Samsung Galaxy S24 — RED 0-0-24', description: 'Без первого взноса, без переплаты на 24 месяца', originalPrice: 449990, dealPrice: 449990, store: 'Kaspi Shop', category: 'electronics', imageUrl: 'https://placehold.co/400x300/00A651/fff?text=Galaxy+S24+RED', postedBy: 'kz_tech', postedAt: '3 часа назад', temperature: 267, comments: 18, url: '#', region: 'kz' as const, discount: 0 },
-                { id: 903, title: 'Dyson V15 — RED рассрочка + кэшбэк', description: 'Kaspi RED на 6 месяцев + кэшбэк 5% бонусами', originalPrice: 329990, dealPrice: 329990, store: 'Kaspi Shop', category: 'home', imageUrl: 'https://placehold.co/400x300/00A651/fff?text=Dyson+RED', postedBy: 'smart_shopper', postedAt: '5 часов назад', temperature: 198, comments: 11, url: '#', region: 'kz' as const, discount: 0 },
-              ].map(deal => (
-                <Link key={deal.id} to={`/deal/${deal.id}`} className="block">
-                  <div className="bg-card border-2 border-secondary/30 rounded-xl p-4 hover:border-secondary/60 transition-all hover:shadow-lg group">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Badge className="bg-secondary text-secondary-foreground text-xs font-bold">🔴 Kaspi RED</Badge>
-                      <span className="text-xs text-muted-foreground">0% рассрочка</span>
-                    </div>
-                    <div className="flex gap-3">
-                      <div className="w-20 h-20 rounded-lg overflow-hidden bg-muted shrink-0">
-                        <img src={deal.imageUrl} alt={deal.title} className="w-full h-full object-cover" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-bold text-sm text-foreground line-clamp-2 group-hover:text-primary transition-colors">{deal.title}</h4>
-                        <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{deal.description}</p>
-                        <div className="flex items-center gap-2 mt-2">
-                          <span className="text-base font-extrabold text-secondary">{formatPrice(deal.dealPrice, 'KZT')}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
+              {kaspiDeals.map(deal => (
+                <DealCard key={deal.id} deal={deal} />
               ))}
+              {kaspiDeals.length === 0 && (
+                <p className="text-sm text-muted-foreground col-span-full text-center py-6">Нет сделок по выбранному фильтру</p>
+              )}
             </div>
           </section>
         )}
