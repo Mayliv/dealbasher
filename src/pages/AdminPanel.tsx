@@ -21,6 +21,7 @@ import ContentModeration from "@/components/admin/ContentModeration";
 import UserActivity from "@/components/admin/UserActivity";
 import SiteSettings from "@/components/admin/SiteSettings";
 import CodeEditor from "@/components/admin/CodeEditor";
+import ReportsQueue from "@/components/admin/ReportsQueue";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
