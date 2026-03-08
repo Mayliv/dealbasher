@@ -164,7 +164,7 @@ const DealCard = ({ deal }: DealCardProps) => {
                   }`}
                 title="Cold"
               >
-                💩
+                ❄️
               </button>
             </div>
 

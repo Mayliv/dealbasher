@@ -41,6 +41,7 @@ const App = () => (
                 <Route path="/deals" element={<Index />} />
                 <Route path="/categories" element={<CategoriesPage />} />
                 <Route path="/promocodes" element={<PromocodesPage />} />
+                <Route path="/bugs" element={<PriceBugsPage />} />
                 <Route path="/freebies" element={<StaticPage />} />
                 <Route path="/discussions" element={<Discussions />} />
                 <Route path="/owner" element={<AdminPanel />} />

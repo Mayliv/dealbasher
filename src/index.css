@@ -151,7 +151,16 @@
   }
 
   /* Vote float animation */
-  @keyframes vote-float {
+@keyframes bug-pulse {
+  0%, 100% { border-color: hsl(var(--destructive) / 0.5); box-shadow: 0 0 0 0 hsl(var(--destructive) / 0.2); }
+  50% { border-color: hsl(var(--destructive)); box-shadow: 0 0 20px 0 hsl(var(--destructive) / 0.15); }
+}
+
+.animate-bug-pulse {
+  animation: bug-pulse 2s ease-in-out infinite;
+}
+
+@keyframes vote-float {
     0% {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
