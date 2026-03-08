@@ -565,7 +565,9 @@ const Index = () => {
           </aside>
         </div>
       </main>
+      </PullToRefresh>
 
+      <PWAInstallBanner />
       <Footer />
     </div>
   );
