@@ -137,58 +137,7 @@ const mockComments: Comment[] = [
   },
 ];
 
-// ─── Comment Component ─────────────────────────────────────────
-const CommentItem = ({
-  comment,
-  depth = 0,
-}: {
-  comment: Comment;
-  depth?: number;
-}) => {
-  const [showReplyBox, setShowReplyBox] = useState(false);
-
-  return (
-    <div className={`${depth > 0 ? 'ml-8 border-l-2 border-border pl-4' : ''}`}>
-      <div className="py-3">
-        <div className="flex items-center gap-2 mb-1.5">
-          <Avatar className="h-6 w-6">
-            <AvatarImage src={comment.avatarUrl} />
-            <AvatarFallback className="text-[10px] bg-muted">
-              {comment.author.charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <span className="text-sm font-medium text-foreground">{comment.author}</span>
-          <span className="text-xs text-muted-foreground">{comment.postedAt}</span>
-        </div>
-        <p className="text-sm text-foreground/90 leading-relaxed">{comment.text}</p>
-        <div className="flex items-center gap-3 mt-2">
-          <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
-            <ThumbsUp className="w-3 h-3" /> {comment.likes}
-          </button>
-          {depth < 1 && (
-            <button
-              onClick={() => setShowReplyBox(!showReplyBox)}
-              className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <Reply className="w-3 h-3" /> Ответить
-            </button>
-          )}
-        </div>
-        {showReplyBox && (
-          <div className="mt-2 flex gap-2">
-            <Textarea placeholder="Напишите ответ..." className="min-h-[60px] text-sm" />
-            <Button size="sm" className="gradient-primary text-primary-foreground self-end">
-              <Send className="w-3 h-3" />
-            </Button>
-          </div>
-        )}
-      </div>
-      {comment.replies?.map((reply) => (
-        <CommentItem key={reply.id} comment={reply} depth={depth + 1} />
-      ))}
-    </div>
-  );
-};
+// CommentItem is now imported from @/components/CommentItem
 
 // ─── Main Page ─────────────────────────────────────────────────
 const DealDetail = () => {
