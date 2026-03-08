@@ -49,9 +49,14 @@ const hallOfFame = [
   { title: 'Samsung S24 Ultra за 2 990₽', store: 'DNS', discount: 97.5, date: '02.05.2024' },
 ];
 
+const kaspiBugs = [
+  { id: 'kb1', store: 'Kaspi Shop', title: 'MacBook Air M2 за 49 990₸ вместо 649 990₸', originalPrice: 649990, bugPrice: 49990, discount: 92, imageUrl: 'https://placehold.co/400x300/cc0000/fff?text=MacBook+Kaspi', postedBy: 'kaspi_bug_hunter', postedAt: '20 мин назад', hoursLeft: 3, isActive: true },
+  { id: 'kb2', store: 'Kaspi Shop', title: 'AirPods Pro 2 за 4 990₸ — ошибка Kaspi!', originalPrice: 119990, bugPrice: 4990, discount: 96, imageUrl: 'https://placehold.co/400x300/cc0000/fff?text=AirPods+Kaspi', postedBy: 'almaty_sniper', postedAt: '40 мин назад', hoursLeft: 1.5, isActive: true },
+];
+
 const PriceBugsPage = () => {
   const { toast } = useToast();
-  const { formatPrice } = useLocalization();
+  const { formatPrice, region } = useLocalization();
 
   const [formData, setFormData] = useState({
     storeUrl: '',
