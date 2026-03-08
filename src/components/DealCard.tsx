@@ -97,8 +97,21 @@ const DealCard = ({ deal }: DealCardProps) => {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
 
+  const [shareOpen, setShareOpen] = useState(false);
+  const [shareCount, setShareCount] = useState(() => {
+    const stored = localStorage.getItem(`share_count_${deal.id}`);
+    return stored ? parseInt(stored, 10) : Math.floor(Math.random() * 120);
+  });
+
+  const handleShare = () => {
+    const newCount = shareCount + 1;
+    setShareCount(newCount);
+    localStorage.setItem(`share_count_${deal.id}`, String(newCount));
+  };
+
   const isExpired = temperature < -10;
   const isOnFire = temperature > 300;
+  const isViral = shareCount > 100;
   const currency = region === 'kz' ? 'KZT' : region === 'ru' ? 'RUB' : 'USD';
 
   const regionDeals = deals.filter(d => !d.region || d.region === region);
