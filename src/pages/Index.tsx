@@ -431,9 +431,9 @@ const Index = () => {
                 {t('section.all_bugs')} <ExternalLink className="h-3 w-3" />
               </Link>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="space-y-0 rounded-xl border overflow-hidden">
               {priceBugs.map(deal => (
-                <PriceBugCard key={deal.id} deal={deal} />
+                <DealCard key={deal.id} deal={deal} />
               ))}
             </div>
           </section>
