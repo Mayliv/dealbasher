@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MessageSquare, Clock } from 'lucide-react';
+import { MessageSquare, Clock, Share2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Deal, deals } from '@/utils/data';
 import { useLocalization } from '@/contexts/LocalizationContext';
@@ -9,6 +9,7 @@ import { useTemperatureVote } from '@/hooks/useTemperatureVote';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 import { isDealOfTheDay } from '@/components/DealOfTheDay';
+import ShareModal from '@/components/ShareModal';
 
 interface DealCardProps {
   deal: Deal;
