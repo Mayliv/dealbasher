@@ -17,6 +17,8 @@ export interface Deal {
   location?: string;
   marketplace?: string;
   region?: 'kz' | 'ru';
+  isPriceBug?: boolean;
+  avatarUrl?: string;
 }
 
 export const categories = [
