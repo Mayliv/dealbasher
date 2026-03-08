@@ -114,23 +114,25 @@ export const usePulseSubmit = () => {
 };
 
 // ─── Onboarding tooltip sequence ───────────────────────────
-const ONBOARDING_STEPS = [
+type TooltipPosition = 'top' | 'bottom' | 'left' | 'right';
+
+const ONBOARDING_STEPS: { target: string; text: string; position: TooltipPosition }[] = [
   {
     target: '[data-onboarding="feed"]',
     text: '👋 Это лента сделок. Голосуй стрелками — горячие поднимутся выше!',
-    position: 'right' as const,
+    position: 'right',
   },
   {
     target: '[data-onboarding="submit"]',
     text: '🔥 Нашёл скидку? Добавь её сюда и помоги другим сэкономить!',
-    position: 'bottom' as const,
+    position: 'bottom',
   },
   {
     target: '[data-onboarding="region"]',
-    position: 'bottom' as const,
     text: '🌍 Выбери свой регион чтобы видеть релевантные сделки',
+    position: 'bottom',
   },
-] as const;
+];
 
 export const OnboardingTooltips = () => {
   const [step, setStep] = useState(0);
