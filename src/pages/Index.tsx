@@ -120,55 +120,7 @@ const HeroBanner = ({ deals: heroDeals }: { deals: typeof deals }) => {
   );
 };
 
-// ─── Price Bug Card ─────────────────────────────────────
-const PriceBugCard = ({ deal }: { deal: typeof deals[0] }) => {
-  const { formatPrice, region } = useLocalization();
-  const currency = region === 'kz' ? 'KZT' : region === 'ru' ? 'RUB' : 'USD';
-  const [timeLeft, setTimeLeft] = useState({ h: Math.floor(Math.random() * 4) + 1, m: Math.floor(Math.random() * 59), s: Math.floor(Math.random() * 59) });
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        let { h, m, s } = prev;
-        s--;
-        if (s < 0) { s = 59; m--; }
-        if (m < 0) { m = 59; h--; }
-        if (h < 0) return { h: 0, m: 0, s: 0 };
-        return { h, m, s };
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  return (
-    <Link to={`/deal/${deal.id}`} className="block">
-      <div className="bg-card border-2 border-destructive/30 rounded-xl p-4 hover:border-destructive/60 transition-all hover:shadow-lg animate-bug-pulse group">
-        <div className="flex items-center gap-2 mb-3">
-          <Badge className="bg-destructive text-destructive-foreground text-xs font-bold">🐛 Баг цены!</Badge>
-          <div className="ml-auto flex items-center gap-1 text-xs text-destructive font-mono font-bold">
-            <Clock className="h-3 w-3" />
-            {String(timeLeft.h).padStart(2, '0')}:{String(timeLeft.m).padStart(2, '0')}:{String(timeLeft.s).padStart(2, '0')}
-          </div>
-        </div>
-        <div className="flex gap-3">
-          <div className="w-20 h-20 rounded-lg overflow-hidden bg-muted shrink-0">
-            <img src={deal.imageUrl} alt={deal.title} className="w-full h-full object-cover" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <h4 className="font-bold text-sm text-foreground line-clamp-2 group-hover:text-primary transition-colors">{deal.title}</h4>
-            <p className="text-xs text-muted-foreground mt-0.5">{deal.store}</p>
-            <div className="flex items-center gap-2 mt-2">
-              {deal.originalPrice && (
-                <span className="text-xs text-muted-foreground line-through">{formatPrice(deal.originalPrice, currency)}</span>
-              )}
-              <span className="text-base font-extrabold text-destructive">{formatPrice(deal.dealPrice, currency)}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Link>
-  );
-};
+// PriceBugCard removed — using DealCard for all deal types
 
 // ─── Sidebar Widgets ────────────────────────────────────
 const TopStoresWidget = () => {
