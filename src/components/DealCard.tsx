@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { MessageSquare, Share2, Clock, Tag, MapPin, Store } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -9,6 +9,8 @@ import { useLocalization } from '@/contexts/LocalizationContext';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useTemperatureVote } from '@/hooks/useTemperatureVote';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 
 interface DealCardProps {
   deal: Deal;
@@ -74,13 +76,66 @@ const FloatingDelta = ({ delta }: { delta: number | null }) => {
   );
 };
 
+// ─── Swipe overlay feedback ────────────────────────────────
+const SwipeOverlay = ({ direction, opacity }: { direction: 'hot' | 'cold' | null; opacity: number }) => {
+  if (!direction || opacity <= 0) return null;
+  return (
+    <div
+      className={cn(
+        'absolute inset-0 z-30 rounded-xl flex items-center justify-center pointer-events-none transition-opacity',
+        direction === 'hot' ? 'bg-orange-500/20' : 'bg-blue-500/20'
+      )}
+      style={{ opacity: Math.min(opacity, 1) }}
+    >
+      <span className="text-5xl">{direction === 'hot' ? '🔥' : '❄️'}</span>
+    </div>
+  );
+};
+
 const DealCard = ({ deal }: DealCardProps) => {
   const { formatPrice } = useLocalization();
   const { temperature, userVote, lastDelta, vote } = useTemperatureVote(deal.id, deal.temperature);
   const tempStyle = getTemperatureStyle(temperature);
+  const isMobile = useIsMobile();
 
   const isExpired = temperature < -10;
   const isOnFire = temperature > 300;
+
+  // ─── Swipe gesture state ─────────────────────────────────
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+  const [swipeOffset, setSwipeOffset] = useState(0);
+  const [swipeDirection, setSwipeDirection] = useState<'hot' | 'cold' | null>(null);
+  const SWIPE_THRESHOLD = 80;
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (!isMobile || userVote) return;
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  }, [isMobile, userVote]);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!isMobile || userVote || touchStartX.current === null || touchStartY.current === null) return;
+    const dx = e.touches[0].clientX - touchStartX.current;
+    const dy = e.touches[0].clientY - touchStartY.current;
+    // Only handle horizontal swipes
+    if (Math.abs(dy) > Math.abs(dx)) return;
+    setSwipeOffset(dx);
+    setSwipeDirection(dx > 30 ? 'hot' : dx < -30 ? 'cold' : null);
+  }, [isMobile, userVote]);
+
+  const handleTouchEnd = useCallback(() => {
+    if (!isMobile || userVote) return;
+    if (swipeOffset > SWIPE_THRESHOLD) {
+      vote('hot');
+    } else if (swipeOffset < -SWIPE_THRESHOLD) {
+      vote('cold');
+    }
+    setSwipeOffset(0);
+    setSwipeDirection(null);
+    touchStartX.current = null;
+    touchStartY.current = null;
+  }, [isMobile, userVote, swipeOffset, vote]);
 
   const handleShare = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -88,8 +143,23 @@ const DealCard = ({ deal }: DealCardProps) => {
     navigator.clipboard.writeText(`${window.location.origin}/deal/${deal.id}`);
   };
 
+  const swipeOpacity = Math.abs(swipeOffset) / SWIPE_THRESHOLD;
+
   return (
-    <div className={`group bg-card text-card-foreground rounded-xl border overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 relative ${isOnFire ? 'hot-deal-glow' : ''}`}>
+    <div
+      className={cn(
+        'group bg-card text-card-foreground rounded-xl border overflow-hidden hover:shadow-lg transition-all duration-200 relative',
+        !isMobile && 'hover:-translate-y-0.5',
+        isOnFire && 'hot-deal-glow'
+      )}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      style={isMobile && swipeOffset ? { transform: `translateX(${swipeOffset * 0.3}px)`, transition: swipeOffset === 0 ? 'transform 0.3s' : 'none' } : undefined}
+    >
+      {/* Swipe overlay */}
+      <SwipeOverlay direction={swipeDirection} opacity={swipeOpacity} />
+
       {/* Expired overlay */}
       {isExpired && (
         <div className="absolute inset-0 z-20 bg-background/70 backdrop-blur-[2px] flex items-center justify-center rounded-xl">
@@ -100,10 +170,11 @@ const DealCard = ({ deal }: DealCardProps) => {
         </div>
       )}
 
-      <div className="flex flex-col sm:flex-row">
+      {/* Mobile: vertical layout, Desktop: horizontal */}
+      <div className={cn('flex', isMobile ? 'flex-col' : 'flex-col sm:flex-row')}>
         {/* Image Section */}
-        <div className="relative sm:w-56 lg:w-64 shrink-0">
-          <AspectRatio ratio={16 / 9} className="sm:h-full">
+        <div className={cn('relative shrink-0', isMobile ? 'w-full' : 'sm:w-56 lg:w-64')}>
+          <AspectRatio ratio={16 / 9} className={cn(!isMobile && 'sm:h-full')}>
             <img src={deal.imageUrl} alt={deal.title} className="w-full h-full object-cover" />
           </AspectRatio>
 
@@ -131,6 +202,15 @@ const DealCard = ({ deal }: DealCardProps) => {
               </Badge>
             </div>
           )}
+
+          {/* Mobile: swipe hint */}
+          {isMobile && !userVote && (
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
+              <span className="text-[10px] text-white/70 bg-black/40 backdrop-blur-sm rounded-full px-2 py-0.5">
+                ← ❄️ свайп 🔥 →
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Content Section */}
@@ -141,13 +221,14 @@ const DealCard = ({ deal }: DealCardProps) => {
               <button
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); vote('hot'); }}
                 disabled={!!userVote}
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-base transition-all duration-200
-                  ${userVote === 'hot'
+                className={cn(
+                  'w-8 h-8 rounded-full flex items-center justify-center text-base transition-all duration-200',
+                  userVote === 'hot'
                     ? 'bg-orange-500 scale-110 shadow-md'
                     : userVote
                       ? 'bg-muted opacity-50 cursor-not-allowed'
                       : 'bg-muted hover:bg-orange-100 dark:hover:bg-orange-900/30 hover:scale-110 cursor-pointer'
-                  }`}
+                )}
                 title="Hot!"
               >
                 🔥
@@ -164,13 +245,14 @@ const DealCard = ({ deal }: DealCardProps) => {
               <button
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); vote('cold'); }}
                 disabled={!!userVote}
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-base transition-all duration-200
-                  ${userVote === 'cold'
+                className={cn(
+                  'w-8 h-8 rounded-full flex items-center justify-center text-base transition-all duration-200',
+                  userVote === 'cold'
                     ? 'bg-blue-500 scale-110 shadow-md'
                     : userVote
                       ? 'bg-muted opacity-50 cursor-not-allowed'
                       : 'bg-muted hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:scale-110 cursor-pointer'
-                  }`}
+                )}
                 title="Cold"
               >
                 ❄️
@@ -182,7 +264,7 @@ const DealCard = ({ deal }: DealCardProps) => {
               <Link to={`/deal/${deal.id}`} className="text-base font-semibold leading-snug hover:text-primary transition-colors line-clamp-2">
                 {deal.title}
               </Link>
-              <p className="mt-1.5 text-sm text-muted-foreground line-clamp-2">
+              <p className={cn('mt-1.5 text-sm text-muted-foreground', isMobile ? 'line-clamp-1' : 'line-clamp-2')}>
                 {deal.description}
               </p>
 
@@ -219,7 +301,7 @@ const DealCard = ({ deal }: DealCardProps) => {
               </div>
               <div className="flex items-center gap-1 text-xs text-muted-foreground shrink-0">
                 <Clock className="w-3 h-3" />
-                <span>{deal.postedAt}</span>
+                <span className={cn(isMobile && 'hidden')}>{deal.postedAt}</span>
               </div>
               <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-5 shrink-0 hidden sm:inline-flex">
                 <Tag className="w-2.5 h-2.5 mr-0.5" />

@@ -426,12 +426,24 @@ const SubmitDeal = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <Header />
+      {/* Hide header on mobile for fullscreen feel */}
+      <div className="hidden md:block">
+        <Header />
+      </div>
 
-      <main className="flex-1 container mx-auto px-4 py-6">
+      {/* Mobile: sticky top bar */}
+      <div className="md:hidden sticky top-0 z-40 gradient-primary px-4 py-3 flex items-center justify-between">
+        <button onClick={() => navigate(-1)} className="text-primary-foreground">
+          <ArrowLeft className="h-5 w-5" />
+        </button>
+        <h1 className="text-base font-bold text-primary-foreground">Добавить сделку</h1>
+        <div className="w-5" />
+      </div>
+
+      <main className="flex-1 container mx-auto px-4 py-4 md:py-6">
         <div className="max-w-5xl mx-auto">
-          <h1 className="text-2xl font-extrabold text-foreground mb-2">Добавить сделку</h1>
-          <p className="text-sm text-muted-foreground mb-6">Поделитесь выгодным предложением с сообществом</p>
+          <h1 className="text-2xl font-extrabold text-foreground mb-2 hidden md:block">Добавить сделку</h1>
+          <p className="text-sm text-muted-foreground mb-4 md:mb-6 hidden md:block">Поделитесь выгодным предложением с сообществом</p>
 
           <ProgressBar step={step} />
 
@@ -439,7 +451,7 @@ const SubmitDeal = () => {
             {/* ─── Form Panel ─────────────────── */}
             <div className="flex-1 min-w-0">
               <div className="bg-card rounded-xl border overflow-hidden">
-                <div className="p-6 space-y-5">
+                <div className="p-4 md:p-6 space-y-5">
 
                   {/* Step 1: Основное */}
                   {step === 1 && (
@@ -722,8 +734,8 @@ const SubmitDeal = () => {
               </div>
             </div>
 
-            {/* ─── Live Preview Panel ─────────── */}
-            <div className="lg:w-80 shrink-0">
+            {/* ─── Live Preview Panel (desktop only) ─────────── */}
+            <div className="lg:w-80 shrink-0 hidden lg:block">
               <div className="sticky top-20 space-y-3">
                 <LivePreview form={form} />
 
