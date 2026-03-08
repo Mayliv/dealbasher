@@ -21,6 +21,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import MobileSidebarDrawer from '@/components/MobileSidebarDrawer';
+import DealOfTheDay from '@/components/DealOfTheDay';
 
 type DealTypeFilter = 'all' | 'online' | 'offline';
 
