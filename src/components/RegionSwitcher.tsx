@@ -1,43 +1,45 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLocalization } from '@/contexts/LocalizationContext';
-import { Flag } from 'lucide-react';
 
 const RegionSwitcher: React.FC = () => {
   const { region } = useLocalization();
   
-  // In a real-world scenario, these would redirect to the actual subdomains
-  // For this demo, we'll just use different routes
   const handleSwitchRegion = (newRegion: 'kz' | 'ru') => {
-    // In a real implementation, this would redirect to different subdomains
-    // window.location.href = `https://${newRegion}.dealbasher.com`;
-    
-    // For demonstration purposes, we'll store the region preference in localStorage
     localStorage.setItem('dealbasher_region', newRegion);
-    window.location.reload(); // Reload to apply region changes
+    window.location.reload();
   };
 
   return (
-    <div className="flex items-center space-x-1">
+    <div className="flex items-center gap-0.5 bg-white/10 rounded-lg p-0.5">
       <Button 
-        variant={region === 'kz' ? 'default' : 'outline'} 
+        variant="ghost"
         size="sm" 
-        className={`h-7 w-8 p-0 ${region === 'kz' ? 'bg-deal-red hover:bg-deal-red/90' : ''}`}
+        className={`h-7 px-2 gap-1 text-xs font-bold rounded-md transition-all ${
+          region === 'kz' 
+            ? 'bg-white/20 text-primary-foreground shadow-sm' 
+            : 'text-primary-foreground/60 hover:text-primary-foreground hover:bg-white/10'
+        }`}
         onClick={() => handleSwitchRegion('kz')}
-        title="Казахстан - DealBasher KZ"
+        title="Казахстан"
       >
-        <span className="text-xs font-bold">KZ</span>
+        <span className="text-sm">🇰🇿</span>
+        <span>KZ</span>
       </Button>
       <Button 
-        variant={region === 'ru' ? 'default' : 'outline'}
+        variant="ghost"
         size="sm" 
-        className={`h-7 w-8 p-0 ${region === 'ru' ? 'bg-deal-red hover:bg-deal-red/90' : ''}`}
+        className={`h-7 px-2 gap-1 text-xs font-bold rounded-md transition-all ${
+          region === 'ru' 
+            ? 'bg-white/20 text-primary-foreground shadow-sm' 
+            : 'text-primary-foreground/60 hover:text-primary-foreground hover:bg-white/10'
+        }`}
         onClick={() => handleSwitchRegion('ru')}
-        title="Россия - DealBasher RU"
+        title="Россия"
       >
-        <span className="text-xs font-bold">RU</span>
+        <span className="text-sm">🇷🇺</span>
+        <span>RU</span>
       </Button>
     </div>
   );
