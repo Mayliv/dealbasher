@@ -437,13 +437,18 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
             </Link>
 
             {/* Bookmark - right aligned */}
-            <button
-              data-no-navigate
-              onClick={(e) => { e.stopPropagation(); setSaved(!saved); }}
-              className={cn('ml-auto hover:text-primary transition-colors', saved && 'text-primary')}
-            >
-              <Bookmark className={cn('w-3.5 h-3.5', saved && 'fill-current')} />
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  data-no-navigate
+                  onClick={(e) => { e.stopPropagation(); setSaved(!saved); }}
+                  className={cn('ml-auto hover:text-primary transition-colors', saved && 'text-primary')}
+                >
+                  <Bookmark className={cn('w-3.5 h-3.5', saved && 'fill-current')} />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>{saved ? 'Убрать из избранного' : 'Сохранить в избранное'}</TooltipContent>
+            </Tooltip>
           </div>
         </div>
 
