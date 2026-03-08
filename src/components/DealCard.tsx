@@ -360,9 +360,16 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
               </span>
             )}
             {deal.discount && (
-              <Badge className="bg-[hsl(var(--deal-success))] text-primary-foreground border-0 text-[10px] font-bold px-1.5 py-0 h-4">
-                -{deal.discount}%
-              </Badge>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span>
+                    <Badge className="bg-[hsl(var(--deal-success))] text-primary-foreground border-0 text-[10px] font-bold px-1.5 py-0 h-4">
+                      -{deal.discount}%
+                    </Badge>
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>Скидка относительно оригинальной цены</TooltipContent>
+              </Tooltip>
             )}
           </div>
 
