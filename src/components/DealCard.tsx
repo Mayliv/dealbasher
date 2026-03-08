@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MessageSquare, Clock } from 'lucide-react';
+import { MessageSquare, Clock, Share2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Deal, deals } from '@/utils/data';
 import { useLocalization } from '@/contexts/LocalizationContext';
@@ -9,6 +9,7 @@ import { useTemperatureVote } from '@/hooks/useTemperatureVote';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 import { isDealOfTheDay } from '@/components/DealOfTheDay';
+import ShareModal from '@/components/ShareModal';
 
 interface DealCardProps {
   deal: Deal;
@@ -96,8 +97,21 @@ const DealCard = ({ deal }: DealCardProps) => {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
 
+  const [shareOpen, setShareOpen] = useState(false);
+  const [shareCount, setShareCount] = useState(() => {
+    const stored = localStorage.getItem(`share_count_${deal.id}`);
+    return stored ? parseInt(stored, 10) : Math.floor(Math.random() * 120);
+  });
+
+  const handleShare = () => {
+    const newCount = shareCount + 1;
+    setShareCount(newCount);
+    localStorage.setItem(`share_count_${deal.id}`, String(newCount));
+  };
+
   const isExpired = temperature < -10;
   const isOnFire = temperature > 300;
+  const isViral = shareCount > 100;
   const currency = region === 'kz' ? 'KZT' : region === 'ru' ? 'RUB' : 'USD';
 
   const regionDeals = deals.filter(d => !d.region || d.region === region);
@@ -266,6 +280,15 @@ const DealCard = ({ deal }: DealCardProps) => {
             {deal.title}
           </h3>
 
+          {/* Badges row */}
+          <div className="flex items-center gap-1 flex-wrap mt-1">
+            {isViral && (
+              <Badge variant="outline" className="text-[9px] px-1 py-0 h-4 border-destructive text-destructive">
+                🦠 Вирусная
+              </Badge>
+            )}
+          </div>
+
           {/* Price block */}
           <div className="mt-2 space-y-0.5">
             <span className="text-lg font-extrabold text-[hsl(var(--deal-success))] block leading-tight">
@@ -285,7 +308,7 @@ const DealCard = ({ deal }: DealCardProps) => {
             </div>
           </div>
 
-          {/* Bottom row: user, time, comments */}
+          {/* Bottom row: user, time, comments, share */}
           <div className="flex items-center gap-1.5 mt-2 text-[10px] text-muted-foreground">
             <span className="truncate max-w-[60px]">{deal.postedBy}</span>
             <span>·</span>
@@ -294,6 +317,15 @@ const DealCard = ({ deal }: DealCardProps) => {
             <span>·</span>
             <MessageSquare className="w-2.5 h-2.5 shrink-0" />
             <span>{deal.comments}</span>
+            <span>·</span>
+            <button
+              data-no-navigate
+              onClick={(e) => { e.stopPropagation(); setShareOpen(true); }}
+              className="inline-flex items-center gap-0.5 hover:text-primary transition-colors"
+            >
+              <Share2 className="w-2.5 h-2.5" />
+              <span>{shareCount}</span>
+            </button>
           </div>
         </div>
       </div>
@@ -309,6 +341,15 @@ const DealCard = ({ deal }: DealCardProps) => {
       >
         🛒 Перейти к скидке
       </a>
+
+      {/* Share modal */}
+      <ShareModal
+        deal={deal}
+        open={shareOpen}
+        onOpenChange={setShareOpen}
+        shareCount={shareCount}
+        onShare={handleShare}
+      />
     </div>
   );
 };
