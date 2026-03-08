@@ -339,6 +339,11 @@ const DealCard = ({ deal }: DealCardProps) => {
                 🦠 Вирусная
               </Badge>
             )}
+            {isAged && !isExpired && (
+              <Badge variant="outline" className="text-[9px] px-1 py-0 h-4 border-amber-500 text-amber-600 dark:text-amber-400">
+                🕐 Возможно устарело
+              </Badge>
+            )}
           </div>
 
           {/* Price block */}
