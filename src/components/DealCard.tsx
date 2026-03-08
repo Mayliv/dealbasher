@@ -3,11 +3,12 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MessageSquare, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Deal } from '@/utils/data';
+import { Deal, deals } from '@/utils/data';
 import { useLocalization } from '@/contexts/LocalizationContext';
 import { useTemperatureVote } from '@/hooks/useTemperatureVote';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
+import { isDealOfTheDay } from '@/components/DealOfTheDay';
 
 interface DealCardProps {
   deal: Deal;
@@ -99,6 +100,9 @@ const DealCard = ({ deal }: DealCardProps) => {
   const isOnFire = temperature > 300;
   const currency = region === 'kz' ? 'KZT' : region === 'ru' ? 'RUB' : 'USD';
 
+  const regionDeals = deals.filter(d => !d.region || d.region === region);
+  const isDOTD = isDealOfTheDay(deal.id, regionDeals);
+
   // ─── Swipe gesture state ─────────────────────────────────
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
@@ -145,7 +149,8 @@ const DealCard = ({ deal }: DealCardProps) => {
       className={cn(
         'group bg-card text-card-foreground rounded-xl border overflow-hidden hover:shadow-lg transition-all duration-200 relative cursor-pointer',
         !isMobile && 'hover:-translate-y-0.5',
-        isOnFire && 'hot-deal-glow'
+        isOnFire && 'hot-deal-glow',
+        isDOTD && 'border-yellow-400/60 dark:border-yellow-500/40'
       )}
       onClick={handleCardClick}
       onTouchStart={handleTouchStart}
@@ -153,6 +158,13 @@ const DealCard = ({ deal }: DealCardProps) => {
       onTouchEnd={handleTouchEnd}
       style={isMobile && swipeOffset ? { transform: `translateX(${swipeOffset * 0.3}px)`, transition: swipeOffset === 0 ? 'transform 0.3s' : 'none' } : undefined}
     >
+      {/* Deal of the Day crown */}
+      {isDOTD && (
+        <div className="dotd-crown-badge">
+          <span className="text-2xl" title="Сделка дня">👑</span>
+        </div>
+      )}
+
       {/* Swipe overlay */}
       <SwipeOverlay direction={swipeDirection} opacity={swipeOpacity} />
 

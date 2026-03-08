@@ -21,6 +21,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import MobileSidebarDrawer from '@/components/MobileSidebarDrawer';
+import DealOfTheDay from '@/components/DealOfTheDay';
 
 type DealTypeFilter = 'all' | 'online' | 'offline';
 
@@ -344,6 +345,9 @@ const Index = () => {
       <main className="flex-1 container mx-auto px-4 py-6">
         {/* Hero Banner */}
         <HeroBanner deals={heroDeals} />
+
+        {/* 🏆 Deal of the Day */}
+        <DealOfTheDay regionDeals={regionDeals} />
 
         {/* 🔴 Kaspi RED section — KZ only */}
         {region === 'kz' && (
