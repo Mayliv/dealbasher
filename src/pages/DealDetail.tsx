@@ -4,7 +4,8 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import CategoryBar from '@/components/CategoryBar';
 import Footer from '@/components/Footer';
-import { deals, Deal } from '@/utils/data';
+import { deals, Deal, categories } from '@/utils/data';
+import { usePageSEO } from '@/hooks/usePageSEO';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -201,10 +202,11 @@ const DealDetail = () => {
   const { dealId } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { formatPrice } = useLocalization();
+  const { formatPrice, region } = useLocalization();
   const { user } = useAuth();
 
   const deal = deals.find((d) => d.id === parseInt(dealId || '0'));
+  const currency = region === 'kz' ? 'KZT' : region === 'ru' ? 'RUB' : 'USD';
 
   const priceHistory = useMemo(() => (deal ? generatePriceHistory(deal) : []), [deal]);
 
@@ -213,6 +215,48 @@ const DealDetail = () => {
   const [trackModalOpen, setTrackModalOpen] = useState(false);
   const [targetPrice, setTargetPrice] = useState('');
   const [dealTracked, setDealTracked] = useState(() => deal ? isTracked(deal.id) : false);
+
+  // SEO meta tags
+  const categoryName = categories.find(c => c.id === deal?.category)?.name || deal?.category || '';
+  const seoTitle = deal
+    ? `${deal.title} за ${formatPrice(deal.dealPrice, currency)}${deal.discount ? ` (-${deal.discount}%)` : ''} | DealBasher`
+    : 'Сделка не найдена | DealBasher';
+  const seoDescription = deal
+    ? `${deal.title} в ${deal.store}. ${deal.description?.slice(0, 120) || ''} Цена: ${formatPrice(deal.dealPrice, currency)}`
+    : 'Сделка не найдена';
+  const canonicalUrl = deal ? `${window.location.origin}/deal/${deal.id}` : undefined;
+
+  const jsonLd = deal ? {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: deal.title,
+    image: deal.imageUrl,
+    description: deal.description,
+    offers: {
+      '@type': 'Offer',
+      price: deal.dealPrice,
+      priceCurrency: currency,
+      availability: 'https://schema.org/InStock',
+      url: deal.url,
+      seller: { '@type': 'Organization', name: deal.store },
+    },
+    ...(deal.originalPrice ? {
+      priceSpecification: {
+        '@type': 'PriceSpecification',
+        price: deal.originalPrice,
+        priceCurrency: currency,
+      },
+    } : {}),
+  } : undefined;
+
+  usePageSEO({
+    title: seoTitle,
+    description: seoDescription,
+    ogImage: deal?.imageUrl,
+    ogType: 'product',
+    canonical: canonicalUrl,
+    jsonLd,
+  });
 
   const similarDeals = useMemo(
     () =>
@@ -285,13 +329,13 @@ const DealDetail = () => {
 
       <main className="flex-1 container mx-auto px-4 py-6">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-1 text-sm text-muted-foreground mb-4">
+        <nav aria-label="Breadcrumb" className="flex items-center gap-1 text-sm text-muted-foreground mb-4">
           <Link to="/" className="hover:text-foreground transition-colors">Главная</Link>
           <ChevronRight className="w-3 h-3" />
-          <Link to={`/category/${deal.category}`} className="hover:text-foreground transition-colors capitalize">{deal.category}</Link>
+          <Link to={`/category/${deal.category}`} className="hover:text-foreground transition-colors">{categoryName}</Link>
           <ChevronRight className="w-3 h-3" />
           <span className="text-foreground truncate max-w-[200px]">{deal.title}</span>
-        </div>
+        </nav>
 
         <div className="flex flex-col lg:flex-row gap-6">
           {/* ─── Main Content ─────────────────── */}

@@ -25,6 +25,7 @@ import TrackingPage from "./pages/TrackingPage";
 import DigestPage from "./pages/DigestPage";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import ChallengesPage from "./pages/ChallengesPage";
+import SitemapPage from "./pages/SitemapPage";
 import MobileBottomNav from "./components/MobileBottomNav";
 import LiveActivityFeed from "./components/LiveActivityFeed";
 
@@ -60,6 +61,7 @@ const App = () => (
                   <Route path="/digest" element={<DigestPage />} />
                   <Route path="/leaderboard" element={<LeaderboardPage />} />
                   <Route path="/challenges" element={<ChallengesPage />} />
+                  <Route path="/sitemap" element={<SitemapPage />} />
                   <Route path="/:pageId" element={<StaticPage />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
