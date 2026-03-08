@@ -89,11 +89,22 @@ const Header = () => {
               <LocationSelector />
               <LanguageSwitcher />
               
-              <Link to="/login">
-                <Button variant="outline" size="sm" className="h-8">
-                  Войти
-                </Button>
-              </Link>
+              {user ? (
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm text-muted-foreground hidden lg:inline">
+                    {user.user_metadata?.username || user.email}
+                  </span>
+                  <Button variant="outline" size="sm" className="h-8" onClick={() => signOut()}>
+                    <LogOut className="h-4 w-4 mr-1" /> Выйти
+                  </Button>
+                </div>
+              ) : (
+                <Link to="/login">
+                  <Button variant="outline" size="sm" className="h-8">
+                    Войти
+                  </Button>
+                </Link>
+              )}
               
               <button 
                 className="md:hidden text-gray-700 dark:text-gray-300"
