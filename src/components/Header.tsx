@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import dealbasherLogo from '@/assets/dealbasher-logo.png';
 import { Search, Menu, X, LogOut, Moon, Sun } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -52,10 +53,8 @@ const Header = () => {
         <div className="flex items-center justify-between h-14">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <Link to="/" className="flex items-center gap-0.5">
-              <span className="text-xl font-extrabold text-primary-foreground tracking-tight">Deal</span>
-              <span className="text-xl">⚡</span>
-              <span className="text-xl font-extrabold text-primary-foreground tracking-tight">Basher</span>
+            <Link to="/" className="flex items-center">
+              <img src={dealbasherLogo} alt="DealBasher" className="h-9 md:h-10 w-auto" />
               {!isMobile && (
                 <span className="text-[10px] ml-1.5 bg-white/20 rounded px-1.5 py-0.5 text-primary-foreground font-medium uppercase">
                   {region}
