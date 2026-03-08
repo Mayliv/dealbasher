@@ -81,7 +81,7 @@ const DealCard = ({ deal }: DealCardProps) => {
 
           {/* Price Row */}
           <div className="flex items-baseline gap-3 mt-3">
-            <span className="text-xl font-bold text-green-600 dark:text-green-400">
+            <span className="text-xl font-bold text-deal-success">
               {formatPrice(deal.dealPrice, 'USD')}
             </span>
             {deal.originalPrice && (
