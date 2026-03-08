@@ -25,6 +25,7 @@ import TrackingPage from "./pages/TrackingPage";
 import DigestPage from "./pages/DigestPage";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import ChallengesPage from "./pages/ChallengesPage";
+import SitemapPage from "./pages/SitemapPage";
 import MobileBottomNav from "./components/MobileBottomNav";
 import LiveActivityFeed from "./components/LiveActivityFeed";
 
