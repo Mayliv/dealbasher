@@ -411,6 +411,11 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
               </TooltipTrigger>
               <TooltipContent>Все сделки от {deal.postedBy}</TooltipContent>
             </Tooltip>
+            <span className="text-border">·</span>
+            <Clock className="w-3 h-3 shrink-0" />
+            <span className="truncate">{deal.postedAt}</span>
+            <span className="text-border">·</span>
+            <Link
               to={`/category/${deal.category}`}
               data-no-navigate
               onClick={(e) => e.stopPropagation()}
