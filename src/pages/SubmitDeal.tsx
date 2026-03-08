@@ -451,6 +451,7 @@ const SubmitDeal = () => {
             {/* ─── Form Panel ─────────────────── */}
             <div className="flex-1 min-w-0">
               <div className="bg-card rounded-xl border overflow-hidden">
+                <div className="p-4 md:p-6 space-y-5">
 
                   {/* Step 1: Основное */}
                   {step === 1 && (
