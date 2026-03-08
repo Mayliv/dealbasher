@@ -172,7 +172,7 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
             data-no-navigate
             className={cn(
               'w-7 h-7 rounded-full flex items-center justify-center transition-all',
-              userVote === 'cold' ? 'bg-blue-500 text-white' : userVote ? 'bg-muted opacity-50' : 'hover:bg-blue-500/20 text-muted-foreground hover:text-blue-500'
+              userVote === 'cold' ? 'bg-deal-cold text-white' : userVote ? 'bg-muted opacity-50' : 'hover:bg-deal-cold/20 text-muted-foreground hover:text-deal-cold'
             )}
           >
             <ChevronDown className="w-4 h-4" />
