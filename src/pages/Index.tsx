@@ -23,6 +23,8 @@ import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import MobileSidebarDrawer from '@/components/MobileSidebarDrawer';
 import DealOfTheDay from '@/components/DealOfTheDay';
+import PullToRefresh from '@/components/PullToRefresh';
+import PWAInstallBanner from '@/components/PWAInstallBanner';
 
 type DealTypeFilter = 'all' | 'online' | 'offline';
 
@@ -345,6 +347,12 @@ const Index = () => {
     return 0;
   });
 
+  const handlePullRefresh = useCallback(async () => {
+    // Simulate refresh delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    window.location.reload();
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
@@ -352,6 +360,7 @@ const Index = () => {
       <MarketplaceBar />
       <CityPickerModal />
 
+      <PullToRefresh onRefresh={handlePullRefresh}>
       <main className="flex-1 container mx-auto px-4 py-6">
         {/* Hero Banner */}
         <HeroBanner deals={heroDeals} />
@@ -556,7 +565,9 @@ const Index = () => {
           </aside>
         </div>
       </main>
+      </PullToRefresh>
 
+      <PWAInstallBanner />
       <Footer />
     </div>
   );
