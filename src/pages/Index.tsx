@@ -426,7 +426,7 @@ const Index = () => {
           <section className="mb-8">
             <div className="flex items-center gap-2 mb-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                📍 В вашем городе
+                {t('section.in_city')}
               </h2>
               {userCity && (
                 <Badge variant="secondary" className="text-xs">
