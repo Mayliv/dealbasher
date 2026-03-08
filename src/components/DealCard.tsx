@@ -316,9 +316,16 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
             className="w-full h-full object-cover"
           />
           {/* Store badge on image */}
-          <Badge className="absolute top-1.5 right-1.5 text-[9px] px-1 py-0 h-4 bg-[hsl(var(--deal-success))] text-primary-foreground border-0 backdrop-blur-sm">
-            {deal.store}
-          </Badge>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span>
+                <Badge className="absolute top-1.5 right-1.5 text-[9px] px-1 py-0 h-4 bg-[hsl(var(--deal-success))] text-primary-foreground border-0 backdrop-blur-sm cursor-pointer">
+                  {deal.store}
+                </Badge>
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>Все сделки из {deal.store}</TooltipContent>
+          </Tooltip>
           {/* Special badges on image */}
           {deal.isPriceBug && (
             <Badge className="absolute bottom-1.5 left-1.5 bg-destructive text-destructive-foreground text-[9px] px-1 py-0 h-4 border-0">
