@@ -162,7 +162,7 @@ const Header = () => {
                 </span>
               )}
             </Link>
-            {!isMobile && <RegionSwitcher />}
+            {!isMobile && <span data-onboarding="region"><RegionSwitcher /></span>}
           </div>
           
           {/* Desktop Navigation */}
