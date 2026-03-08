@@ -19,6 +19,9 @@ export interface Deal {
   region?: 'kz' | 'ru';
   isPriceBug?: boolean;
   avatarUrl?: string;
+  isOffline?: boolean;
+  storeAddress?: string;
+  city?: string;
 }
 
 export const categories = [
@@ -380,9 +383,130 @@ const globalDeals: Deal[] = [
   }
 ];
 
+// Offline deals
+const offlineDeals: Deal[] = [
+  {
+    id: 501,
+    title: 'Nike Air Max 90 — распродажа в магазине',
+    description: 'Только в розничном магазине Nike на Тверской. Скидка 60% на прошлую коллекцию.',
+    originalPrice: 14990,
+    dealPrice: 5990,
+    discount: 60,
+    store: 'Nike Store',
+    category: 'fashion',
+    imageUrl: 'https://placehold.co/400x300/e9e9e9/999?text=Nike+Offline',
+    postedBy: 'street_deals',
+    postedAt: '1 час назад',
+    temperature: 287,
+    comments: 9,
+    url: '#',
+    region: 'ru',
+    isOffline: true,
+    storeAddress: 'Тверская ул., 12',
+    city: 'moscow',
+  },
+  {
+    id: 502,
+    title: 'Dyson V12 — витринный образец со скидкой',
+    description: 'Витринный образец в отличном состоянии. Полная гарантия.',
+    originalPrice: 49990,
+    dealPrice: 29990,
+    discount: 40,
+    store: 'М.Видео',
+    category: 'home',
+    imageUrl: 'https://placehold.co/400x300/e9e9e9/999?text=Dyson+Store',
+    postedBy: 'offline_hunter',
+    postedAt: '3 часа назад',
+    temperature: 198,
+    comments: 5,
+    url: '#',
+    region: 'ru',
+    isOffline: true,
+    storeAddress: 'Невский пр., 100',
+    city: 'spb',
+  },
+  {
+    id: 503,
+    title: 'Samsung QLED 65" — ликвидация склада',
+    description: 'Ликвидация складских остатков в ТЦ Мега. Только самовывоз.',
+    originalPrice: 89990,
+    dealPrice: 54990,
+    discount: 39,
+    store: 'Samsung Store',
+    category: 'electronics',
+    imageUrl: 'https://placehold.co/400x300/e9e9e9/999?text=Samsung+Store',
+    postedBy: 'mega_deals',
+    postedAt: '5 часов назад',
+    temperature: 345,
+    comments: 14,
+    url: '#',
+    region: 'ru',
+    isOffline: true,
+    storeAddress: 'ТЦ Мега, 2 этаж',
+    city: 'ekaterinburg',
+  },
+  {
+    id: 504,
+    title: 'Apple MacBook Air M2 — витрина Sulpak',
+    description: 'Витринный образец MacBook Air M2 со скидкой в Sulpak Алматы.',
+    originalPrice: 650000,
+    dealPrice: 449000,
+    discount: 31,
+    store: 'Sulpak',
+    category: 'electronics',
+    imageUrl: 'https://placehold.co/400x300/e9e9e9/999?text=MacBook+Sulpak',
+    postedBy: 'almaty_deals',
+    postedAt: '2 часа назад',
+    temperature: 312,
+    comments: 11,
+    url: '#',
+    region: 'kz',
+    isOffline: true,
+    storeAddress: 'ТРЦ Mega Park, 1 этаж',
+    city: 'almaty',
+  },
+  {
+    id: 505,
+    title: 'Adidas Outlet — всё по 5000₸',
+    description: 'Распродажа в аутлете Adidas. Кроссовки, футболки по единой цене.',
+    originalPrice: 25000,
+    dealPrice: 5000,
+    discount: 80,
+    store: 'Adidas Outlet',
+    category: 'fashion',
+    imageUrl: 'https://placehold.co/400x300/e9e9e9/999?text=Adidas+Outlet',
+    postedBy: 'astana_shopper',
+    postedAt: '4 часа назад',
+    temperature: 256,
+    comments: 7,
+    url: '#',
+    region: 'kz',
+    isOffline: true,
+    storeAddress: 'пр. Кабанбай батыра, 62',
+    city: 'astana',
+  },
+];
+
+// City lists for offline deals
+export const offlineCitiesRu = [
+  { id: 'moscow', name: 'Москва' },
+  { id: 'spb', name: 'Санкт-Петербург' },
+  { id: 'ekaterinburg', name: 'Екатеринбург' },
+  { id: 'novosibirsk', name: 'Новосибирск' },
+  { id: 'kazan', name: 'Казань' },
+  { id: 'krasnodar', name: 'Краснодар' },
+];
+
+export const offlineCitiesKz = [
+  { id: 'almaty', name: 'Алматы' },
+  { id: 'astana', name: 'Астана' },
+  { id: 'shymkent', name: 'Шымкент' },
+];
+
 // Combine all deals, but tag them with their regions
 export const deals: Deal[] = [
   ...globalDeals,
   ...kazDeals,
-  ...ruDeals
+  ...ruDeals,
+  ...offlineDeals,
 ];

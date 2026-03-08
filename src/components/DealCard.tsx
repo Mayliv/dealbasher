@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { MessageSquare, Share2, Clock, Tag } from 'lucide-react';
+import { MessageSquare, Share2, Clock, Tag, MapPin, Store } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Deal } from '@/utils/data';
@@ -122,6 +122,15 @@ const DealCard = ({ deal }: DealCardProps) => {
               </Badge>
             </div>
           )}
+
+          {/* Offline badge */}
+          {deal.isOffline && (
+            <div className={`absolute ${deal.isPriceBug ? 'top-9' : 'top-2'} left-2`}>
+              <Badge className="bg-deal-success text-primary-foreground border-0 backdrop-blur-sm text-xs font-bold shadow-sm">
+                <Store className="w-3 h-3 mr-1" /> Офлайн
+              </Badge>
+            </div>
+          )}
         </div>
 
         {/* Content Section */}
@@ -216,6 +225,12 @@ const DealCard = ({ deal }: DealCardProps) => {
                 <Tag className="w-2.5 h-2.5 mr-0.5" />
                 {deal.category}
               </Badge>
+              {deal.isOffline && deal.storeAddress && (
+                <div className="flex items-center gap-1 text-xs text-muted-foreground shrink-0 hidden sm:flex">
+                  <MapPin className="w-3 h-3 text-deal-success" />
+                  <span className="truncate max-w-[120px]">{deal.storeAddress}</span>
+                </div>
+              )}
             </div>
             <div className="flex items-center gap-1 shrink-0">
               <Link to={`/deal/${deal.id}`}>
