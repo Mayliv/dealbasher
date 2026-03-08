@@ -114,6 +114,11 @@ export default {
 				'confetti-fall': {
 					'0%': { transform: 'translateY(-10px) rotate(0deg)', opacity: '1' },
 					'100%': { transform: 'translateY(100vh) rotate(720deg)', opacity: '0' }
+				},
+				'gradient-shift': {
+					'0%': { backgroundPosition: '0% 50%' },
+					'50%': { backgroundPosition: '100% 50%' },
+					'100%': { backgroundPosition: '0% 50%' }
 				}
 			},
 			animation: {
@@ -121,7 +126,8 @@ export default {
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'pulse-hot': 'pulse-hot 2s infinite',
 				'fade-in': 'fade-in 0.2s ease-out',
-				'confetti-fall': 'confetti-fall 2.5s ease-in forwards'
+				'confetti-fall': 'confetti-fall 2.5s ease-in forwards',
+				'gradient-shift': 'gradient-shift 6s ease infinite'
 			}
 		}
 	},
