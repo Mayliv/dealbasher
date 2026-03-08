@@ -11,29 +11,34 @@ import {
 import { Globe } from 'lucide-react';
 
 const LanguageSwitcher: React.FC = () => {
-  const { language, setLanguage, t } = useLocalization();
+  const { language, setLanguage } = useLocalization();
 
   const languages = [
-    { code: 'ru', name: 'Русский' },
-    { code: 'kk', name: 'Қазақша' },
-    { code: 'en', name: 'English' },
+    { code: 'ru' as const, name: 'Русский', short: 'RU' },
+    { code: 'kk' as const, name: 'Қазақша', short: 'KZ' },
+    { code: 'en' as const, name: 'English', short: 'EN' },
   ];
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="h-8 gap-1">
-          <Globe className="h-4 w-4" />
-          <span className="hidden md:inline-block">{languages.find(l => l.code === language)?.name}</span>
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="h-8 gap-1 text-primary-foreground/80 hover:text-primary-foreground hover:bg-white/10 px-2"
+        >
+          <Globe className="h-3.5 w-3.5" />
+          <span className="text-xs font-bold">{languages.find(l => l.code === language)?.short}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="min-w-[140px]">
         {languages.map((lang) => (
           <DropdownMenuItem
             key={lang.code}
             className={language === lang.code ? "bg-muted font-medium" : ""}
-            onClick={() => setLanguage(lang.code as any)}
+            onClick={() => setLanguage(lang.code)}
           >
+            <span className="mr-2 font-bold text-xs text-muted-foreground">{lang.short}</span>
             {lang.name}
           </DropdownMenuItem>
         ))}

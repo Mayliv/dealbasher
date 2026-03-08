@@ -61,6 +61,9 @@ export default {
 					dark: '#333333',
 					discount: '#FF9800',
 				},
+				kaspi: {
+					green: 'hsl(var(--kaspi-green))',
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
