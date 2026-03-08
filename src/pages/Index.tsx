@@ -452,11 +452,9 @@ const Index = () => {
                 </Badge>
               )}
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="space-y-0 rounded-xl border overflow-hidden">
               {nearbyDeals.map(deal => (
-                <div key={deal.id}>
-                  <DealCard deal={deal} />
-                </div>
+                <DealCard key={deal.id} deal={deal} />
               ))}
             </div>
           </section>
