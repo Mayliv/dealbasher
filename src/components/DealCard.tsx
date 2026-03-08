@@ -405,12 +405,12 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
                 {deal.postedBy.slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            <span className="truncate max-w-[70px]">{deal.postedBy}</span>
-            <span className="text-border">·</span>
-            <Clock className="w-3 h-3 shrink-0" />
-            <span className="truncate">{deal.postedAt}</span>
-            <span className="text-border">·</span>
-            <Link
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="truncate max-w-[70px] cursor-pointer hover:text-primary transition-colors">{deal.postedBy}</span>
+              </TooltipTrigger>
+              <TooltipContent>Все сделки от {deal.postedBy}</TooltipContent>
+            </Tooltip>
               to={`/category/${deal.category}`}
               data-no-navigate
               onClick={(e) => e.stopPropagation()}
