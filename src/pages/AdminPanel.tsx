@@ -104,7 +104,7 @@ const AdminPanel: React.FC = () => {
         </Alert>
         
         <Tabs defaultValue="activity" className="space-y-4">
-          <TabsList className="grid grid-cols-5 gap-2">
+          <TabsList className="grid grid-cols-6 gap-2">
             <TabsTrigger value="activity" className="flex gap-2 items-center">
               <Activity className="h-4 w-4" />
               <span className="hidden sm:inline">Активность</span>
@@ -116,6 +116,10 @@ const AdminPanel: React.FC = () => {
             <TabsTrigger value="content" className="flex gap-2 items-center">
               <MessageSquare className="h-4 w-4" />
               <span className="hidden sm:inline">Контент</span>
+            </TabsTrigger>
+            <TabsTrigger value="reports" className="flex gap-2 items-center">
+              <Flag className="h-4 w-4" />
+              <span className="hidden sm:inline">Жалобы</span>
             </TabsTrigger>
             <TabsTrigger value="code" className="flex gap-2 items-center">
               <FileCode className="h-4 w-4" />
