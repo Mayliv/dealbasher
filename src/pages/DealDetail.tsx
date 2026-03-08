@@ -210,6 +210,9 @@ const DealDetail = () => {
 
   const [selectedImage, setSelectedImage] = useState(0);
   const [temperature, setTemperature] = useState(deal?.temperature || 0);
+  const [trackModalOpen, setTrackModalOpen] = useState(false);
+  const [targetPrice, setTargetPrice] = useState('');
+  const [dealTracked, setDealTracked] = useState(() => deal ? isTracked(deal.id) : false);
 
   const similarDeals = useMemo(
     () =>
