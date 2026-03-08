@@ -163,7 +163,7 @@ const UserActivity: React.FC = () => {
                     <Tag className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div>
-                    <p className="font-medium">Одежда</p>
+                    <p className="font-medium">Мода и одежда</p>
                     <p className="text-sm text-muted-foreground">98 предложений</p>
                   </div>
                 </div>
