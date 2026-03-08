@@ -1,25 +1,51 @@
 
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import dealbasherLogo from '@/assets/dealbasher-logo.png';
-import { Search, Menu, X, LogOut, Moon, Sun } from 'lucide-react';
+import { Search, Menu, X, LogOut, Moon, Sun, Clock, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/components/ui/use-toast';
-import { useNavigate } from 'react-router-dom';
 import { useLocalization } from '@/contexts/LocalizationContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/providers/ThemeProvider';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 import LanguageSwitcher from './LanguageSwitcher';
 import RegionSwitcher from './RegionSwitcher';
 import LocationSelector from './LocationSelector';
 import NotificationBell from './NotificationBell';
 
+const RECENT_SEARCHES_KEY = 'dealbasher_recent_searches';
+const MAX_RECENT = 6;
+
+const TRENDING_SEARCHES = ['iPhone', 'Nike', 'Dyson', 'PlayStation', 'Samsung', 'AirPods', 'Xiaomi', 'Adidas'];
+
+function getRecentSearches(): string[] {
+  try {
+    return JSON.parse(localStorage.getItem(RECENT_SEARCHES_KEY) || '[]');
+  } catch { return []; }
+}
+
+function addRecentSearch(query: string) {
+  const recent = getRecentSearches().filter(s => s !== query);
+  recent.unshift(query);
+  localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(recent.slice(0, MAX_RECENT)));
+}
+
+function removeRecentSearch(query: string) {
+  const recent = getRecentSearches().filter(s => s !== query);
+  localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(recent));
+}
+
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [recentSearches, setRecentSearches] = useState<string[]>(getRecentSearches());
+  const searchRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
   const { t, region } = useLocalization();
@@ -27,25 +53,100 @@ const Header = () => {
   const { theme, setTheme } = useTheme();
   const isMobile = useIsMobile();
 
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setIsSearchFocused(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
+      addRecentSearch(searchQuery.trim());
+      setRecentSearches(getRecentSearches());
+      setIsSearchFocused(false);
       navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
       setIsMobileSearchOpen(false);
     } else {
-      toast({
-        title: "Поле поиска пусто",
-        description: "Пожалуйста, введите поисковый запрос",
-        variant: "destructive",
-      });
+      toast({ title: "Поле поиска пусто", description: "Пожалуйста, введите поисковый запрос", variant: "destructive" });
     }
   };
 
-  const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : theme === 'light' ? 'dark' : 'light');
+  const handleRecentClick = (q: string) => {
+    setSearchQuery(q);
+    setIsSearchFocused(false);
+    addRecentSearch(q);
+    setRecentSearches(getRecentSearches());
+    navigate(`/search?q=${encodeURIComponent(q)}`);
+    setIsMobileSearchOpen(false);
   };
 
+  const handleRemoveRecent = (e: React.MouseEvent, q: string) => {
+    e.stopPropagation();
+    removeRecentSearch(q);
+    setRecentSearches(getRecentSearches());
+  };
+
+  const toggleTheme = () => setTheme(theme === 'dark' ? 'light' : theme === 'light' ? 'dark' : 'light');
   const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+  const showDropdown = isSearchFocused && (recentSearches.length > 0 || searchQuery === '');
+
+  // Search dropdown content
+  const SearchDropdown = () => (
+    <div className="absolute top-full left-0 right-0 mt-1 bg-popover border border-border rounded-lg shadow-xl z-50 overflow-hidden animate-fade-in">
+      {/* Recent searches */}
+      {recentSearches.length > 0 && (
+        <div className="p-3 border-b border-border">
+          <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wide mb-2 flex items-center gap-1">
+            <Clock className="w-3 h-3" /> Недавние
+          </p>
+          <div className="flex flex-wrap gap-1.5">
+            {recentSearches.map(q => (
+              <Badge
+                key={q}
+                variant="secondary"
+                className="cursor-pointer hover:bg-primary/10 hover:text-primary transition-colors text-xs pr-1 gap-1"
+                onClick={() => handleRecentClick(q)}
+              >
+                {q}
+                <button
+                  onClick={(e) => handleRemoveRecent(e, q)}
+                  className="ml-0.5 hover:text-destructive transition-colors"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </Badge>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Trending searches */}
+      <div className="p-3">
+        <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wide mb-2 flex items-center gap-1">
+          <TrendingUp className="w-3 h-3" /> 🔥 Популярные запросы
+        </p>
+        <div className="flex flex-wrap gap-1.5">
+          {TRENDING_SEARCHES.map(q => (
+            <Badge
+              key={q}
+              variant="outline"
+              className="cursor-pointer hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-colors text-xs"
+              onClick={() => handleRecentClick(q)}
+            >
+              {q}
+            </Badge>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <header className="sticky top-0 z-50 w-full gradient-primary backdrop-blur supports-[backdrop-filter]:bg-primary/80 shadow-lg">
@@ -87,24 +188,30 @@ const Header = () => {
           
           {/* Search & Actions */}
           <div className="flex items-center space-x-2">
-            {/* Desktop search */}
+            {/* Desktop search with expand animation */}
             {!isMobile && (
-              <form onSubmit={handleSearch} className="relative hidden md:block">
-                <Input
-                  type="text"
-                  placeholder="Поиск предложений..."
-                  className="w-56 pr-8 bg-white/15 border-white/20 text-primary-foreground placeholder:text-primary-foreground/50 focus:bg-white/25"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <button type="submit" className="absolute right-0 top-0 bottom-0 px-2 text-primary-foreground/60 hover:text-primary-foreground">
-                  <Search className="h-4 w-4" />
-                </button>
-              </form>
+              <div ref={searchRef} className="relative hidden md:block">
+                <form onSubmit={handleSearch} className="relative">
+                  <Input
+                    type="text"
+                    placeholder="Поиск предложений..."
+                    className={cn(
+                      'pr-8 bg-white/15 border-white/20 text-primary-foreground placeholder:text-primary-foreground/50 transition-all duration-300 ease-out',
+                      isSearchFocused ? 'w-80 bg-white/25 shadow-lg' : 'w-56'
+                    )}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onFocus={() => setIsSearchFocused(true)}
+                  />
+                  <button type="submit" className="absolute right-0 top-0 bottom-0 px-2 text-primary-foreground/60 hover:text-primary-foreground">
+                    <Search className="h-4 w-4" />
+                  </button>
+                </form>
+                {showDropdown && <SearchDropdown />}
+              </div>
             )}
             
             <div className="flex items-center space-x-1">
-              {/* Mobile: search icon */}
               {isMobile && (
                 <Button
                   variant="ghost"
@@ -120,7 +227,6 @@ const Header = () => {
               {!isMobile && <LanguageSwitcher />}
               <NotificationBell />
               
-              {/* Dark mode toggle - desktop only */}
               {!isMobile && (
                 <Button
                   variant="ghost"
@@ -132,7 +238,6 @@ const Header = () => {
                 </Button>
               )}
               
-              {/* Desktop user actions */}
               {!isMobile && (
                 <>
                   {user ? (
@@ -159,12 +264,8 @@ const Header = () => {
                 </>
               )}
               
-              {/* Mobile hamburger */}
               {isMobile && (
-                <button 
-                  className="text-primary-foreground"
-                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                >
+                <button className="text-primary-foreground" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
                   {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
                 </button>
               )}
@@ -174,7 +275,7 @@ const Header = () => {
         
         {/* Mobile Search Bar */}
         {isMobile && isMobileSearchOpen && (
-          <div className="py-2 border-t border-white/10">
+          <div className="py-2 border-t border-white/10" ref={searchRef}>
             <form onSubmit={handleSearch} className="relative">
               <Input
                 type="text"
@@ -182,19 +283,20 @@ const Header = () => {
                 className="w-full pr-8 bg-white/15 border-white/20 text-primary-foreground placeholder:text-primary-foreground/50"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setIsSearchFocused(true)}
                 autoFocus
               />
               <button type="submit" className="absolute right-0 top-0 bottom-0 px-2 text-primary-foreground/60 hover:text-primary-foreground">
                 <Search className="h-4 w-4" />
               </button>
             </form>
+            {showDropdown && <SearchDropdown />}
           </div>
         )}
 
         {/* Mobile Navigation Menu */}
         {isMobile && isMobileMenuOpen && (
           <div className="py-3 space-y-1 border-t border-white/10">
-            {/* Region & Location */}
             <div className="flex items-center gap-2 px-3 py-2">
               <RegionSwitcher />
               <LocationSelector />
@@ -228,7 +330,6 @@ const Header = () => {
               </Link>
             ))}
             
-            {/* Auth */}
             <div className="px-3 pt-2 border-t border-white/10">
               {user ? (
                 <Button
