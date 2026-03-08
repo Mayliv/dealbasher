@@ -90,7 +90,7 @@ const DealCard = ({ deal }: DealCardProps) => {
               </span>
             )}
             {deal.discount && (
-              <Badge className="bg-green-600 dark:bg-green-500 text-white border-0 text-xs font-bold">
+              <Badge className="bg-deal-success text-primary-foreground border-0 text-xs font-bold">
                 -{deal.discount}%
               </Badge>
             )}
