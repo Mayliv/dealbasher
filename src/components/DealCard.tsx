@@ -251,7 +251,12 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
 
       <div className={cn('flex items-center', isMobile ? 'px-3 py-3 gap-3' : 'px-4 py-3 gap-4')}>
         {/* LEFT: Vote widget */}
-        <div className="w-[52px] shrink-0 flex flex-col items-center gap-0.5" data-no-navigate>
+        <div className="w-[52px] shrink-0 flex flex-col items-center gap-0.5 relative" data-no-navigate>
+          {/* First-time hint */}
+          <FirstTimeHint id="vote-hint" position="right">
+            👆 Голосуй за сделки! Чем горячее — тем выше в ленте
+          </FirstTimeHint>
+
           <button
             onClick={(e) => { e.stopPropagation(); vote('hot'); }}
             disabled={!!userVote}
@@ -268,12 +273,19 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
             <ChevronUp className="w-5 h-5" strokeWidth={2.5} />
           </button>
 
-          <div className="relative py-0.5">
-            <FloatingDelta delta={lastDelta} />
-            <span className={cn('text-base font-extrabold leading-none', getTemperatureColor(temperature))}>
-              <AnimatedTemp value={temperature} />
-            </span>
-          </div>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="relative py-0.5 cursor-default" data-no-navigate>
+                <FloatingDelta delta={lastDelta} />
+                <span className={cn('text-base font-extrabold leading-none', getTemperatureColor(temperature))}>
+                  <AnimatedTemp value={temperature} />
+                </span>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="right">
+              Рейтинг сделки от сообщества. {temperature > 0 ? `+${temperature}°` : `${temperature}°`} = {temperature > 200 ? 'очень горячо!' : temperature > 50 ? 'хорошая сделка' : temperature < 0 ? 'холодная сделка' : 'нормально'}
+            </TooltipContent>
+          </Tooltip>
 
           <button
             onClick={(e) => { e.stopPropagation(); vote('cold'); }}
