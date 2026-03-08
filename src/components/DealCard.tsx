@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MessageSquare, Clock, Share2 } from 'lucide-react';
+import { MessageSquare, Clock, Share2, Flag, TimerOff } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Deal, deals } from '@/utils/data';
 import { useLocalization } from '@/contexts/LocalizationContext';
@@ -10,6 +10,8 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 import { isDealOfTheDay } from '@/components/DealOfTheDay';
 import ShareModal from '@/components/ShareModal';
+import ReportDealModal, { getReportCount, reportExpired } from '@/components/ReportDealModal';
+import { useToast } from '@/components/ui/use-toast';
 
 interface DealCardProps {
   deal: Deal;
@@ -96,8 +98,11 @@ const DealCard = ({ deal }: DealCardProps) => {
   const { temperature, userVote, lastDelta, vote } = useTemperatureVote(deal.id, deal.temperature);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const [shareOpen, setShareOpen] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
+  const [reportCount, setReportCount] = useState(() => getReportCount(deal.id));
   const [shareCount, setShareCount] = useState(() => {
     const stored = localStorage.getItem(`share_count_${deal.id}`);
     return stored ? parseInt(stored, 10) : Math.floor(Math.random() * 120);
@@ -108,6 +113,27 @@ const DealCard = ({ deal }: DealCardProps) => {
     setShareCount(newCount);
     localStorage.setItem(`share_count_${deal.id}`, String(newCount));
   };
+
+  const handleExpiredReport = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    reportExpired(deal.id);
+    setReportCount(prev => prev + 1);
+    toast({ title: '🕐 Отмечено как истёкшее', description: 'Спасибо за обратную связь!' });
+  };
+
+  // Check if deal is older than 7 days
+  const isAged = (() => {
+    try {
+      const posted = new Date(deal.postedAt);
+      if (isNaN(posted.getTime())) {
+        // Try parsing relative time like "2ч назад"
+        return false;
+      }
+      return (Date.now() - posted.getTime()) > 7 * 24 * 60 * 60 * 1000;
+    } catch { return false; }
+  })();
+
+  const isUnderReview = reportCount >= 3;
 
   const isExpired = temperature < -10;
   const isOnFire = temperature > 300;
@@ -188,6 +214,17 @@ const DealCard = ({ deal }: DealCardProps) => {
           <div className="text-center">
             <span className="text-4xl">❄️</span>
             <p className="text-sm font-semibold text-muted-foreground mt-1">Истёкшая сделка?</p>
+          </div>
+        </div>
+      )}
+
+      {/* Community review overlay (3+ reports) */}
+      {isUnderReview && !isExpired && (
+        <div className="absolute inset-0 z-20 bg-amber-500/10 backdrop-blur-[1px] flex items-center justify-center rounded-xl border-2 border-amber-500/50">
+          <div className="text-center bg-background/90 rounded-lg px-4 py-2">
+            <span className="text-2xl">⚠️</span>
+            <p className="text-sm font-semibold text-amber-600 dark:text-amber-400 mt-1">Проверяется сообществом</p>
+            <p className="text-[10px] text-muted-foreground">{reportCount} жалоб</p>
           </div>
         </div>
       )}
@@ -302,6 +339,11 @@ const DealCard = ({ deal }: DealCardProps) => {
                 🦠 Вирусная
               </Badge>
             )}
+            {isAged && !isExpired && (
+              <Badge variant="outline" className="text-[9px] px-1 py-0 h-4 border-amber-500 text-amber-600 dark:text-amber-400">
+                🕐 Возможно устарело
+              </Badge>
+            )}
           </div>
 
           {/* Price block */}
@@ -353,17 +395,35 @@ const DealCard = ({ deal }: DealCardProps) => {
         </div>
       </div>
 
-      {/* BOTTOM BAR: CTA Button */}
-      <a
-        href={deal.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        data-no-navigate
-        onClick={(e) => e.stopPropagation()}
-        className="block w-full gradient-primary text-primary-foreground text-center py-2.5 text-sm font-bold hover:opacity-90 transition-opacity"
-      >
-        🛒 Перейти к скидке
-      </a>
+      {/* Report & Expired buttons bar */}
+      <div className="flex items-center border-t border-border" data-no-navigate>
+        <a
+          href={deal.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-no-navigate
+          onClick={(e) => e.stopPropagation()}
+          className="flex-1 gradient-primary text-primary-foreground text-center py-2.5 text-sm font-bold hover:opacity-90 transition-opacity"
+        >
+          🛒 Перейти к скидке
+        </a>
+        <button
+          data-no-navigate
+          onClick={(e) => { e.stopPropagation(); handleExpiredReport(e); }}
+          className="px-3 py-2.5 text-muted-foreground hover:text-amber-500 transition-colors border-l border-border"
+          title="Сделка истекла"
+        >
+          <TimerOff className="w-4 h-4" />
+        </button>
+        <button
+          data-no-navigate
+          onClick={(e) => { e.stopPropagation(); setReportOpen(true); }}
+          className="px-3 py-2.5 text-muted-foreground hover:text-destructive transition-colors border-l border-border"
+          title="Пожаловаться"
+        >
+          <Flag className="w-4 h-4" />
+        </button>
+      </div>
 
       {/* Share modal */}
       <ShareModal
@@ -372,6 +432,14 @@ const DealCard = ({ deal }: DealCardProps) => {
         onOpenChange={setShareOpen}
         shareCount={shareCount}
         onShare={handleShare}
+      />
+
+      {/* Report modal */}
+      <ReportDealModal
+        dealId={deal.id}
+        dealTitle={deal.title}
+        open={reportOpen}
+        onOpenChange={(open) => { setReportOpen(open); if (!open) setReportCount(getReportCount(deal.id)); }}
       />
     </div>
   );
