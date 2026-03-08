@@ -164,7 +164,7 @@ const CommentItem = ({
           <span className="text-xs text-muted-foreground">{comment.postedAt}</span>
 
           {/* Report flag */}
-          <div className={cn('ml-auto', !isMobile && 'opacity-0 group-hover/comment:opacity-100 transition-opacity')}>
+          <div className="ml-auto">
             {reported ? (
               <span className="text-destructive" title="Жалоба отправлена">
                 <Flag className="w-3.5 h-3.5 fill-current" />
