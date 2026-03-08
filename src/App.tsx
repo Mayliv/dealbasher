@@ -32,6 +32,7 @@ import FaqPage from "./pages/FaqPage";
 import ContactPage from "./pages/ContactPage";
 import MobileBottomNav from "./components/MobileBottomNav";
 import LiveActivityFeed from "./components/LiveActivityFeed";
+import { OnboardingTooltips } from "./components/HintsSystem";
 
 const queryClient = new QueryClient();
 
@@ -75,6 +76,7 @@ const App = () => (
                 </Routes>
                 <MobileBottomNav />
                 <LiveActivityFeed />
+                <OnboardingTooltips />
               </div>
             </BrowserRouter>
           </TooltipProvider>

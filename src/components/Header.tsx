@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import dealbasherLogo from '@/assets/dealbasher-logo.png';
-import { Search, Menu, X, LogOut, Moon, Sun, Clock, TrendingUp } from 'lucide-react';
+import { Search, Menu, X, LogOut, Moon, Sun, Clock, TrendingUp, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -16,6 +16,7 @@ import LanguageSwitcher from './LanguageSwitcher';
 import RegionSwitcher from './RegionSwitcher';
 import LocationSelector from './LocationSelector';
 import NotificationBell from './NotificationBell';
+import { usePulseSubmit } from './HintsSystem';
 
 const RECENT_SEARCHES_KEY = 'dealbasher_recent_searches';
 const MAX_RECENT = 6;
@@ -52,6 +53,7 @@ const Header = () => {
   const { user, signOut } = useAuth();
   const { theme, setTheme } = useTheme();
   const isMobile = useIsMobile();
+  const shouldPulse = usePulseSubmit();
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -162,7 +164,7 @@ const Header = () => {
                 </span>
               )}
             </Link>
-            {!isMobile && <RegionSwitcher />}
+            {!isMobile && <span data-onboarding="region"><RegionSwitcher /></span>}
           </div>
           
           {/* Desktop Navigation */}
@@ -238,6 +240,21 @@ const Header = () => {
                 </Button>
               )}
               
+              {!isMobile && (
+                <Link to="/submit-deal" data-onboarding="submit">
+                  <Button
+                    size="sm"
+                    className={cn(
+                      'h-8 bg-white/20 text-primary-foreground hover:bg-white/30 border-0 gap-1',
+                      shouldPulse && 'animate-pulse-hot'
+                    )}
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                    Добавить
+                  </Button>
+                </Link>
+              )}
+
               {!isMobile && (
                 <>
                   {user ? (

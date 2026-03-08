@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MessageSquare, Clock, Share2, Flag, TimerOff, ChevronUp, ChevronDown, Bookmark, MapPin } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { Deal, deals } from '@/utils/data';
 import { useLocalization } from '@/contexts/LocalizationContext';
 import { useTemperatureVote } from '@/hooks/useTemperatureVote';
@@ -13,6 +14,7 @@ import ShareModal from '@/components/ShareModal';
 import ReportDealModal, { getReportCount, reportExpired } from '@/components/ReportDealModal';
 import { useToast } from '@/components/ui/use-toast';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { FirstTimeHint } from '@/components/HintsSystem';
 
 interface DealCardProps {
   deal: Deal;
@@ -249,7 +251,12 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
 
       <div className={cn('flex items-center', isMobile ? 'px-3 py-3 gap-3' : 'px-4 py-3 gap-4')}>
         {/* LEFT: Vote widget */}
-        <div className="w-[52px] shrink-0 flex flex-col items-center gap-0.5" data-no-navigate>
+        <div className="w-[52px] shrink-0 flex flex-col items-center gap-0.5 relative" data-no-navigate>
+          {/* First-time hint */}
+          <FirstTimeHint id="vote-hint" position="right">
+            👆 Голосуй за сделки! Чем горячее — тем выше в ленте
+          </FirstTimeHint>
+
           <button
             onClick={(e) => { e.stopPropagation(); vote('hot'); }}
             disabled={!!userVote}
@@ -266,12 +273,19 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
             <ChevronUp className="w-5 h-5" strokeWidth={2.5} />
           </button>
 
-          <div className="relative py-0.5">
-            <FloatingDelta delta={lastDelta} />
-            <span className={cn('text-base font-extrabold leading-none', getTemperatureColor(temperature))}>
-              <AnimatedTemp value={temperature} />
-            </span>
-          </div>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="relative py-0.5 cursor-default" data-no-navigate>
+                <FloatingDelta delta={lastDelta} />
+                <span className={cn('text-base font-extrabold leading-none', getTemperatureColor(temperature))}>
+                  <AnimatedTemp value={temperature} />
+                </span>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="right">
+              Рейтинг сделки от сообщества. {temperature > 0 ? `+${temperature}°` : `${temperature}°`} = {temperature > 200 ? 'очень горячо!' : temperature > 50 ? 'хорошая сделка' : temperature < 0 ? 'холодная сделка' : 'нормально'}
+            </TooltipContent>
+          </Tooltip>
 
           <button
             onClick={(e) => { e.stopPropagation(); vote('cold'); }}
@@ -302,9 +316,16 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
             className="w-full h-full object-cover"
           />
           {/* Store badge on image */}
-          <Badge className="absolute top-1.5 right-1.5 text-[9px] px-1 py-0 h-4 bg-[hsl(var(--deal-success))] text-primary-foreground border-0 backdrop-blur-sm">
-            {deal.store}
-          </Badge>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span>
+                <Badge className="absolute top-1.5 right-1.5 text-[9px] px-1 py-0 h-4 bg-[hsl(var(--deal-success))] text-primary-foreground border-0 backdrop-blur-sm cursor-pointer">
+                  {deal.store}
+                </Badge>
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>Все сделки из {deal.store}</TooltipContent>
+          </Tooltip>
           {/* Special badges on image */}
           {deal.isPriceBug && (
             <Badge className="absolute bottom-1.5 left-1.5 bg-destructive text-destructive-foreground text-[9px] px-1 py-0 h-4 border-0">
@@ -346,9 +367,16 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
               </span>
             )}
             {deal.discount && (
-              <Badge className="bg-[hsl(var(--deal-success))] text-primary-foreground border-0 text-[10px] font-bold px-1.5 py-0 h-4">
-                -{deal.discount}%
-              </Badge>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span>
+                    <Badge className="bg-[hsl(var(--deal-success))] text-primary-foreground border-0 text-[10px] font-bold px-1.5 py-0 h-4">
+                      -{deal.discount}%
+                    </Badge>
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>Скидка относительно оригинальной цены</TooltipContent>
+              </Tooltip>
             )}
           </div>
 
@@ -377,7 +405,12 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
                 {deal.postedBy.slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            <span className="truncate max-w-[70px]">{deal.postedBy}</span>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="truncate max-w-[70px] cursor-pointer hover:text-primary transition-colors">{deal.postedBy}</span>
+              </TooltipTrigger>
+              <TooltipContent>Все сделки от {deal.postedBy}</TooltipContent>
+            </Tooltip>
             <span className="text-border">·</span>
             <Clock className="w-3 h-3 shrink-0" />
             <span className="truncate">{deal.postedAt}</span>
@@ -404,13 +437,18 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
             </Link>
 
             {/* Bookmark - right aligned */}
-            <button
-              data-no-navigate
-              onClick={(e) => { e.stopPropagation(); setSaved(!saved); }}
-              className={cn('ml-auto hover:text-primary transition-colors', saved && 'text-primary')}
-            >
-              <Bookmark className={cn('w-3.5 h-3.5', saved && 'fill-current')} />
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  data-no-navigate
+                  onClick={(e) => { e.stopPropagation(); setSaved(!saved); }}
+                  className={cn('ml-auto hover:text-primary transition-colors', saved && 'text-primary')}
+                >
+                  <Bookmark className={cn('w-3.5 h-3.5', saved && 'fill-current')} />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>{saved ? 'Убрать из избранного' : 'Сохранить в избранное'}</TooltipContent>
+            </Tooltip>
           </div>
         </div>
 
