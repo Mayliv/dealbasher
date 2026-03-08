@@ -61,6 +61,7 @@ const App = () => (
                   <Route path="/digest" element={<DigestPage />} />
                   <Route path="/leaderboard" element={<LeaderboardPage />} />
                   <Route path="/challenges" element={<ChallengesPage />} />
+                  <Route path="/sitemap" element={<SitemapPage />} />
                   <Route path="/:pageId" element={<StaticPage />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
