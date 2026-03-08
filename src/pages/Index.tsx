@@ -284,7 +284,20 @@ const Index = () => {
   const [dealTypeFilter, setDealTypeFilter] = useState<DealTypeFilter>('all');
   const [userCity, setUserCity] = useState<string | null>(getSelectedCity());
   const [kaspiFilter, setKaspiFilter] = useState<'all' | 'red' | 'installment'>('all');
-  const { t, region, formatPrice } = useLocalization();
+  const [showOnboarding, setShowOnboarding] = useState(!isOnboardingDone());
+  const [onboardingPrefs, setOnboardingPrefs] = useState<OnboardingPrefs | null>(getOnboardingPrefs());
+  const { t, region, setRegion, formatPrice } = useLocalization();
+
+  const handleOnboardingComplete = (prefs: OnboardingPrefs) => {
+    setOnboardingPrefs(prefs);
+    setRegion(prefs.region);
+    if (prefs.city) {
+      localStorage.setItem(`dealbasher_city_${prefs.region}`, prefs.city);
+      setSelectedCity(prefs.city);
+      setUserCity(prefs.city);
+    }
+    setShowOnboarding(false);
+  };
 
   useEffect(() => {
     const savedCity = localStorage.getItem(`dealbasher_city_${region}`);
