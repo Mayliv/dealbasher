@@ -580,6 +580,7 @@ const Index = () => {
 
           {/* Sidebar */}
           <aside className="space-y-4 hidden lg:block">
+            <WeeklyChallengesWidget />
             <TopStoresWidget />
             <TopHuntersWidget />
             <HotCategoriesWidget />
