@@ -19,6 +19,7 @@ import AdminHeader from "@/components/admin/AdminHeader";
 import AdminLogin from "@/components/admin/AdminLogin";
 import ContentModeration from "@/components/admin/ContentModeration";
 import UserActivity from "@/components/admin/UserActivity";
+import AnalyticsDashboard from "@/components/admin/AnalyticsDashboard";
 import SiteSettings from "@/components/admin/SiteSettings";
 import CodeEditor from "@/components/admin/CodeEditor";
 import ReportsQueue from "@/components/admin/ReportsQueue";
