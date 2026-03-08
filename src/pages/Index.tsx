@@ -413,9 +413,7 @@ const Index = () => {
           <ScrollArea className="w-full">
             <div className="flex gap-4 pb-4">
               {hotDeals.map(deal => (
-                <div key={deal.id} className="min-w-[320px] max-w-[380px] shrink-0">
-                  <DealCard deal={deal} />
-                </div>
+                <DealCard key={deal.id} deal={deal} variant="compact" />
               ))}
             </div>
             <ScrollBar orientation="horizontal" />
