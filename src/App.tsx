@@ -23,6 +23,7 @@ import UserProfile from "./pages/UserProfile";
 import NotificationSettings from "./pages/NotificationSettings";
 import TrackingPage from "./pages/TrackingPage";
 import DigestPage from "./pages/DigestPage";
+import LeaderboardPage from "./pages/LeaderboardPage";
 import MobileBottomNav from "./components/MobileBottomNav";
 import LiveActivityFeed from "./components/LiveActivityFeed";
 
