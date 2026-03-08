@@ -85,15 +85,8 @@ const generatePriceHistory = (deal: Deal) => {
 };
 
 // ─── Mock comments ─────────────────────────────────────────────
-interface Comment {
-  id: number;
-  author: string;
-  avatarUrl?: string;
-  text: string;
-  postedAt: string;
-  likes: number;
-  replies?: Comment[];
-}
+import CommentItemComponent, { Comment } from '@/components/CommentItem';
+
 
 const mockComments: Comment[] = [
   {
