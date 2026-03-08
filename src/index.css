@@ -5,38 +5,48 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 15%;
+    /* Page & card backgrounds */
+    --background: 210 17% 98%;
+    --foreground: 220 15% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 15%;
+    --card-foreground: 220 15% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 15%;
+    --popover-foreground: 220 15% 15%;
 
-    --primary: 11 100% 58%;
+    /* Brand primary: #FF4B2B */
+    --primary: 9 100% 58%;
     --primary-foreground: 0 0% 100%;
 
+    /* Secondary: #FF416C */
     --secondary: 346 100% 63%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    /* Meta text: #6c757d */
+    --muted: 210 16% 96%;
+    --muted-foreground: 208 7% 46%;
 
-    --accent: 0 0% 96%;
-    --accent-foreground: 0 0% 15%;
+    --accent: 210 16% 96%;
+    --accent-foreground: 220 15% 15%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
+    /* Hot temperature: #e63946 */
+    --destructive: 355 79% 56%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 11 100% 58%;
+    /* Borders: #e9ecef */
+    --border: 210 14% 92%;
+    --input: 210 14% 92%;
+    --ring: 9 100% 58%;
 
     --radius: 0.5rem;
 
-    --gradient-primary: linear-gradient(135deg, hsl(11 100% 58%), hsl(346 100% 63%));
-    --deal-success: 142 71% 45%;
+    /* Semantic tokens */
+    --gradient-primary: linear-gradient(135deg, hsl(9 100% 58%), hsl(346 100% 63%));
+    --deal-success: 145 63% 47%;
+    --deal-hot: 355 79% 56%;
+    --deal-cold: 231 77% 60%;
+    --meta: 208 7% 46%;
     --kaspi-green: 152 100% 33%;
     --kaspi-red: 0 100% 40%;
   }
@@ -57,26 +67,29 @@
     --popover: 220 20% 14%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 11 100% 58%;
+    --primary: 9 100% 58%;
     --primary-foreground: 0 0% 98%;
 
     --secondary: 346 100% 63%;
     --secondary-foreground: 0 0% 98%;
 
     --muted: 220 15% 20%;
-    --muted-foreground: 0 0% 65%;
+    --muted-foreground: 210 10% 58%;
 
     --accent: 220 15% 20%;
     --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 62% 30%;
+    --destructive: 355 79% 45%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 220 15% 22%;
     --input: 220 15% 22%;
-    --ring: 11 100% 58%;
+    --ring: 9 100% 58%;
 
-    --deal-success: 142 71% 45%;
+    --deal-success: 145 63% 47%;
+    --deal-hot: 355 79% 56%;
+    --deal-cold: 231 77% 60%;
+    --meta: 210 10% 58%;
     --kaspi-green: 152 100% 33%;
     --kaspi-red: 0 100% 40%;
   }
@@ -94,7 +107,20 @@
 
   body {
     @apply bg-background text-foreground;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.3;
+    font-weight: 700;
+  }
+
+  h1 { font-size: 24px; }
+  h2 { font-size: 20px; }
+  h3 { font-size: 18px; }
 
   ::-webkit-scrollbar {
     width: 8px;
@@ -115,31 +141,39 @@
 }
 
 @layer components {
+  /* ─── Brand gradient ──────────────────────────── */
   .gradient-primary {
-    background: linear-gradient(135deg, hsl(11 100% 58%), hsl(346 100% 63%));
+    background: linear-gradient(135deg, hsl(9 100% 58%), hsl(346 100% 63%));
   }
 
+  /* ─── Typography utilities ────────────────────── */
+  .text-body { font-size: 15px; line-height: 1.5; font-weight: 400; }
+  .text-meta { font-size: 13px; line-height: 1.5; color: hsl(var(--meta)); }
+  .text-tiny { font-size: 11px; line-height: 1.4; color: hsl(var(--meta)); }
+  .text-price { font-weight: 600; }
+
+  /* ─── Card base ───────────────────────────────── */
   .deal-card {
-    @apply bg-card rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300;
+    @apply bg-card rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200;
+    padding: 16px;
   }
 
   .deal-badge {
     @apply px-2 py-1 text-xs font-bold rounded-full text-white;
   }
 
-  .deal-hot {
-    @apply bg-deal-red;
+  /* ─── Section spacing ─────────────────────────── */
+  .section-gap {
+    margin-bottom: 32px;
   }
 
-  .deal-cold {
-    @apply bg-deal-gray text-deal-dark dark:bg-gray-700 dark:text-gray-200;
-  }
+  /* ─── Temperature colors ──────────────────────── */
+  .temp-hot { color: hsl(var(--deal-hot)); }
+  .temp-cold { color: hsl(var(--deal-cold)); }
+  .temp-neutral { color: hsl(var(--meta)); }
+  .temp-fire { color: hsl(var(--deal-hot)); }
 
-  .temperature-button {
-    @apply flex items-center justify-center w-8 h-8 rounded-full;
-  }
-
-  /* Animated gradient border for hot deals */
+  /* ─── Animated gradient border for hot deals ──── */
   @keyframes gradient-rotate {
     0% { --angle: 0deg; }
     100% { --angle: 360deg; }
@@ -154,7 +188,7 @@
     position: absolute;
     inset: -2px;
     border-radius: inherit;
-    background: linear-gradient(var(--angle, 0deg), hsl(11 100% 58%), hsl(346 100% 63%), hsl(39 100% 60%), hsl(11 100% 58%));
+    background: linear-gradient(var(--angle, 0deg), hsl(9 100% 58%), hsl(346 100% 63%), hsl(39 100% 60%), hsl(9 100% 58%));
     z-index: -1;
     animation: gradient-rotate 3s linear infinite;
   }
@@ -165,25 +199,20 @@
     inherits: false;
   }
 
-  /* Vote float animation */
-@keyframes bug-pulse {
-  0%, 100% { border-color: hsl(var(--destructive) / 0.5); box-shadow: 0 0 0 0 hsl(var(--destructive) / 0.2); }
-  50% { border-color: hsl(var(--destructive)); box-shadow: 0 0 20px 0 hsl(var(--destructive) / 0.15); }
-}
+  /* ─── Bug pulse ───────────────────────────────── */
+  @keyframes bug-pulse {
+    0%, 100% { border-color: hsl(var(--destructive) / 0.5); box-shadow: 0 0 0 0 hsl(var(--destructive) / 0.2); }
+    50% { border-color: hsl(var(--destructive)); box-shadow: 0 0 20px 0 hsl(var(--destructive) / 0.15); }
+  }
 
-.animate-bug-pulse {
-  animation: bug-pulse 2s ease-in-out infinite;
-}
+  .animate-bug-pulse {
+    animation: bug-pulse 2s ease-in-out infinite;
+  }
 
-@keyframes vote-float {
-    0% {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-    100% {
-      opacity: 0;
-      transform: translateX(-50%) translateY(-24px);
-    }
+  /* ─── Vote float ──────────────────────────────── */
+  @keyframes vote-float {
+    0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-24px); }
   }
 
   .animate-vote-float {
@@ -194,7 +223,7 @@
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
-  /* Deal of the Day shine effect */
+  /* ─── Deal of the Day shine effect ────────────── */
   @keyframes dotd-shine {
     0% { left: -100%; }
     50%, 100% { left: 100%; }
@@ -212,18 +241,12 @@
     left: -100%;
     width: 60%;
     height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      hsla(45, 100%, 70%, 0.15),
-      transparent
-    );
+    background: linear-gradient(90deg, transparent, hsla(45, 100%, 70%, 0.15), transparent);
     animation: dotd-shine 4s ease-in-out infinite;
     pointer-events: none;
     z-index: 10;
   }
 
-  /* Golden crown badge on deal cards */
   .dotd-crown-badge {
     position: absolute;
     top: -4px;
