@@ -395,17 +395,35 @@ const DealCard = ({ deal }: DealCardProps) => {
         </div>
       </div>
 
-      {/* BOTTOM BAR: CTA Button */}
-      <a
-        href={deal.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        data-no-navigate
-        onClick={(e) => e.stopPropagation()}
-        className="block w-full gradient-primary text-primary-foreground text-center py-2.5 text-sm font-bold hover:opacity-90 transition-opacity"
-      >
-        🛒 Перейти к скидке
-      </a>
+      {/* Report & Expired buttons bar */}
+      <div className="flex items-center border-t border-border" data-no-navigate>
+        <a
+          href={deal.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-no-navigate
+          onClick={(e) => e.stopPropagation()}
+          className="flex-1 gradient-primary text-primary-foreground text-center py-2.5 text-sm font-bold hover:opacity-90 transition-opacity"
+        >
+          🛒 Перейти к скидке
+        </a>
+        <button
+          data-no-navigate
+          onClick={(e) => { e.stopPropagation(); handleExpiredReport(e); }}
+          className="px-3 py-2.5 text-muted-foreground hover:text-amber-500 transition-colors border-l border-border"
+          title="Сделка истекла"
+        >
+          <TimerOff className="w-4 h-4" />
+        </button>
+        <button
+          data-no-navigate
+          onClick={(e) => { e.stopPropagation(); setReportOpen(true); }}
+          className="px-3 py-2.5 text-muted-foreground hover:text-destructive transition-colors border-l border-border"
+          title="Пожаловаться"
+        >
+          <Flag className="w-4 h-4" />
+        </button>
+      </div>
 
       {/* Share modal */}
       <ShareModal
@@ -414,6 +432,14 @@ const DealCard = ({ deal }: DealCardProps) => {
         onOpenChange={setShareOpen}
         shareCount={shareCount}
         onShare={handleShare}
+      />
+
+      {/* Report modal */}
+      <ReportDealModal
+        dealId={deal.id}
+        dealTitle={deal.title}
+        open={reportOpen}
+        onOpenChange={(open) => { setReportOpen(open); if (!open) setReportCount(getReportCount(deal.id)); }}
       />
     </div>
   );
