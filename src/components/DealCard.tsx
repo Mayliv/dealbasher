@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { MessageSquare, Share2, Clock, Tag } from 'lucide-react';
+import { MessageSquare, Share2, Clock, Tag, MapPin, Store } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Deal } from '@/utils/data';
