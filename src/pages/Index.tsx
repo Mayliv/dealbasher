@@ -345,10 +345,50 @@ const Index = () => {
         {/* Hero Banner */}
         <HeroBanner deals={heroDeals} />
 
+        {/* 🔴 Kaspi RED section — KZ only */}
+        {region === 'kz' && (
+          <section className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+                {t('section.kaspi_red')}
+              </h2>
+              <Badge className="bg-secondary text-secondary-foreground text-xs font-bold">Kaspi</Badge>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[
+                { id: 901, title: 'iPhone 15 Pro — Kaspi RED 12 мес', description: 'Рассрочка 0% на 12 месяцев через Kaspi RED. Без переплаты!', originalPrice: 599990, dealPrice: 599990, store: 'Kaspi Shop', category: 'electronics', imageUrl: 'https://placehold.co/400x300/00A651/fff?text=iPhone+15+RED', postedBy: 'kaspi_deals', postedAt: '1 час назад', temperature: 389, comments: 24, url: '#', region: 'kz' as const, discount: 0 },
+                { id: 902, title: 'Samsung Galaxy S24 — RED 0-0-24', description: 'Без первого взноса, без переплаты на 24 месяца', originalPrice: 449990, dealPrice: 449990, store: 'Kaspi Shop', category: 'electronics', imageUrl: 'https://placehold.co/400x300/00A651/fff?text=Galaxy+S24+RED', postedBy: 'kz_tech', postedAt: '3 часа назад', temperature: 267, comments: 18, url: '#', region: 'kz' as const, discount: 0 },
+                { id: 903, title: 'Dyson V15 — RED рассрочка + кэшбэк', description: 'Kaspi RED на 6 месяцев + кэшбэк 5% бонусами', originalPrice: 329990, dealPrice: 329990, store: 'Kaspi Shop', category: 'home', imageUrl: 'https://placehold.co/400x300/00A651/fff?text=Dyson+RED', postedBy: 'smart_shopper', postedAt: '5 часов назад', temperature: 198, comments: 11, url: '#', region: 'kz' as const, discount: 0 },
+              ].map(deal => (
+                <Link key={deal.id} to={`/deal/${deal.id}`} className="block">
+                  <div className="bg-card border-2 border-secondary/30 rounded-xl p-4 hover:border-secondary/60 transition-all hover:shadow-lg group">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Badge className="bg-secondary text-secondary-foreground text-xs font-bold">🔴 Kaspi RED</Badge>
+                      <span className="text-xs text-muted-foreground">0% рассрочка</span>
+                    </div>
+                    <div className="flex gap-3">
+                      <div className="w-20 h-20 rounded-lg overflow-hidden bg-muted shrink-0">
+                        <img src={deal.imageUrl} alt={deal.title} className="w-full h-full object-cover" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-bold text-sm text-foreground line-clamp-2 group-hover:text-primary transition-colors">{deal.title}</h4>
+                        <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{deal.description}</p>
+                        <div className="flex items-center gap-2 mt-2">
+                          <span className="text-base font-extrabold text-secondary">{formatPrice(deal.dealPrice, 'KZT')}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* 🔥 Hot Right Now */}
         <section className="mb-8">
           <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-            🔥 Горячее прямо сейчас
+            {t('section.hot_now')}
           </h2>
           <ScrollArea className="w-full">
             <div className="flex gap-4 pb-4">
