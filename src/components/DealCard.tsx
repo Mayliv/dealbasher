@@ -100,6 +100,9 @@ const DealCard = ({ deal }: DealCardProps) => {
   const isOnFire = temperature > 300;
   const currency = region === 'kz' ? 'KZT' : region === 'ru' ? 'RUB' : 'USD';
 
+  const regionDeals = deals.filter(d => !d.region || d.region === region);
+  const isDOTD = isDealOfTheDay(deal.id, regionDeals);
+
   // ─── Swipe gesture state ─────────────────────────────────
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);

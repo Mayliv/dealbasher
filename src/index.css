@@ -191,4 +191,42 @@
   .safe-area-bottom {
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
+
+  /* Deal of the Day shine effect */
+  @keyframes dotd-shine {
+    0% { left: -100%; }
+    50%, 100% { left: 100%; }
+  }
+
+  .dotd-shine {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dotd-shine::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsla(45, 100%, 70%, 0.15),
+      transparent
+    );
+    animation: dotd-shine 4s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* Golden crown badge on deal cards */
+  .dotd-crown-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    z-index: 20;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  }
 }
