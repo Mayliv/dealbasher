@@ -215,7 +215,7 @@ const DealCard = ({ deal }: DealCardProps) => {
                     {deal.postedBy.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-                <span className="text-xs text-muted-foreground truncate max-w-[80px]">{deal.postedBy}</span>
+                <Link to={`/user/${deal.postedBy}`} className="text-xs text-muted-foreground truncate max-w-[80px] hover:text-primary transition-colors">{deal.postedBy}</Link>
               </div>
               <div className="flex items-center gap-1 text-xs text-muted-foreground shrink-0">
                 <Clock className="w-3 h-3" />
