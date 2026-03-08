@@ -166,6 +166,10 @@ const AdminPanel: React.FC = () => {
             <ContentModeration />
           </TabsContent>
           
+          <TabsContent value="reports" className="space-y-4">
+            <ReportsQueue />
+          </TabsContent>
+          
           <TabsContent value="code" className="space-y-4">
             <CodeEditor />
           </TabsContent>
