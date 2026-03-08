@@ -31,12 +31,13 @@ const last30Days = Array.from({ length: 30 }, (_, i) => {
 
 const categoryBreakdown = [
   { name: 'Электроника', value: 142, color: 'hsl(0, 72%, 65%)' },
-  { name: 'Одежда', value: 98, color: 'hsl(210, 90%, 65%)' },
-  { name: 'Продукты', value: 76, color: 'hsl(135, 60%, 55%)' },
+  { name: 'Мода и одежда', value: 98, color: 'hsl(210, 90%, 65%)' },
+  { name: 'Еда и рестораны', value: 76, color: 'hsl(135, 60%, 55%)' },
   { name: 'Путешествия', value: 54, color: 'hsl(270, 60%, 65%)' },
   { name: 'Дом и сад', value: 41, color: 'hsl(40, 90%, 60%)' },
-  { name: 'Красота', value: 37, color: 'hsl(330, 70%, 65%)' },
+  { name: 'Красота и здоровье', value: 37, color: 'hsl(330, 70%, 65%)' },
   { name: 'Игры', value: 33, color: 'hsl(180, 60%, 50%)' },
+  { name: 'Спорт', value: 28, color: 'hsl(20, 80%, 55%)' },
 ];
 
 const topStores = [
