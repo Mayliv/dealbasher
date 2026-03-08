@@ -34,25 +34,28 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/category/:categoryId" element={<CategoryPage />} />
-                <Route path="/deal/:dealId" element={<DealDetail />} />
-                <Route path="/search" element={<SearchResults />} />
-                <Route path="/submit-deal" element={<SubmitDeal />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/deals" element={<Index />} />
-                <Route path="/categories" element={<CategoriesPage />} />
-                <Route path="/promocodes" element={<PromocodesPage />} />
-                <Route path="/bugs" element={<PriceBugsPage />} />
-                <Route path="/freebies" element={<StaticPage />} />
-                <Route path="/discussions" element={<Discussions />} />
-                <Route path="/owner" element={<AdminPanel />} />
-                <Route path="/user/:username" element={<UserProfile />} />
-                <Route path="/settings/notifications" element={<NotificationSettings />} />
-                <Route path="/:pageId" element={<StaticPage />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+              <div className="pb-14 md:pb-0">
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/category/:categoryId" element={<CategoryPage />} />
+                  <Route path="/deal/:dealId" element={<DealDetail />} />
+                  <Route path="/search" element={<SearchResults />} />
+                  <Route path="/submit-deal" element={<SubmitDeal />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/deals" element={<Index />} />
+                  <Route path="/categories" element={<CategoriesPage />} />
+                  <Route path="/promocodes" element={<PromocodesPage />} />
+                  <Route path="/bugs" element={<PriceBugsPage />} />
+                  <Route path="/freebies" element={<StaticPage />} />
+                  <Route path="/discussions" element={<Discussions />} />
+                  <Route path="/owner" element={<AdminPanel />} />
+                  <Route path="/user/:username" element={<UserProfile />} />
+                  <Route path="/settings/notifications" element={<NotificationSettings />} />
+                  <Route path="/:pageId" element={<StaticPage />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+                <MobileBottomNav />
+              </div>
             </BrowserRouter>
           </TooltipProvider>
         </AuthProvider>
