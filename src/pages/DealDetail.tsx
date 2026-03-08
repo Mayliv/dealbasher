@@ -449,12 +449,32 @@ const DealDetail = () => {
 
             {/* ─── Price History Chart ──────────── */}
             <div className="bg-card rounded-xl border p-5">
-              <h2 className="text-lg font-semibold text-foreground mb-4">📈 История цен</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-foreground">📊 История цены (30 дней)</h2>
+                <Button
+                  variant={dealTracked ? "secondary" : "default"}
+                  size="sm"
+                  className={dealTracked ? "" : "gradient-primary text-primary-foreground"}
+                  onClick={() => {
+                    if (dealTracked) {
+                      removeTrackedDeal(deal.id);
+                      setDealTracked(false);
+                      toast({ title: '🔕 Отслеживание отменено' });
+                    } else {
+                      setTargetPrice(String(Math.round(deal.dealPrice * 0.9)));
+                      setTrackModalOpen(true);
+                    }
+                  }}
+                >
+                  {dealTracked ? <BellOff className="w-4 h-4 mr-1" /> : <Bell className="w-4 h-4 mr-1" />}
+                  {dealTracked ? 'Отслеживается' : 'Отслеживать цену'}
+                </Button>
+              </div>
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={priceHistory}>
                     <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                    <XAxis dataKey="date" className="text-xs" tick={{ fill: 'hsl(var(--muted-foreground))' }} />
+                    <XAxis dataKey="date" className="text-xs" tick={{ fill: 'hsl(var(--muted-foreground))' }} interval={4} />
                     <YAxis className="text-xs" tick={{ fill: 'hsl(var(--muted-foreground))' }} />
                     <RechartsTooltip
                       contentStyle={{
@@ -463,17 +483,46 @@ const DealDetail = () => {
                         borderRadius: '8px',
                         color: 'hsl(var(--foreground))',
                       }}
+                      formatter={(value: number, name: string) => [formatPrice(value, 'USD'), 'Цена']}
+                      labelFormatter={(label, payload) => {
+                        const item = payload?.[0]?.payload;
+                        return item?.sale ? `${label} — 🔥 ${item.sale}` : label;
+                      }}
                     />
+                    {/* Sale annotations as reference dots */}
+                    {priceHistory.filter(p => p.sale).map((p, i) => (
+                      <ReferenceLine
+                        key={i}
+                        x={p.date}
+                        stroke="hsl(var(--destructive))"
+                        strokeDasharray="3 3"
+                        label={{ value: '🔥', position: 'top', fill: 'hsl(var(--destructive))' }}
+                      />
+                    ))}
                     <Line
                       type="monotone"
                       dataKey="price"
                       stroke="hsl(var(--primary))"
                       strokeWidth={2}
-                      dot={{ r: 4, fill: 'hsl(var(--primary))' }}
+                      dot={(props) => {
+                        const { cx, cy, payload } = props;
+                        if (payload.sale) {
+                          return <circle cx={cx} cy={cy} r={6} fill="hsl(var(--destructive))" stroke="white" strokeWidth={2} />;
+                        }
+                        return <circle cx={cx} cy={cy} r={3} fill="hsl(var(--primary))" />;
+                      }}
                       activeDot={{ r: 6, fill: 'hsl(var(--primary))' }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
+              </div>
+              <div className="flex items-center gap-4 mt-3 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full bg-primary" /> Цена
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full bg-destructive" /> Распродажа
+                </span>
               </div>
             </div>
 
