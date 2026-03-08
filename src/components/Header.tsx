@@ -1,12 +1,13 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Menu, X } from 'lucide-react';
+import { Search, Menu, X, LogOut, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { useLocalization } from '@/contexts/LocalizationContext';
+import { useAuth } from '@/contexts/AuthContext';
 import LanguageSwitcher from './LanguageSwitcher';
 import RegionSwitcher from './RegionSwitcher';
 import LocationSelector from './LocationSelector';
@@ -17,6 +18,7 @@ const Header = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { t, region } = useLocalization();
+  const { user, signOut } = useAuth();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -87,11 +89,22 @@ const Header = () => {
               <LocationSelector />
               <LanguageSwitcher />
               
-              <Link to="/login">
-                <Button variant="outline" size="sm" className="h-8">
-                  Войти
-                </Button>
-              </Link>
+              {user ? (
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm text-muted-foreground hidden lg:inline">
+                    {user.user_metadata?.username || user.email}
+                  </span>
+                  <Button variant="outline" size="sm" className="h-8" onClick={() => signOut()}>
+                    <LogOut className="h-4 w-4 mr-1" /> Выйти
+                  </Button>
+                </div>
+              ) : (
+                <Link to="/login">
+                  <Button variant="outline" size="sm" className="h-8">
+                    Войти
+                  </Button>
+                </Link>
+              )}
               
               <button 
                 className="md:hidden text-gray-700 dark:text-gray-300"
