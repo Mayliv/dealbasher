@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import LiveActivityFeed from '@/components/LiveActivityFeed';
+
 import Header from '@/components/Header';
 import CategoryBar from '@/components/CategoryBar';
 import DealCard from '@/components/DealCard';
@@ -527,7 +527,6 @@ const Index = () => {
       </main>
 
       <Footer />
-      <LiveActivityFeed />
     </div>
   );
 };

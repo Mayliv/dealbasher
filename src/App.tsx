@@ -22,6 +22,7 @@ import PriceBugsPage from "./pages/PriceBugsPage";
 import UserProfile from "./pages/UserProfile";
 import NotificationSettings from "./pages/NotificationSettings";
 import MobileBottomNav from "./components/MobileBottomNav";
+import LiveActivityFeed from "./components/LiveActivityFeed";
 
 const queryClient = new QueryClient();
 
@@ -55,6 +56,7 @@ const App = () => (
                   <Route path="*" element={<NotFound />} />
                 </Routes>
                 <MobileBottomNav />
+                <LiveActivityFeed />
               </div>
             </BrowserRouter>
           </TooltipProvider>
