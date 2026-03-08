@@ -3,11 +3,12 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MessageSquare, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Deal } from '@/utils/data';
+import { Deal, deals } from '@/utils/data';
 import { useLocalization } from '@/contexts/LocalizationContext';
 import { useTemperatureVote } from '@/hooks/useTemperatureVote';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
+import { isDealOfTheDay } from '@/components/DealOfTheDay';
 
 interface DealCardProps {
   deal: Deal;
