@@ -76,6 +76,7 @@ const App = () => (
                 </Routes>
                 <MobileBottomNav />
                 <LiveActivityFeed />
+                <OnboardingTooltips />
               </div>
             </BrowserRouter>
           </TooltipProvider>
