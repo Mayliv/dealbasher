@@ -71,7 +71,7 @@ const FloatingDelta = ({ delta }: { delta: number | null }) => {
     <span
       className={cn(
         'absolute -top-5 left-1/2 -translate-x-1/2 text-sm font-bold pointer-events-none animate-vote-float',
-        isPositive ? 'text-orange-500' : 'text-blue-500'
+        isPositive ? 'text-deal-hot' : 'text-deal-cold'
       )}
     >
       {isPositive ? '+' : ''}{currentDelta}
