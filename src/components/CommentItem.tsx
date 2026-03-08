@@ -26,7 +26,7 @@ interface StoredReaction {
 
 const REACTION_CONFIG: { type: ReactionType; icon: typeof ThumbsUp; label: string; activeClass: string }[] = [
   { type: 'useful', icon: ThumbsUp, label: 'Полезно', activeClass: 'text-[hsl(var(--deal-success))] bg-[hsl(var(--deal-success)/0.1)]' },
-  { type: 'funny', icon: Laugh, label: 'Смешно', activeClass: 'text-yellow-500 bg-yellow-500/10' },
+  { type: 'funny', icon: Laugh, label: 'Смешно', activeClass: 'text-amber-500 bg-amber-500/10' },
   { type: 'useless', icon: ThumbsDown, label: 'Бесполезно', activeClass: 'text-muted-foreground bg-muted' },
 ];
 
