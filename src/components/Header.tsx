@@ -96,6 +96,7 @@ const Header = () => {
             <div className="flex items-center space-x-1">
               <LocationSelector />
               <LanguageSwitcher />
+              <NotificationBell />
               
               {/* Dark mode toggle */}
               <Button

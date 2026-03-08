@@ -107,9 +107,12 @@ const CategoryPage = () => {
           <div className="md:col-span-3">
             <div className="bg-card rounded-xl border p-6 mb-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6">
-                <div className="flex items-center mb-4 sm:mb-0">
-                  <Flame className="text-primary mr-2" />
-                  <h2 className="text-xl font-bold text-foreground">{currentCategory.name}</h2>
+                <div className="flex items-center gap-3 mb-4 sm:mb-0">
+                  <div className="flex items-center">
+                    <Flame className="text-primary mr-2" />
+                    <h2 className="text-xl font-bold text-foreground">{currentCategory.name}</h2>
+                  </div>
+                  <SubscribeButton type="category" name={currentCategory.name} />
                 </div>
                 <SortingTabs activeTab={sortTab} onChangeTab={setSortTab} />
               </div>
