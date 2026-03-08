@@ -245,13 +245,14 @@ const TopHuntersWidget = () => {
 const HotCategoriesWidget = () => {
   const hotCats = [
     { name: 'Электроника', slug: 'electronics', count: 86 },
-    { name: 'Мода', slug: 'fashion', count: 54 },
+    { name: 'Мода и одежда', slug: 'fashion', count: 54 },
     { name: 'Игры', slug: 'gaming', count: 42 },
     { name: 'Дом и сад', slug: 'home', count: 38 },
-    { name: 'Красота', slug: 'beauty', count: 29 },
-    { name: 'Еда', slug: 'food', count: 23 },
+    { name: 'Красота и здоровье', slug: 'beauty', count: 29 },
+    { name: 'Еда и рестораны', slug: 'food', count: 23 },
     { name: 'Путешествия', slug: 'travel', count: 17 },
-    { name: 'Локальные', slug: 'local', count: 12 },
+    { name: 'Спорт', slug: 'sports', count: 15 },
+    { name: 'Детям', slug: 'kids', count: 12 },
   ];
 
   return (

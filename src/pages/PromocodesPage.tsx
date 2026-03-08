@@ -41,10 +41,12 @@ import { useToast } from '@/components/ui/use-toast';
 // ─── Data ──────────────────────────────────────────────────
 const categories = [
   { id: 'all', name: 'Все', icon: '🏷️' },
-  { id: 'food', name: 'Еда', icon: '🍔' },
-  { id: 'fashion', name: 'Одежда', icon: '👕' },
+  { id: 'food', name: 'Еда и рестораны', icon: '🍔' },
+  { id: 'fashion', name: 'Мода и одежда', icon: '👕' },
   { id: 'electronics', name: 'Электроника', icon: '📱' },
   { id: 'travel', name: 'Путешествия', icon: '✈️' },
+  { id: 'beauty', name: 'Красота и здоровье', icon: '💄' },
+  { id: 'sports', name: 'Спорт', icon: '⚽' },
 ];
 
 const topStores = [
