@@ -12,7 +12,7 @@ import { getSelectedCity } from '@/components/CityPickerModal';
 import { deals, offlineCitiesRu, offlineCitiesKz, categories } from '@/utils/data';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Flame, MapPin, Thermometer, Store, Wifi, LayoutGrid, ChevronLeft, ChevronRight, Bug, Crown, TrendingUp, ExternalLink, Clock } from 'lucide-react';
+import { Flame, MapPin, Thermometer, Store, Wifi, LayoutGrid, ChevronLeft, ChevronRight, Crown, TrendingUp, ExternalLink, Clock } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { useLocalization } from '@/contexts/LocalizationContext';
 import { getStoredTemp } from '@/hooks/useTemperatureVote';
