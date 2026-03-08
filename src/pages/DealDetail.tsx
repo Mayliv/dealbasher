@@ -688,6 +688,64 @@ const DealDetail = () => {
       </main>
 
       <Footer />
+
+      {/* Track Price Modal */}
+      <Dialog open={trackModalOpen} onOpenChange={setTrackModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Bell className="w-5 h-5 text-primary" />
+              Отслеживать цену
+            </DialogTitle>
+            <DialogDescription>
+              Мы уведомим вас когда цена на <strong>{deal.title}</strong> упадёт до указанного уровня.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium text-foreground mb-1.5 block">
+                Уведомить меня когда цена упадёт до:
+              </label>
+              <div className="flex items-center gap-2">
+                <Input
+                  type="number"
+                  value={targetPrice}
+                  onChange={(e) => setTargetPrice(e.target.value)}
+                  placeholder={String(Math.round(deal.dealPrice * 0.9))}
+                  className="text-lg font-bold"
+                />
+                <span className="text-muted-foreground">₽</span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Текущая цена: {formatPrice(deal.dealPrice, 'USD')}
+              </p>
+            </div>
+            <Button
+              className="w-full gradient-primary text-primary-foreground"
+              onClick={() => {
+                const target = parseInt(targetPrice) || Math.round(deal.dealPrice * 0.9);
+                addTrackedDeal({
+                  dealId: deal.id,
+                  targetPrice: target,
+                  addedAt: new Date().toLocaleDateString('ru-RU'),
+                });
+                setDealTracked(true);
+                setTrackModalOpen(false);
+                toast({
+                  title: '✅ Добавлено в отслеживаемые!',
+                  description: 'Пришлём уведомление в Telegram или на email когда цена упадёт.',
+                });
+              }}
+            >
+              <TrendingDown className="w-4 h-4 mr-2" />
+              Отслеживать за {targetPrice ? formatPrice(parseInt(targetPrice), 'USD') : formatPrice(Math.round(deal.dealPrice * 0.9), 'USD')}
+            </Button>
+            <p className="text-center text-xs text-muted-foreground">
+              Вы можете просмотреть все отслеживаемые товары на <Link to="/tracking" className="text-primary hover:underline">этой странице</Link>
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
