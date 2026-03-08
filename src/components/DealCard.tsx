@@ -98,8 +98,11 @@ const DealCard = ({ deal }: DealCardProps) => {
   const { temperature, userVote, lastDelta, vote } = useTemperatureVote(deal.id, deal.temperature);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const [shareOpen, setShareOpen] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
+  const [reportCount, setReportCount] = useState(() => getReportCount(deal.id));
   const [shareCount, setShareCount] = useState(() => {
     const stored = localStorage.getItem(`share_count_${deal.id}`);
     return stored ? parseInt(stored, 10) : Math.floor(Math.random() * 120);
@@ -110,6 +113,27 @@ const DealCard = ({ deal }: DealCardProps) => {
     setShareCount(newCount);
     localStorage.setItem(`share_count_${deal.id}`, String(newCount));
   };
+
+  const handleExpiredReport = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    reportExpired(deal.id);
+    setReportCount(prev => prev + 1);
+    toast({ title: '🕐 Отмечено как истёкшее', description: 'Спасибо за обратную связь!' });
+  };
+
+  // Check if deal is older than 7 days
+  const isAged = (() => {
+    try {
+      const posted = new Date(deal.postedAt);
+      if (isNaN(posted.getTime())) {
+        // Try parsing relative time like "2ч назад"
+        return false;
+      }
+      return (Date.now() - posted.getTime()) > 7 * 24 * 60 * 60 * 1000;
+    } catch { return false; }
+  })();
+
+  const isUnderReview = reportCount >= 3;
 
   const isExpired = temperature < -10;
   const isOnFire = temperature > 300;
