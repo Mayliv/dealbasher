@@ -284,6 +284,16 @@ const DealDetail = () => {
                     <h1 className="text-xl font-bold text-foreground leading-tight">{deal.title}</h1>
                     <div className="flex items-center gap-2 mt-2 flex-wrap">
                       <Badge variant="secondary" className="text-xs">{deal.store}</Badge>
+                      {isDealOfTheDay(deal.id, deals) && (
+                        <Badge className="bg-yellow-500 text-white border-0 text-xs font-bold">
+                          👑 Сделка дня
+                        </Badge>
+                      )}
+                      {wasDealOfTheDay(deal.id, deals) && !isDealOfTheDay(deal.id, deals) && (
+                        <Badge variant="outline" className="border-yellow-400 text-yellow-600 dark:text-yellow-400 text-xs font-bold">
+                          👑 Была сделкой дня
+                        </Badge>
+                      )}
                       {deal.isPriceBug && (
                         <Badge variant="outline" className="border-destructive text-destructive text-xs font-bold">
                           🐛 Price Bug
