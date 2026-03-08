@@ -30,16 +30,28 @@ export interface Deal {
 }
 
 export const categories = [
-  { id: 'all', name: 'Все предложения' },
-  { id: 'electronics', name: 'Электроника' },
-  { id: 'fashion', name: 'Мода' },
-  { id: 'home', name: 'Дом и сад' },
-  { id: 'gaming', name: 'Игры' },
-  { id: 'beauty', name: 'Красота' },
-  { id: 'food', name: 'Еда и напитки' },
-  { id: 'travel', name: 'Путешествия' },
-  { id: 'local', name: 'Локальные скидки' },
+  { id: 'all', name: 'Все предложения', nameKk: 'Барлық ұсыныстар' },
+  { id: 'electronics', name: 'Электроника', nameKk: 'Электроника' },
+  { id: 'fashion', name: 'Мода и одежда', nameKk: 'Сән және киім' },
+  { id: 'home', name: 'Дом и сад', nameKk: 'Үй және бақша' },
+  { id: 'gaming', name: 'Игры', nameKk: 'Ойындар' },
+  { id: 'beauty', name: 'Красота и здоровье', nameKk: 'Сұлулық және денсаулық' },
+  { id: 'food', name: 'Еда и рестораны', nameKk: 'Тамақ және мейрамханалар' },
+  { id: 'travel', name: 'Путешествия', nameKk: 'Саяхат' },
+  { id: 'sports', name: 'Спорт', nameKk: 'Спорт' },
+  { id: 'kids', name: 'Детям', nameKk: 'Балаларға' },
+  { id: 'auto', name: 'Авто', nameKk: 'Авто' },
+  { id: 'local', name: 'Локальные скидки', nameKk: 'Жергілікті жеңілдіктер' },
+  { id: 'other', name: 'Другое', nameKk: 'Басқа' },
 ];
+
+/** Get localized category name by ID */
+export const getCategoryName = (categoryId: string, language: string = 'ru'): string => {
+  const cat = categories.find(c => c.id === categoryId);
+  if (!cat) return categoryId;
+  if (language === 'kk') return cat.nameKk;
+  return cat.name;
+};
 
 // Kazakhstan marketplaces
 export const kazMarketplaces = [

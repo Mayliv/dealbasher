@@ -21,10 +21,13 @@ const Footer: React.FC = () => {
             <h3 className="text-lg font-semibold mb-4 text-foreground">Категории</h3>
             <ul className="space-y-2">
               <li><Link to="/category/electronics" className="text-sm text-muted-foreground hover:text-primary">Электроника</Link></li>
-              <li><Link to="/category/fashion" className="text-sm text-muted-foreground hover:text-primary">Мода</Link></li>
+              <li><Link to="/category/fashion" className="text-sm text-muted-foreground hover:text-primary">Мода и одежда</Link></li>
               <li><Link to="/category/home" className="text-sm text-muted-foreground hover:text-primary">Дом и сад</Link></li>
               <li><Link to="/category/gaming" className="text-sm text-muted-foreground hover:text-primary">Игры</Link></li>
-              <li><Link to="/category/beauty" className="text-sm text-muted-foreground hover:text-primary">Красота</Link></li>
+              <li><Link to="/category/beauty" className="text-sm text-muted-foreground hover:text-primary">Красота и здоровье</Link></li>
+              <li><Link to="/category/sports" className="text-sm text-muted-foreground hover:text-primary">Спорт</Link></li>
+              <li><Link to="/category/kids" className="text-sm text-muted-foreground hover:text-primary">Детям</Link></li>
+              <li><Link to="/category/auto" className="text-sm text-muted-foreground hover:text-primary">Авто</Link></li>
             </ul>
           </div>
           

@@ -329,7 +329,7 @@ const LivePreview = ({ form }: { form: FormData }) => {
               <span>Только что</span>
               {form.category && (
                 <Badge variant="secondary" className="text-[8px] px-1 py-0 h-3.5">
-                  <Tag className="w-2 h-2 mr-0.5" />{form.category}
+                  <Tag className="w-2 h-2 mr-0.5" />{categories.find(c => c.id === form.category)?.name || form.category}
                 </Badge>
               )}
               {form.dealType === 'offline' && form.storeAddress && (
