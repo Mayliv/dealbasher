@@ -19,6 +19,9 @@ export interface Deal {
   region?: 'kz' | 'ru';
   isPriceBug?: boolean;
   avatarUrl?: string;
+  isOffline?: boolean;
+  storeAddress?: string;
+  city?: string;
 }
 
 export const categories = [
