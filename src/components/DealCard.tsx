@@ -225,6 +225,12 @@ const DealCard = ({ deal }: DealCardProps) => {
                 <Tag className="w-2.5 h-2.5 mr-0.5" />
                 {deal.category}
               </Badge>
+              {deal.isOffline && deal.storeAddress && (
+                <div className="flex items-center gap-1 text-xs text-muted-foreground shrink-0 hidden sm:flex">
+                  <MapPin className="w-3 h-3 text-deal-success" />
+                  <span className="truncate max-w-[120px]">{deal.storeAddress}</span>
+                </div>
+              )}
             </div>
             <div className="flex items-center gap-1 shrink-0">
               <Link to={`/deal/${deal.id}`}>

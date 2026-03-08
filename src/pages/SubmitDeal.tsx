@@ -8,12 +8,15 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import { categories } from '@/utils/data';
+import { categories, offlineCitiesRu, offlineCitiesKz } from '@/utils/data';
 import { useToast } from '@/components/ui/use-toast';
+import { useLocalization } from '@/contexts/LocalizationContext';
+import { Wifi, Store } from 'lucide-react';
 
 const SubmitDeal = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { region } = useLocalization();
   
   const [formData, setFormData] = useState({
     title: '',
@@ -23,17 +26,24 @@ const SubmitDeal = () => {
     category: '',
     description: '',
     store: '',
+    isOffline: false,
+    storeAddress: '',
+    city: '',
   });
 
-  const updateFormData = (field: string, value: string) => {
+  const cities = region === 'kz' ? offlineCitiesKz : offlineCitiesRu;
+
+  const updateFormData = (field: string, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Проверка на заполнение обязательных полей
     const requiredFields = ['title', 'url', 'dealPrice', 'category', 'description'];
+    if (formData.isOffline) {
+      requiredFields.push('storeAddress', 'city');
+    }
     const missingFields = requiredFields.filter(field => !formData[field as keyof typeof formData]);
     
     if (missingFields.length > 0) {
@@ -50,22 +60,44 @@ const SubmitDeal = () => {
       description: "Ваша сделка успешно отправлена и находится на модерации",
     });
     
-    // Перенаправление на главную страницу после 1 секунды
     setTimeout(() => {
       navigate('/');
     }, 1000);
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background">
       <Header />
       
       <main className="flex-1 container mx-auto px-4 py-6">
         <div className="max-w-2xl mx-auto">
-          <h1 className="text-2xl font-bold mb-6">Добавить новую сделку</h1>
+          <h1 className="text-2xl font-bold mb-6 text-foreground">Добавить новую сделку</h1>
           
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          <div className="bg-card rounded-xl border overflow-hidden">
             <form onSubmit={handleSubmit} className="p-6 space-y-6">
+              {/* Online / Offline toggle */}
+              <div className="space-y-2">
+                <Label>Тип сделки</Label>
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant={!formData.isOffline ? 'default' : 'outline'}
+                    className={`flex-1 h-11 gap-2 ${!formData.isOffline ? 'gradient-primary text-primary-foreground' : ''}`}
+                    onClick={() => updateFormData('isOffline', false)}
+                  >
+                    <Wifi className="w-4 h-4" /> Онлайн
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={formData.isOffline ? 'default' : 'outline'}
+                    className={`flex-1 h-11 gap-2 ${formData.isOffline ? 'bg-deal-success text-primary-foreground hover:bg-deal-success/90' : ''}`}
+                    onClick={() => updateFormData('isOffline', true)}
+                  >
+                    <Store className="w-4 h-4" /> Офлайн в магазине
+                  </Button>
+                </div>
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="title">Название сделки *</Label>
                 <Input 
@@ -123,7 +155,6 @@ const SubmitDeal = () => {
                 <Select 
                   value={formData.category} 
                   onValueChange={(value) => updateFormData('category', value)}
-                  required
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Выберите категорию" />
@@ -147,6 +178,40 @@ const SubmitDeal = () => {
                   onChange={(e) => updateFormData('store', e.target.value)}
                 />
               </div>
+
+              {/* Offline-specific fields */}
+              {formData.isOffline && (
+                <div className="space-y-4 p-4 rounded-lg bg-deal-success/5 border border-deal-success/20">
+                  <div className="flex items-center gap-2 text-sm font-medium text-deal-success">
+                    <Store className="w-4 h-4" /> Детали офлайн-сделки
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="city">Город *</Label>
+                    <Select
+                      value={formData.city}
+                      onValueChange={(value) => updateFormData('city', value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Выберите город" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {cities.map(city => (
+                          <SelectItem key={city.id} value={city.id}>{city.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="storeAddress">Адрес магазина *</Label>
+                    <Input
+                      id="storeAddress"
+                      placeholder="ул. Примерная, 10"
+                      value={formData.storeAddress}
+                      onChange={(e) => updateFormData('storeAddress', e.target.value)}
+                    />
+                  </div>
+                </div>
+              )}
               
               <div className="space-y-2">
                 <Label htmlFor="description">Описание сделки *</Label>
@@ -161,7 +226,7 @@ const SubmitDeal = () => {
               </div>
               
               <div className="pt-4">
-                <Button type="submit" className="w-full bg-deal-red hover:bg-deal-red/90">
+                <Button type="submit" className="w-full gradient-primary text-primary-foreground font-bold">
                   Отправить сделку
                 </Button>
               </div>
