@@ -240,10 +240,7 @@ const CommentItem = ({
         <p className="text-sm text-foreground/90 leading-relaxed">{comment.text}</p>
 
         {/* Reactions + Reply row */}
-        <div className={cn(
-          'flex items-center gap-1 mt-2',
-          !isMobile && 'opacity-0 group-hover/comment:opacity-100 transition-opacity'
-        )}>
+        <div className="flex items-center gap-1.5 mt-2">
           {/* Reactions */}
           {REACTION_CONFIG.map(({ type, icon: Icon, label, activeClass }) => {
             const isActive = userReaction === type;
