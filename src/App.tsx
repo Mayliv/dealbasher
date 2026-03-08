@@ -20,6 +20,7 @@ import CategoriesPage from "./pages/CategoriesPage";
 import PromocodesPage from "./pages/PromocodesPage";
 import PriceBugsPage from "./pages/PriceBugsPage";
 import UserProfile from "./pages/UserProfile";
+import NotificationSettings from "./pages/NotificationSettings";
 
 const queryClient = new QueryClient();
 
