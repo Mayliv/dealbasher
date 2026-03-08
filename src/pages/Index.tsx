@@ -407,10 +407,10 @@ const Index = () => {
           <section className="mb-8">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                🐛 Свежие баги цен
+                {t('section.price_bugs')}
               </h2>
               <Link to="/bugs" className="text-sm text-primary hover:underline flex items-center gap-1">
-                Все баги <ExternalLink className="h-3 w-3" />
+                {t('section.all_bugs')} <ExternalLink className="h-3 w-3" />
               </Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
