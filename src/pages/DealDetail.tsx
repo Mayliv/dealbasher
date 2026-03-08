@@ -11,6 +11,14 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from '@/components/ui/use-toast';
 import { useLocalization } from '@/contexts/LocalizationContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { Input } from '@/components/ui/input';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 import {
   ThumbsUp,
   ThumbsDown,
@@ -24,6 +32,9 @@ import {
   Send,
   ChevronRight,
   Reply,
+  Bell,
+  BellOff,
+  TrendingDown,
 } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import {
@@ -34,10 +45,13 @@ import {
   CartesianGrid,
   Tooltip as RechartsTooltip,
   ResponsiveContainer,
+  ReferenceLine,
+  ReferenceArea,
 } from 'recharts';
 import DealCard from '@/components/DealCard';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { isDealOfTheDay, wasDealOfTheDay } from '@/components/DealOfTheDay';
+import { addTrackedDeal, isTracked, removeTrackedDeal } from '@/pages/TrackingPage';
 
 // ─── Temperature color helper ──────────────────────────────────
 const getTemperatureStyle = (temp: number) => {
@@ -47,20 +61,24 @@ const getTemperatureStyle = (temp: number) => {
   return { gradient: 'from-red-700 to-red-500', text: 'text-destructive' };
 };
 
-// ─── Mock price history ────────────────────────────────────────
+// ─── Mock 30-day price history with sale annotations ───────────
 const generatePriceHistory = (deal: Deal) => {
-  const points = 12;
   const data = [];
   const basePrice = deal.originalPrice || deal.dealPrice * 1.3;
-  for (let i = 0; i < points; i++) {
-    const daysAgo = points - 1 - i;
+  const saledays = new Set([5, 12, 20, 28]); // days with sales
+  for (let i = 0; i < 30; i++) {
+    const daysAgo = 29 - i;
     const label = daysAgo === 0 ? 'Сегодня' : `${daysAgo}д`;
-    const variance = Math.random() * 0.15;
-    const price =
-      i === points - 1
-        ? deal.dealPrice
-        : basePrice * (1 - variance * (i / points));
-    data.push({ date: label, price: Math.round(price * 100) / 100 });
+    const isSale = saledays.has(i);
+    const variance = Math.random() * 0.12;
+    let price = basePrice * (1 - variance * (i / 30));
+    if (isSale) price = price * 0.82;
+    if (i === 29) price = deal.dealPrice;
+    data.push({
+      date: label,
+      price: Math.round(price),
+      sale: isSale ? 'Распродажа' : undefined,
+    });
   }
   return data;
 };
@@ -192,6 +210,9 @@ const DealDetail = () => {
 
   const [selectedImage, setSelectedImage] = useState(0);
   const [temperature, setTemperature] = useState(deal?.temperature || 0);
+  const [trackModalOpen, setTrackModalOpen] = useState(false);
+  const [targetPrice, setTargetPrice] = useState('');
+  const [dealTracked, setDealTracked] = useState(() => deal ? isTracked(deal.id) : false);
 
   const similarDeals = useMemo(
     () =>
@@ -428,12 +449,32 @@ const DealDetail = () => {
 
             {/* ─── Price History Chart ──────────── */}
             <div className="bg-card rounded-xl border p-5">
-              <h2 className="text-lg font-semibold text-foreground mb-4">📈 История цен</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-foreground">📊 История цены (30 дней)</h2>
+                <Button
+                  variant={dealTracked ? "secondary" : "default"}
+                  size="sm"
+                  className={dealTracked ? "" : "gradient-primary text-primary-foreground"}
+                  onClick={() => {
+                    if (dealTracked) {
+                      removeTrackedDeal(deal.id);
+                      setDealTracked(false);
+                      toast({ title: '🔕 Отслеживание отменено' });
+                    } else {
+                      setTargetPrice(String(Math.round(deal.dealPrice * 0.9)));
+                      setTrackModalOpen(true);
+                    }
+                  }}
+                >
+                  {dealTracked ? <BellOff className="w-4 h-4 mr-1" /> : <Bell className="w-4 h-4 mr-1" />}
+                  {dealTracked ? 'Отслеживается' : 'Отслеживать цену'}
+                </Button>
+              </div>
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={priceHistory}>
                     <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                    <XAxis dataKey="date" className="text-xs" tick={{ fill: 'hsl(var(--muted-foreground))' }} />
+                    <XAxis dataKey="date" className="text-xs" tick={{ fill: 'hsl(var(--muted-foreground))' }} interval={4} />
                     <YAxis className="text-xs" tick={{ fill: 'hsl(var(--muted-foreground))' }} />
                     <RechartsTooltip
                       contentStyle={{
@@ -442,17 +483,46 @@ const DealDetail = () => {
                         borderRadius: '8px',
                         color: 'hsl(var(--foreground))',
                       }}
+                      formatter={(value: number, name: string) => [formatPrice(value, 'USD'), 'Цена']}
+                      labelFormatter={(label, payload) => {
+                        const item = payload?.[0]?.payload;
+                        return item?.sale ? `${label} — 🔥 ${item.sale}` : label;
+                      }}
                     />
+                    {/* Sale annotations as reference dots */}
+                    {priceHistory.filter(p => p.sale).map((p, i) => (
+                      <ReferenceLine
+                        key={i}
+                        x={p.date}
+                        stroke="hsl(var(--destructive))"
+                        strokeDasharray="3 3"
+                        label={{ value: '🔥', position: 'top', fill: 'hsl(var(--destructive))' }}
+                      />
+                    ))}
                     <Line
                       type="monotone"
                       dataKey="price"
                       stroke="hsl(var(--primary))"
                       strokeWidth={2}
-                      dot={{ r: 4, fill: 'hsl(var(--primary))' }}
+                      dot={(props) => {
+                        const { cx, cy, payload } = props;
+                        if (payload.sale) {
+                          return <circle cx={cx} cy={cy} r={6} fill="hsl(var(--destructive))" stroke="white" strokeWidth={2} />;
+                        }
+                        return <circle cx={cx} cy={cy} r={3} fill="hsl(var(--primary))" />;
+                      }}
                       activeDot={{ r: 6, fill: 'hsl(var(--primary))' }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
+              </div>
+              <div className="flex items-center gap-4 mt-3 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full bg-primary" /> Цена
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full bg-destructive" /> Распродажа
+                </span>
               </div>
             </div>
 
@@ -618,6 +688,64 @@ const DealDetail = () => {
       </main>
 
       <Footer />
+
+      {/* Track Price Modal */}
+      <Dialog open={trackModalOpen} onOpenChange={setTrackModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Bell className="w-5 h-5 text-primary" />
+              Отслеживать цену
+            </DialogTitle>
+            <DialogDescription>
+              Мы уведомим вас когда цена на <strong>{deal.title}</strong> упадёт до указанного уровня.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium text-foreground mb-1.5 block">
+                Уведомить меня когда цена упадёт до:
+              </label>
+              <div className="flex items-center gap-2">
+                <Input
+                  type="number"
+                  value={targetPrice}
+                  onChange={(e) => setTargetPrice(e.target.value)}
+                  placeholder={String(Math.round(deal.dealPrice * 0.9))}
+                  className="text-lg font-bold"
+                />
+                <span className="text-muted-foreground">₽</span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Текущая цена: {formatPrice(deal.dealPrice, 'USD')}
+              </p>
+            </div>
+            <Button
+              className="w-full gradient-primary text-primary-foreground"
+              onClick={() => {
+                const target = parseInt(targetPrice) || Math.round(deal.dealPrice * 0.9);
+                addTrackedDeal({
+                  dealId: deal.id,
+                  targetPrice: target,
+                  addedAt: new Date().toLocaleDateString('ru-RU'),
+                });
+                setDealTracked(true);
+                setTrackModalOpen(false);
+                toast({
+                  title: '✅ Добавлено в отслеживаемые!',
+                  description: 'Пришлём уведомление в Telegram или на email когда цена упадёт.',
+                });
+              }}
+            >
+              <TrendingDown className="w-4 h-4 mr-2" />
+              Отслеживать за {targetPrice ? formatPrice(parseInt(targetPrice), 'USD') : formatPrice(Math.round(deal.dealPrice * 0.9), 'USD')}
+            </Button>
+            <p className="text-center text-xs text-muted-foreground">
+              Вы можете просмотреть все отслеживаемые товары на <Link to="/tracking" className="text-primary hover:underline">этой странице</Link>
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

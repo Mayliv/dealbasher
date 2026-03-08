@@ -21,6 +21,7 @@ import PromocodesPage from "./pages/PromocodesPage";
 import PriceBugsPage from "./pages/PriceBugsPage";
 import UserProfile from "./pages/UserProfile";
 import NotificationSettings from "./pages/NotificationSettings";
+import TrackingPage from "./pages/TrackingPage";
 import MobileBottomNav from "./components/MobileBottomNav";
 import LiveActivityFeed from "./components/LiveActivityFeed";
 
@@ -52,6 +53,7 @@ const App = () => (
                   <Route path="/owner" element={<AdminPanel />} />
                   <Route path="/user/:username" element={<UserProfile />} />
                   <Route path="/settings/notifications" element={<NotificationSettings />} />
+                  <Route path="/tracking" element={<TrackingPage />} />
                   <Route path="/:pageId" element={<StaticPage />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
