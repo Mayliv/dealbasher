@@ -563,9 +563,7 @@ const DealDetail = () => {
                 <ScrollArea className="w-full">
                   <div className="flex gap-4 pb-4">
                     {similarDeals.map((d) => (
-                      <div key={d.id} className="min-w-[320px] max-w-[360px] shrink-0">
-                        <DealCard deal={d} />
-                      </div>
+                      <DealCard key={d.id} deal={d} variant="compact" />
                     ))}
                   </div>
                   <ScrollBar orientation="horizontal" />

@@ -164,7 +164,7 @@ const CommentItem = ({
           <span className="text-xs text-muted-foreground">{comment.postedAt}</span>
 
           {/* Report flag */}
-          <div className={cn('ml-auto', !isMobile && 'opacity-0 group-hover/comment:opacity-100 transition-opacity')}>
+          <div className="ml-auto">
             {reported ? (
               <span className="text-destructive" title="Жалоба отправлена">
                 <Flag className="w-3.5 h-3.5 fill-current" />
@@ -240,10 +240,7 @@ const CommentItem = ({
         <p className="text-sm text-foreground/90 leading-relaxed">{comment.text}</p>
 
         {/* Reactions + Reply row */}
-        <div className={cn(
-          'flex items-center gap-1 mt-2',
-          !isMobile && 'opacity-0 group-hover/comment:opacity-100 transition-opacity'
-        )}>
+        <div className="flex items-center gap-1.5 mt-2">
           {/* Reactions */}
           {REACTION_CONFIG.map(({ type, icon: Icon, label, activeClass }) => {
             const isActive = userReaction === type;
@@ -254,13 +251,13 @@ const CommentItem = ({
                 onClick={() => handleReaction(type)}
                 title={label}
                 className={cn(
-                  'inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs transition-all',
+                  'inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-sm transition-all',
                   isActive
                     ? activeClass
                     : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                 )}
               >
-                <Icon className="w-3 h-3" />
+                <Icon className="w-4 h-4" />
                 <AnimatedCount value={count} />
               </button>
             );
