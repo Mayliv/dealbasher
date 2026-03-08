@@ -64,7 +64,7 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.promocodes': 'Промокодтар',
     'nav.freebies': 'Тегін',
     'nav.discussions': 'Талқылаулар',
-    'currency.kzt': 'теңге',
+    'currency.kzt': '₸',
     'currency.rub': 'руб',
     'currency.usd': 'USD',
     // Add more translations as needed
