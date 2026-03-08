@@ -11,6 +11,14 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from '@/components/ui/use-toast';
 import { useLocalization } from '@/contexts/LocalizationContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { Input } from '@/components/ui/input';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 import {
   ThumbsUp,
   ThumbsDown,
@@ -24,6 +32,9 @@ import {
   Send,
   ChevronRight,
   Reply,
+  Bell,
+  BellOff,
+  TrendingDown,
 } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import {
@@ -34,10 +45,13 @@ import {
   CartesianGrid,
   Tooltip as RechartsTooltip,
   ResponsiveContainer,
+  ReferenceLine,
+  ReferenceArea,
 } from 'recharts';
 import DealCard from '@/components/DealCard';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { isDealOfTheDay, wasDealOfTheDay } from '@/components/DealOfTheDay';
+import { addTrackedDeal, isTracked, removeTrackedDeal } from '@/pages/TrackingPage';
 
 // ─── Temperature color helper ──────────────────────────────────
 const getTemperatureStyle = (temp: number) => {
