@@ -241,6 +241,21 @@ const Header = () => {
               )}
               
               {!isMobile && (
+                <Link to="/submit-deal" data-onboarding="submit">
+                  <Button
+                    size="sm"
+                    className={cn(
+                      'h-8 bg-white/20 text-primary-foreground hover:bg-white/30 border-0 gap-1',
+                      shouldPulse && 'animate-pulse-hot'
+                    )}
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                    Добавить
+                  </Button>
+                </Link>
+              )}
+
+              {!isMobile && (
                 <>
                   {user ? (
                     <div className="flex items-center space-x-1">
