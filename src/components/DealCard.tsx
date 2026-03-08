@@ -132,7 +132,7 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
         {/* Image */}
         <div className="relative h-[140px] overflow-hidden bg-muted">
           <img src={deal.imageUrl} alt={deal.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-          <Badge variant="secondary" className="absolute top-2 right-2 text-[10px] px-1.5 py-0 h-5 bg-background/80 backdrop-blur-sm">
+          <Badge className="absolute top-2 right-2 text-[10px] px-1.5 py-0 h-5 bg-[hsl(var(--deal-success))] text-primary-foreground border-0 backdrop-blur-sm">
             {deal.store}
           </Badge>
           {deal.isPriceBug && (
