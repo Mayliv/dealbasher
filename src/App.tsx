@@ -29,6 +29,7 @@ import SitemapPage from "./pages/SitemapPage";
 import HowItWorksPage from "./pages/HowItWorksPage";
 import GuidelinesPage from "./pages/GuidelinesPage";
 import FaqPage from "./pages/FaqPage";
+import ContactPage from "./pages/ContactPage";
 import MobileBottomNav from "./components/MobileBottomNav";
 import LiveActivityFeed from "./components/LiveActivityFeed";
 
