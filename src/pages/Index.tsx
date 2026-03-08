@@ -394,12 +394,12 @@ const Index = () => {
               </Button>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="space-y-0 rounded-xl border overflow-hidden">
               {kaspiDeals.map(deal => (
                 <DealCard key={deal.id} deal={deal} />
               ))}
               {kaspiDeals.length === 0 && (
-                <p className="text-sm text-muted-foreground col-span-full text-center py-6">Нет сделок по выбранному фильтру</p>
+                <p className="text-sm text-muted-foreground text-center py-6">Нет сделок по выбранному фильтру</p>
               )}
             </div>
           </section>
