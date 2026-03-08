@@ -149,4 +149,20 @@
     initial-value: 0deg;
     inherits: false;
   }
+
+  /* Vote float animation */
+  @keyframes vote-float {
+    0% {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-24px);
+    }
+  }
+
+  .animate-vote-float {
+    animation: vote-float 0.9s ease-out forwards;
+  }
 }
