@@ -550,7 +550,7 @@ const DealDetail = () => {
 
                 <div className="divide-y divide-border">
                   {mockComments.map((comment) => (
-                    <CommentItem key={comment.id} comment={comment} />
+                    <CommentItemComponent key={comment.id} comment={comment} />
                   ))}
                 </div>
               </div>
