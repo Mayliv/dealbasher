@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MessageSquare, Clock, Share2 } from 'lucide-react';
+import { MessageSquare, Clock, Share2, Flag, TimerOff } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Deal, deals } from '@/utils/data';
 import { useLocalization } from '@/contexts/LocalizationContext';
@@ -10,6 +10,8 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 import { isDealOfTheDay } from '@/components/DealOfTheDay';
 import ShareModal from '@/components/ShareModal';
+import ReportDealModal, { getReportCount, reportExpired } from '@/components/ReportDealModal';
+import { useToast } from '@/components/ui/use-toast';
 
 interface DealCardProps {
   deal: Deal;
