@@ -23,6 +23,8 @@ import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import MobileSidebarDrawer from '@/components/MobileSidebarDrawer';
 import DealOfTheDay from '@/components/DealOfTheDay';
+import PullToRefresh from '@/components/PullToRefresh';
+import PWAInstallBanner from '@/components/PWAInstallBanner';
 
 type DealTypeFilter = 'all' | 'online' | 'offline';
 
