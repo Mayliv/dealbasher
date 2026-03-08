@@ -31,7 +31,7 @@ const DealCard = ({ deal }: DealCardProps) => {
   };
 
   return (
-    <div className="group bg-card text-card-foreground rounded-xl border overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
+    <div className={`group bg-card text-card-foreground rounded-xl border overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 ${deal.temperature > 200 ? 'hot-deal-glow' : ''}`}>
       <div className="flex flex-col sm:flex-row">
         {/* Image Section */}
         <div className="relative sm:w-56 lg:w-64 shrink-0">

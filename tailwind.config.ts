@@ -20,6 +20,7 @@ export default {
 		},
 		extend: {
 			colors: {
+				'deal-success': 'hsl(var(--deal-success))',
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
