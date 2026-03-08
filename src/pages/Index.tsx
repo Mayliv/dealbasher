@@ -509,7 +509,7 @@ const Index = () => {
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-0 rounded-xl border overflow-hidden">
               {sortedDeals.length > 0 ? (
                 sortedDeals.map(deal => <DealCard key={deal.id} deal={deal} />)
               ) : (
