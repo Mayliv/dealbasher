@@ -278,7 +278,7 @@ const Index = () => {
   const [minTemp, setMinTemp] = useState(0);
   const [dealTypeFilter, setDealTypeFilter] = useState<DealTypeFilter>('all');
   const [userCity, setUserCity] = useState<string | null>(getSelectedCity());
-  const { t, region } = useLocalization();
+  const { t, region, formatPrice } = useLocalization();
 
   useEffect(() => {
     const savedCity = localStorage.getItem(`dealbasher_city_${region}`);
