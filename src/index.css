@@ -6,64 +6,69 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 20%;
+    --foreground: 0 0% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 20%;
+    --card-foreground: 0 0% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 20%;
+    --popover-foreground: 0 0% 15%;
 
-    --primary: 0 88% 66%;
+    --primary: 11 100% 58%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 20%;
+    --secondary: 346 100% 63%;
+    --secondary-foreground: 0 0% 100%;
 
     --muted: 0 0% 96%;
     --muted-foreground: 0 0% 45%;
 
     --accent: 0 0% 96%;
-    --accent-foreground: 0 0% 20%;
+    --accent-foreground: 0 0% 15%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 0 0% 90%;
     --input: 0 0% 90%;
-    --ring: 0 88% 66%;
+    --ring: 11 100% 58%;
 
     --radius: 0.5rem;
+
+    --gradient-primary: linear-gradient(135deg, hsl(11 100% 58%), hsl(346 100% 63%));
+    --deal-success: 142 71% 45%;
   }
 
   .dark {
-    --background: 0 0% 10%;
+    --background: 220 20% 10%;
     --foreground: 0 0% 98%;
 
-    --card: 0 0% 15%;
+    --card: 220 20% 14%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 15%;
+    --popover: 220 20% 14%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 0 88% 66%;
+    --primary: 11 100% 58%;
     --primary-foreground: 0 0% 98%;
 
-    --secondary: 0 0% 20%;
+    --secondary: 346 100% 63%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 0 0% 20%;
+    --muted: 220 15% 20%;
     --muted-foreground: 0 0% 65%;
 
-    --accent: 0 0% 20%;
+    --accent: 220 15% 20%;
     --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 62% 30%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 0 88% 66%;
+    --border: 220 15% 22%;
+    --input: 220 15% 22%;
+    --ring: 11 100% 58%;
+
+    --deal-success: 142 71% 45%;
   }
 }
 
@@ -73,7 +78,7 @@
   }
 
   body {
-    @apply bg-secondary text-foreground;
+    @apply bg-background text-foreground;
   }
 
   ::-webkit-scrollbar {
@@ -82,21 +87,25 @@
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-secondary;
+    @apply bg-muted;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-muted-foreground/50 rounded-full;
+    @apply bg-muted-foreground/30 rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-muted-foreground/70;
+    @apply bg-muted-foreground/50;
   }
 }
 
 @layer components {
+  .gradient-primary {
+    background: linear-gradient(135deg, hsl(11 100% 58%), hsl(346 100% 63%));
+  }
+
   .deal-card {
-    @apply bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 dark:bg-gray-800 dark:border dark:border-gray-700;
+    @apply bg-card rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300;
   }
 
   .deal-badge {
@@ -113,5 +122,31 @@
 
   .temperature-button {
     @apply flex items-center justify-center w-8 h-8 rounded-full;
+  }
+
+  /* Animated gradient border for hot deals */
+  @keyframes gradient-rotate {
+    0% { --angle: 0deg; }
+    100% { --angle: 360deg; }
+  }
+
+  .hot-deal-glow {
+    position: relative;
+  }
+
+  .hot-deal-glow::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: linear-gradient(var(--angle, 0deg), hsl(11 100% 58%), hsl(346 100% 63%), hsl(39 100% 60%), hsl(11 100% 58%));
+    z-index: -1;
+    animation: gradient-rotate 3s linear infinite;
+  }
+
+  @property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
   }
 }

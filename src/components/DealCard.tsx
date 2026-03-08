@@ -31,7 +31,7 @@ const DealCard = ({ deal }: DealCardProps) => {
   };
 
   return (
-    <div className="group bg-card text-card-foreground rounded-xl border overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
+    <div className={`group bg-card text-card-foreground rounded-xl border overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 ${deal.temperature > 200 ? 'hot-deal-glow' : ''}`}>
       <div className="flex flex-col sm:flex-row">
         {/* Image Section */}
         <div className="relative sm:w-56 lg:w-64 shrink-0">
@@ -81,7 +81,7 @@ const DealCard = ({ deal }: DealCardProps) => {
 
           {/* Price Row */}
           <div className="flex items-baseline gap-3 mt-3">
-            <span className="text-xl font-bold text-green-600 dark:text-green-400">
+            <span className="text-xl font-bold text-deal-success">
               {formatPrice(deal.dealPrice, 'USD')}
             </span>
             {deal.originalPrice && (
@@ -90,7 +90,7 @@ const DealCard = ({ deal }: DealCardProps) => {
               </span>
             )}
             {deal.discount && (
-              <Badge className="bg-green-600 dark:bg-green-500 text-white border-0 text-xs font-bold">
+              <Badge className="bg-deal-success text-primary-foreground border-0 text-xs font-bold">
                 -{deal.discount}%
               </Badge>
             )}
