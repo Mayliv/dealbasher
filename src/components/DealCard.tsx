@@ -141,7 +141,7 @@ const DealCard = ({ deal, variant = 'default' }: DealCardProps) => {
             </Badge>
           )}
           {isDOTD && (
-            <Badge className="absolute bottom-2 left-2 bg-yellow-500 text-white text-[10px] px-1.5 py-0 h-5 border-0">
+            <Badge className="absolute bottom-2 left-2 bg-amber-500 text-white text-[10px] px-1.5 py-0 h-5 border-0">
               👑 Сделка дня
             </Badge>
           )}
