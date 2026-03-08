@@ -20,6 +20,7 @@ import CategoriesPage from "./pages/CategoriesPage";
 import PromocodesPage from "./pages/PromocodesPage";
 import PriceBugsPage from "./pages/PriceBugsPage";
 import UserProfile from "./pages/UserProfile";
+import NotificationSettings from "./pages/NotificationSettings";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => (
                 <Route path="/discussions" element={<Discussions />} />
                 <Route path="/owner" element={<AdminPanel />} />
                 <Route path="/user/:username" element={<UserProfile />} />
+                <Route path="/settings/notifications" element={<NotificationSettings />} />
                 <Route path="/:pageId" element={<StaticPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>

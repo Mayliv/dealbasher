@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Menu, X, LogOut, Moon, Sun } from 'lucide-react';
+import NotificationBell from './NotificationBell';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
@@ -95,6 +96,7 @@ const Header = () => {
             <div className="flex items-center space-x-1">
               <LocationSelector />
               <LanguageSwitcher />
+              <NotificationBell />
               
               {/* Dark mode toggle */}
               <Button

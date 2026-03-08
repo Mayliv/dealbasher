@@ -14,7 +14,7 @@ const CurrencySwitcher: React.FC = () => {
   const { currency, setCurrency, t } = useLocalization();
 
   const currencies = [
-    { code: 'KZT', name: 'Тенге (₸)' },
+    { code: 'KZT', name: '₸ Тенге' },
     { code: 'RUB', name: 'Рубль (₽)' },
     { code: 'USD', name: 'Доллар ($)' },
   ];
